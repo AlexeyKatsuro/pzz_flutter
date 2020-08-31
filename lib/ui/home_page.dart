@@ -1,48 +1,46 @@
 import 'package:flutter/material.dart';
-import 'package:pzz/domain/pzz_net_service.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:pzz/models/app_state.dart';
 import 'package:pzz/models/pizza.dart';
+import 'package:redux/redux.dart';
 import 'package:pzz/models/pizza_variant.dart';
 import 'package:pzz/res/strings.dart';
 import 'package:pzz/utils/extensions/enum_localization_ext.dart';
 
 class HomePage extends StatefulWidget {
+  final VoidCallback onInit;
+
+  HomePage({@required this.onInit}) : assert(onInit != null);
+
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  final service = PzzNetService();
-  List<Pizza> pizzas = const [];
-
-  bool get isLoading => pizzas.isEmpty;
-
   @override
   void initState() {
+    widget.onInit();
     super.initState();
-    loadPizzas();
-  }
-
-  void loadPizzas() async {
-    final data = await service.loadPizzas();
-    print(data);
-    setState(() {
-      pizzas = data;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(StringRes.appName),
-      ),
-      body: isLoading ? _buildLoader() : _buildPizzasList(),
+    return StoreConnector<AppState, _ViewModel>(
+      converter: _ViewModel.formStore,
+      builder: (context, vm) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(StringRes.appName),
+          ),
+          body: vm.loading ? _buildLoader() : _buildPizzasList(vm.pizzas),
+        );
+      },
     );
   }
 
-  Widget _buildPizzasList() {
+  Widget _buildPizzasList(List<Pizza> pizzas) {
     return ListView.separated(
-        padding: EdgeInsets.symmetric(horizontal: 16),
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         itemBuilder: (context, index) => PizzaItem(pizzas[index]),
         separatorBuilder: (context, index) => SizedBox(height: 8),
         itemCount: pizzas.length);
@@ -52,6 +50,17 @@ class _HomePageState extends State<HomePage> {
     return Center(
       child: CircularProgressIndicator(),
     );
+  }
+}
+
+class _ViewModel {
+  final List<Pizza> pizzas;
+  final bool loading;
+
+  _ViewModel({this.pizzas, this.loading});
+
+  static _ViewModel formStore(Store<AppState> store) {
+    return _ViewModel(pizzas: store.state.pizzas, loading: store.state.isLoading);
   }
 }
 

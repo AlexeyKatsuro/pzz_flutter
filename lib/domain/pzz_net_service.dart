@@ -9,7 +9,7 @@ class PzzNetService {
 
   Future<List<Pizza>> loadPizzas() async {
     final path = 'pizzas?load=ingredients,filters&filter=meal_only:0&order=position:asc';
-
+    // await Future.delayed(Duration(seconds: 5));
     final response = await http.get(baseUrl + path);
     if (response.statusCode == 200) {
       final body = jsonDecode(response.body);
