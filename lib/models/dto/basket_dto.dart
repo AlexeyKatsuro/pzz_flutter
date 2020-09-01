@@ -39,11 +39,11 @@ class BasketDto {
   String payment;
   Null selfDeliveryTime;
   int isDelivery;
-  bool isSpecgrill;
+  //int isSpecgrill;
   String specgrillComment;
   int is15Min;
   int isSlowed;
-  bool isMoved;
+  //bool isMoved;
   int isMeal;
   int isExternal;
   int isPaymentDelivery;
@@ -115,11 +115,11 @@ class BasketDto {
       this.payment,
       this.selfDeliveryTime,
       this.isDelivery,
-      this.isSpecgrill,
+      //this.isSpecgrill,
       this.specgrillComment,
       this.is15Min,
       this.isSlowed,
-      this.isMoved,
+      //this.isMoved,
       this.isMeal,
       this.isExternal,
       this.isPaymentDelivery,
@@ -191,11 +191,11 @@ class BasketDto {
     payment = json['payment'];
     selfDeliveryTime = json['self_delivery_time'];
     isDelivery = json['is_delivery'];
-    isSpecgrill = json['is_specgrill'];
+    //isSpecgrill = json['is_specgrill'];
     specgrillComment = json['specgrill_comment'];
     is15Min = json['is_15_min'];
     isSlowed = json['is_slowed'];
-    isMoved = json['is_moved'];
+    //isMoved = json['is_moved'];
     isMeal = json['is_meal'];
     isExternal = json['is_external'];
     isPaymentDelivery = json['is_payment_delivery'];
@@ -279,11 +279,11 @@ class BasketDto {
     data['payment'] = this.payment;
     data['self_delivery_time'] = this.selfDeliveryTime;
     data['is_delivery'] = this.isDelivery;
-    data['is_specgrill'] = this.isSpecgrill;
+    //data['is_specgrill'] = this.isSpecgrill;
     data['specgrill_comment'] = this.specgrillComment;
     data['is_15_min'] = this.is15Min;
     data['is_slowed'] = this.isSlowed;
-    data['is_moved'] = this.isMoved;
+    //data['is_moved'] = this.isMoved;
     data['is_meal'] = this.isMeal;
     data['is_external'] = this.isExternal;
     data['is_payment_delivery'] = this.isPaymentDelivery;

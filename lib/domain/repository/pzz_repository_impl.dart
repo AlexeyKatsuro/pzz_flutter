@@ -7,15 +7,13 @@ class PzzRepositoryImpl implements PzzRepository {
   final _service = PzzNetService();
 
   @override
-  Future<Basket> addItem() {
-    // TODO: implement addItem
-    throw UnimplementedError();
+  Future<Basket> addPizzaItem(Pizza pizza, PizzaSize size) {
+    return _service.addPizzaItem(pizza, size);
   }
 
   @override
   Future<Basket> loadBasket() {
-    // TODO: implement loadBasket
-    throw UnimplementedError();
+    return _service.loadBasket();
   }
 
   @override

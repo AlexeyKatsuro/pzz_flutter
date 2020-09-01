@@ -4,6 +4,6 @@ import 'package:pzz/models/pizza.dart';
 abstract class PzzRepository {
   Future<List<Pizza>> loadPizzas();
   Future<Basket> loadBasket();
-  Future<Basket> addItem();
+  Future<Basket> addPizzaItem(Pizza pizza, PizzaSize size);
   Future<Basket> removeItem();
 }

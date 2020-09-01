@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:pzz/domain/actions/actions.dart';
+import 'package:pzz/domain/selectors/selector.dart';
 import 'package:pzz/models/app_state.dart';
 import 'package:pzz/models/pizza.dart';
-import 'package:redux/redux.dart';
-import 'package:pzz/models/pizza_variant.dart';
 import 'package:pzz/res/strings.dart';
-import 'package:pzz/utils/extensions/enum_localization_ext.dart';
+import 'package:pzz/ui/widgets/badge_counter.dart';
+import 'package:pzz/ui/widgets/pizza.dart';
+import 'package:redux/redux.dart';
 
 class HomePage extends StatefulWidget {
   final VoidCallback onInit;
@@ -30,18 +32,22 @@ class _HomePageState extends State<HomePage> {
       builder: (context, vm) {
         return Scaffold(
           appBar: AppBar(
-            title: Text(StringRes.appName),
+            title: const Text(StringRes.appName),
           ),
-          body: vm.loading ? _buildLoader() : _buildPizzasList(vm.pizzas),
+          body: vm.loading ? _buildLoader() : _buildPizzasList(vm.pizzas, vm.onAddPizzaClick),
+          floatingActionButton: vm.isBasketButtonVisible ? _buildBasketButton(vm.basketCount) : null,
         );
       },
     );
   }
 
-  Widget _buildPizzasList(List<Pizza> pizzas) {
+  Widget _buildPizzasList(List<Pizza> pizzas, void Function(Pizza, PizzaSize) onAddPizzaClick) {
     return ListView.separated(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        itemBuilder: (context, index) => PizzaItem(pizzas[index]),
+        itemBuilder: (context, index) => PizzaWidget(
+              pizza: pizzas[index],
+              onAddPizzaClick: onAddPizzaClick,
+            ),
         separatorBuilder: (context, index) => SizedBox(height: 8),
         itemCount: pizzas.length);
   }
@@ -51,109 +57,44 @@ class _HomePageState extends State<HomePage> {
       child: CircularProgressIndicator(),
     );
   }
+
+  Widget _buildBasketButton(int basketCount) {
+    return BadgeCounter(
+        count: basketCount,
+        child: FloatingActionButton(
+          child: const Icon(Icons.shopping_cart),
+          onPressed: () {},
+        ));
+  }
 }
 
 class _ViewModel {
   final List<Pizza> pizzas;
   final bool loading;
+  final int basketCount;
+  final void Function(Pizza, PizzaSize) onAddPizzaClick;
 
-  _ViewModel({this.pizzas, this.loading});
+  bool get isBasketButtonVisible => basketCount != 0;
+
+  _ViewModel({
+    @required this.pizzas,
+    @required this.loading,
+    @required this.onAddPizzaClick,
+    @required this.basketCount,
+  })  : assert(pizzas != null),
+        assert(loading != null),
+        assert(basketCount != null),
+        assert(onAddPizzaClick != null);
 
   static _ViewModel formStore(Store<AppState> store) {
-    return _ViewModel(pizzas: store.state.pizzas, loading: store.state.isLoading);
-  }
-}
-
-class PizzaItem extends StatelessWidget {
-  final Pizza pizza;
-
-  const PizzaItem(this.pizza);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Image.network(
-            pizza.photo,
-            height: 150,
-            width: double.infinity,
-            fit: BoxFit.cover,
-          ),
-          Divider(
-            height: 1,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              children: [
-                Text(
-                  pizza.name,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline5
-                      .copyWith(color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold),
-                ),
-                ListView.separated(
-                  physics: ClampingScrollPhysics(),
-                  padding: EdgeInsets.symmetric(vertical: 12),
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) => PizzaVariantWidget(pizza.variants[index]),
-                  separatorBuilder: (context, index) => Divider(height: 12),
-                  itemCount: pizza.variants.length,
-                ),
-                Text(
-                  pizza.description,
-                  style: Theme.of(context).textTheme.bodyText2,
-                  textAlign: TextAlign.justify,
-                ),
-              ],
-            ),
-          ),
-        ],
+//    print('----------- BASKET ${store.state.basket?.items?.length}');
+    return _ViewModel(
+      pizzas: store.state.pizzas ?? [],
+      loading: store.state.isLoading,
+      basketCount: basketCountSelector(store),
+      onAddPizzaClick: (pizza, size) => store.dispatch(
+        AddPizzaAction(pizza, size),
       ),
-    );
-  }
-}
-
-class PizzaVariantWidget extends StatelessWidget {
-  final PizzaVariant variant;
-
-  const PizzaVariantWidget(this.variant);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: Column(
-            children: [
-              Text(
-                variant.size.localizedString,
-              ),
-              Text(
-                '${variant.price.toStringAsFixed(2)} р.',
-                style: Theme.of(context)
-                    .textTheme
-                    .headline5
-                    .copyWith(color: Theme.of(context).colorScheme.onSurface, fontWeight: FontWeight.bold),
-              ),
-              Text(
-                '${variant.weight} ${variant.diameter}',
-              ),
-            ],
-          ),
-        ),
-        Expanded(
-          child: OutlineButton(
-            textColor: Theme.of(context).colorScheme.primary,
-            onPressed: () {},
-            child: Text(StringRes.in_basket),
-          ),
-        )
-      ],
     );
   }
 }
