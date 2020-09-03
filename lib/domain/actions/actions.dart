@@ -25,3 +25,10 @@ class AddPizzaAction {
 
   AddPizzaAction(this.pizza, this.size);
 }
+
+class RemovePizzaAction {
+  final Pizza pizza;
+  final PizzaSize size;
+
+  RemovePizzaAction(this.pizza, this.size);
+}

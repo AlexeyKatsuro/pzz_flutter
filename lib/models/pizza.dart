@@ -50,4 +50,10 @@ enum PizzaSize { big, medium, thin }
 
 extension PizzaSizeExt on PizzaSize {
   String get name => describeEnum(this);
+
+  static PizzaSize fromString(String size) {
+    final sizeEnum = PizzaSize.values.firstWhere((element) => element.name == size);
+    assert(sizeEnum != null);
+    return sizeEnum;
+  }
 }

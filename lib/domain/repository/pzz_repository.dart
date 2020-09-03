@@ -5,5 +5,5 @@ abstract class PzzRepository {
   Future<List<Pizza>> loadPizzas();
   Future<Basket> loadBasket();
   Future<Basket> addPizzaItem(Pizza pizza, PizzaSize size);
-  Future<Basket> removeItem();
+  Future<Basket> removePizzaItem(Pizza pizza, PizzaSize size);
 }

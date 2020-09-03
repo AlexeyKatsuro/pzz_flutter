@@ -4,12 +4,18 @@ import 'package:pzz/ui/widgets/pizza_variant.dart';
 
 class PizzaWidget extends StatelessWidget {
   final Pizza pizza;
+  final Map<PizzaSize, int> basketCountMap;
   final void Function(Pizza, PizzaSize) onAddPizzaClick;
+  final void Function(Pizza, PizzaSize) onRemovePizzaClick;
 
   const PizzaWidget({
+    @required this.basketCountMap,
     @required this.pizza,
     @required this.onAddPizzaClick,
+    @required this.onRemovePizzaClick,
   })  : assert(pizza != null),
+        assert(onRemovePizzaClick != null),
+        assert(basketCountMap != null),
         assert(onAddPizzaClick != null);
 
   @override
@@ -39,11 +45,25 @@ class PizzaWidget extends StatelessWidget {
                       .headline5
                       .copyWith(color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold),
                 ),
+//                for (PizzaVariant variant in pizza.variants) ...[
+//                  PizzaVariantWidget(
+//                    variant: variant,
+//                    onAddPizzaClick: (size) {
+//                      onAddPizzaClick(pizza, size);
+//                    },
+//                  ),
+//                  Divider()
+//                ],
+
                 ListView.separated(
-                  physics: ClampingScrollPhysics(),
+                  physics: ScrollPhysics(),
                   padding: EdgeInsets.symmetric(vertical: 12),
                   shrinkWrap: true,
                   itemBuilder: (context, index) => PizzaVariantWidget(
+                    countInBasket: basketCountMap[pizza.variants[index].size] ?? 0,
+                    onRemovePizzaClick: (size) {
+                      onRemovePizzaClick(pizza, size);
+                    },
                     variant: pizza.variants[index],
                     onAddPizzaClick: (size) {
                       onAddPizzaClick(pizza, size);

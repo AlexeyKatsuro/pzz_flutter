@@ -34,22 +34,24 @@ class _HomePageState extends State<HomePage> {
           appBar: AppBar(
             title: const Text(StringRes.appName),
           ),
-          body: vm.loading ? _buildLoader() : _buildPizzasList(vm.pizzas, vm.onAddPizzaClick),
+          body: vm.loading ? _buildLoader() : _buildPizzasList(vm),
           floatingActionButton: vm.isBasketButtonVisible ? _buildBasketButton(vm.basketCount) : null,
         );
       },
     );
   }
 
-  Widget _buildPizzasList(List<Pizza> pizzas, void Function(Pizza, PizzaSize) onAddPizzaClick) {
+  Widget _buildPizzasList(_ViewModel vm) {
     return ListView.separated(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         itemBuilder: (context, index) => PizzaWidget(
-              pizza: pizzas[index],
-              onAddPizzaClick: onAddPizzaClick,
+              basketCountMap: vm.getBasketCountMap(vm.pizzas[index]),
+              pizza: vm.pizzas[index],
+              onRemovePizzaClick: vm.onRemovePizzaClick,
+              onAddPizzaClick: vm.onAddPizzaClick,
             ),
         separatorBuilder: (context, index) => SizedBox(height: 8),
-        itemCount: pizzas.length);
+        itemCount: vm.pizzas.length);
   }
 
   Widget _buildLoader() {
@@ -73,6 +75,8 @@ class _ViewModel {
   final bool loading;
   final int basketCount;
   final void Function(Pizza, PizzaSize) onAddPizzaClick;
+  final void Function(Pizza, PizzaSize) onRemovePizzaClick;
+  final Map<PizzaSize, int> Function(Pizza) getBasketCountMap;
 
   bool get isBasketButtonVisible => basketCount != 0;
 
@@ -80,20 +84,28 @@ class _ViewModel {
     @required this.pizzas,
     @required this.loading,
     @required this.onAddPizzaClick,
+    @required this.onRemovePizzaClick,
+    @required this.getBasketCountMap,
     @required this.basketCount,
   })  : assert(pizzas != null),
         assert(loading != null),
+        assert(getBasketCountMap != null),
         assert(basketCount != null),
         assert(onAddPizzaClick != null);
 
   static _ViewModel formStore(Store<AppState> store) {
-//    print('----------- BASKET ${store.state.basket?.items?.length}');
     return _ViewModel(
       pizzas: store.state.pizzas ?? [],
       loading: store.state.isLoading,
       basketCount: basketCountSelector(store),
+      getBasketCountMap: (pizza) {
+        return basketCountMap(store, pizza);
+      },
       onAddPizzaClick: (pizza, size) => store.dispatch(
         AddPizzaAction(pizza, size),
+      ),
+      onRemovePizzaClick: (pizza, size) => store.dispatch(
+        RemovePizzaAction(pizza, size),
       ),
     );
   }

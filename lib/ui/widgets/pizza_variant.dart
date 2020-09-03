@@ -2,16 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/models/pizza_variant.dart';
 import 'package:pzz/res/strings.dart';
+import 'package:pzz/ui/widgets/counter.dart';
 import 'package:pzz/utils/extensions/enum_localization_ext.dart';
 
 class PizzaVariantWidget extends StatelessWidget {
   final PizzaVariant variant;
+  final int countInBasket;
   final void Function(PizzaSize) onAddPizzaClick;
+  final void Function(PizzaSize) onRemovePizzaClick;
 
   const PizzaVariantWidget({
+    @required this.countInBasket,
     @required this.variant,
     @required this.onAddPizzaClick,
+    @required this.onRemovePizzaClick,
   })  : assert(variant != null),
+        assert(onRemovePizzaClick != null),
+        assert(countInBasket != null),
         assert(onAddPizzaClick != null);
 
   @override
@@ -38,15 +45,30 @@ class PizzaVariantWidget extends StatelessWidget {
           ),
         ),
         Expanded(
-          child: OutlineButton(
-            textColor: Theme.of(context).colorScheme.primary,
-            onPressed: () {
-              onAddPizzaClick(variant.size);
-            },
-            child: Text(StringRes.in_basket),
-          ),
+          child: countInBasket > 0 ? _buildCounter() : _buildToBasketButton(context),
         )
       ],
+    );
+  }
+
+  Widget _buildCounter() {
+    return Counter(
+        onRemoveClick: () {
+          onRemovePizzaClick(variant.size);
+        },
+        count: countInBasket,
+        onAddClick: () {
+          onAddPizzaClick(variant.size);
+        });
+  }
+
+  Widget _buildToBasketButton(BuildContext context) {
+    return OutlineButton(
+      textColor: Theme.of(context).colorScheme.primary,
+      onPressed: () {
+        onAddPizzaClick(variant.size);
+      },
+      child: Text(StringRes.in_basket),
     );
   }
 }

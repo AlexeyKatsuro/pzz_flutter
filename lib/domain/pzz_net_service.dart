@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:http_interceptor/http_interceptor.dart';
 import 'package:pzz/domain/cookie_interseptor.dart';
+import 'package:pzz/domain/logging_inerceptor.dart';
 import 'package:pzz/models/basket.dart';
 import 'package:pzz/models/dto/basket_dto.dart';
 import 'package:pzz/models/mappers/pizza_item_response_mapper.dart';
@@ -13,7 +14,7 @@ class PzzNetService {
 
   http.Client client = HttpClientWithInterceptor.build(interceptors: [
     SessionCookiesInterceptor(),
-    //   LoggingInterceptor(),
+    LoggingInterceptor(),
   ]);
 
   Future<List<Pizza>> loadPizzas() async {
@@ -74,5 +75,29 @@ class PzzNetService {
   List<Pizza> _pizzaResponseMapper(dynamic response) {
     Iterable data = response['data'];
     return data.map(PizzaItemResponseMapper.map).toList();
+  }
+
+  Future<Basket> removePizzaItem(Pizza pizza, PizzaSize size) async {
+    final path = 'basket/remove-item';
+    final formData = {
+      'id': '${pizza.id}',
+      'type': 'pizza',
+      'size': '${size.name}',
+      'dough': 'thin',
+    };
+    return client.post(baseUrl + path, body: formData).then((response) {
+      if (response.statusCode == 200) {
+        final body = jsonDecode(response.body);
+        if (body['error'] == false) {
+          final basketDto = BasketDto.fromJson(body['response']['data']);
+          return Basket(basketDto);
+        } else {
+          print(body['data']);
+        }
+      }
+    }).catchError((ex, StackTrace stackTrace) {
+      print(ex);
+      print(stackTrace);
+    });
   }
 }

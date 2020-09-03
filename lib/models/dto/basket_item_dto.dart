@@ -1,6 +1,6 @@
 class BasketItemDto {
   String type;
-  String id;
+  int id;
   String size;
   String dough;
   int isFailure;
@@ -42,7 +42,7 @@ class BasketItemDto {
 
   BasketItemDto.fromJson(Map<String, dynamic> json) {
     type = json['type'];
-    id = json['id'];
+    id = int.parse(json['id']);
     size = json['size'];
     dough = json['dough'];
     isFailure = json['is_failure'];

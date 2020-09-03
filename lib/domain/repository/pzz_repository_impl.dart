@@ -22,8 +22,7 @@ class PzzRepositoryImpl implements PzzRepository {
   }
 
   @override
-  Future<Basket> removeItem() {
-    // TODO: implement removeItem
-    throw UnimplementedError();
+  Future<Basket> removePizzaItem(Pizza pizza, PizzaSize size) {
+    return _service.removePizzaItem(pizza, size);
   }
 }
