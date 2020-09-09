@@ -46,14 +46,23 @@ class Pizza {
   }
 }
 
-enum PizzaSize { big, medium, thin }
+enum ProductSize { big, medium, thin }
+enum ProductType { pizza, sauce, snack, dessert, drink }
 
-extension PizzaSizeExt on PizzaSize {
+extension ProductSizeExt on ProductSize {
   String get name => describeEnum(this);
 
-  static PizzaSize fromString(String size) {
-    final sizeEnum = PizzaSize.values.firstWhere((element) => element.name == size);
-    assert(sizeEnum != null);
+  static ProductSize fromStringOrNull(String size) {
+    final sizeEnum = ProductSize.values.firstWhere((element) => element.name == size, orElse: () => null);
+    return sizeEnum;
+  }
+}
+
+extension ProductTypeExt on ProductType {
+  String get name => describeEnum(this);
+
+  static ProductType fromStringOrNull(String size) {
+    final sizeEnum = ProductType.values.firstWhere((element) => element.name == size, orElse: () => null);
     return sizeEnum;
   }
 }

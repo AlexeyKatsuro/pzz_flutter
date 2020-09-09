@@ -1,24 +1,18 @@
 import 'package:flutter/cupertino.dart';
-import 'package:pzz/models/dto/basket_dto.dart';
-import 'package:pzz/models/dto/basket_item_dto.dart';
+import 'package:pzz/models/basket_product.dart';
 
 @immutable
 class Basket {
-  const Basket(this.data);
+  const Basket(this.items);
 
-  final BasketDto data;
+  //final BasketDto data;
 
-  List<BasketItemDto> get items => data.items;
+  final List<BasketProduct> items;
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is Basket && runtimeType == other.runtimeType && data == other.data;
+      identical(this, other) || other is Basket && runtimeType == other.runtimeType && items == other.items;
 
   @override
-  int get hashCode => data.hashCode;
-
-  @override
-  String toString() {
-    return 'Basket{data: $data}';
-  }
+  int get hashCode => items.hashCode;
 }

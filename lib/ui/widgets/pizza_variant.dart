@@ -8,8 +8,8 @@ import 'package:pzz/utils/extensions/enum_localization_ext.dart';
 class PizzaVariantWidget extends StatelessWidget {
   final PizzaVariant variant;
   final int countInBasket;
-  final void Function(PizzaSize) onAddPizzaClick;
-  final void Function(PizzaSize) onRemovePizzaClick;
+  final void Function(ProductSize) onAddPizzaClick;
+  final void Function(ProductSize) onRemovePizzaClick;
 
   const PizzaVariantWidget({
     @required this.countInBasket,

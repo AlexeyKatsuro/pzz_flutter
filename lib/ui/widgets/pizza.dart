@@ -4,9 +4,9 @@ import 'package:pzz/ui/widgets/pizza_variant.dart';
 
 class PizzaWidget extends StatelessWidget {
   final Pizza pizza;
-  final Map<PizzaSize, int> basketCountMap;
-  final void Function(Pizza, PizzaSize) onAddPizzaClick;
-  final void Function(Pizza, PizzaSize) onRemovePizzaClick;
+  final Map<ProductSize, int> basketCountMap;
+  final void Function(Pizza, ProductSize) onAddPizzaClick;
+  final void Function(Pizza, ProductSize) onRemovePizzaClick;
 
   const PizzaWidget({
     @required this.basketCountMap,

@@ -1,19 +1,24 @@
-import 'package:collection/collection.dart';
+import 'dart:core';
+
 import 'package:pzz/models/app_state.dart';
-import 'package:pzz/models/dto/basket_item_dto.dart';
+import 'package:pzz/models/basket.dart';
+import 'package:pzz/models/basket_product.dart';
 import 'package:pzz/models/pizza.dart';
-import 'package:redux/redux.dart';
 
-int basketCountSelector(Store<AppState> store) {
-  return store.state.basket?.items?.length ?? 0;
-}
+Basket basketSelector(AppState state) => state.basket;
 
-Map<PizzaSize, int> basketCountMap(Store<AppState> store, Pizza pizza) {
-  final List<BasketItemDto> pizzasItems =
-      store.state.basket?.items?.where((element) => element.id == pizza.id)?.toList() ?? [];
+List<BasketProduct> basketProductsSelector(AppState state) => basketSelector(state).items;
 
-  Map<PizzaSize, List<BasketItemDto>> sizeItemsMap =
-      groupBy(pizzasItems, (BasketItemDto e) => PizzaSizeExt.fromString(e.size));
+int basketCountSelector(AppState state) => basketProductsSelector(state).length;
+
+List<Pizza> pizzasSelector(AppState state) => state.pizzas;
+
+/*
+Map<ProductSize, int> basketCountMap(Store<AppState> store, Pizza pizza) {
+  final Iterable<BasketProduct> pizzasItems = store.state.basket.items.where((element) => element.id == pizza.id);
+  log('------------$pizzasItems');
+  Map<ProductSize, List<BasketProduct>> sizeItemsMap = groupBy(pizzasItems, (BasketProduct e) => e.size);
 
   return sizeItemsMap.map((key, value) => MapEntry(key, value.length));
 }
+*/

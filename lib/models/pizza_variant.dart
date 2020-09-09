@@ -3,7 +3,7 @@ import 'package:pzz/models/pizza.dart';
 
 @immutable
 class PizzaVariant {
-  final PizzaSize size;
+  final ProductSize size;
   final num price;
   final String weight;
   final String diameter;

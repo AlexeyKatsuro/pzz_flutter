@@ -1,17 +1,20 @@
 import 'package:http_interceptor/http_interceptor.dart';
+import 'package:pzz/domain/session_bearer.dart';
 
 class SessionCookiesInterceptor implements InterceptorContract {
   static const PHPSESSID = "PHPSESSID";
   static const COOKIE = "Cookie";
   static const SET_COOKIE = "set-cookie";
 
-  String _phpSessionCookie;
+  SessionCookiesInterceptor(this._sessionBearer);
+
+  SessionBearer _sessionBearer;
 
   @override
   Future<RequestData> interceptRequest({RequestData data}) async {
-    if (_phpSessionCookie != null) {
+    if (_sessionBearer.isTokenValid()) {
       try {
-        data.headers[COOKIE] = _phpSessionCookie;
+        data.headers[COOKIE] = _sessionBearer.token;
       } catch (e) {
         print(e);
       }
@@ -21,9 +24,9 @@ class SessionCookiesInterceptor implements InterceptorContract {
 
   @override
   Future<ResponseData> interceptResponse({ResponseData data}) async {
-    if (_phpSessionCookie == null) {
+    if (!_sessionBearer.isTokenValid()) {
       final setCookieHeader = data.headers[SET_COOKIE];
-      _phpSessionCookie = setCookieHeader.split(';').firstWhere((element) => element.contains(PHPSESSID));
+      _sessionBearer.token = setCookieHeader.split(';').firstWhere((element) => element.contains(PHPSESSID));
     }
     return data;
   }

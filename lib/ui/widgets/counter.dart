@@ -20,7 +20,11 @@ class Counter extends StatelessWidget {
         SizedBox(
           width: 36,
           height: 36,
-          child: FloatingActionButton(
+          child: RaisedButton(
+            padding: EdgeInsets.zero,
+            shape: CircleBorder(),
+            textColor: Theme.of(context).colorScheme.onSecondary,
+            color: Theme.of(context).colorScheme.secondary,
             elevation: 0,
             highlightElevation: 0,
             focusElevation: 0,
@@ -42,7 +46,11 @@ class Counter extends StatelessWidget {
         SizedBox(
           width: 36,
           height: 36,
-          child: FloatingActionButton(
+          child: RaisedButton(
+            padding: EdgeInsets.zero,
+            shape: CircleBorder(),
+            textColor: Theme.of(context).colorScheme.onSecondary,
+            color: Theme.of(context).colorScheme.secondary,
             elevation: 0,
             highlightElevation: 0,
             focusElevation: 0,

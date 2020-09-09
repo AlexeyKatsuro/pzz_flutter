@@ -1,31 +1,32 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:developer';
+
 import 'package:http_interceptor/http_interceptor.dart';
 
 class LoggingInterceptor implements InterceptorContract {
   @override
   Future<RequestData> interceptRequest({RequestData data}) async {
-    debugPrint('REQUEST ----->');
-    debugPrint('${data.method} ${data.baseUrl}');
-    debugPrint('HEADERS:');
-    debugPrint('${data.headers}');
-    debugPrint('PARAMS:');
-    debugPrint('${data.params}');
-    debugPrint('BODY:');
-    debugPrint('${data.body}');
-    debugPrint('<-----REQUEST');
+    log('REQUEST ----->');
+    log('${data.method} ${data.baseUrl}');
+    log('HEADERS:');
+    log('${data.headers}');
+    log('PARAMS:');
+    log('${data.params}');
+    log('BODY:');
+    log('${data.body}');
+    log('<-----REQUEST');
     return data;
   }
 
   @override
   Future<ResponseData> interceptResponse({ResponseData data}) async {
-    debugPrint('RESPONSE ----->');
-    debugPrint('${data.method} ${data.url}');
-    debugPrint('HEADERS:');
-    debugPrint('${data.headers}');
-    debugPrint('BODY:');
-    debugPrint('${data.body}');
-    debugPrint('STATUS CODE ${data.statusCode}');
-    debugPrint('<----- RESPONSE');
+    log('RESPONSE ----->');
+    log('${data.method} ${data.url}');
+    log('HEADERS:');
+    log('${data.headers}');
+    log('BODY:');
+    log('${data.body}');
+    log('STATUS CODE ${data.statusCode}');
+    log('<----- RESPONSE');
     return data;
   }
 }

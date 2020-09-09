@@ -16,13 +16,13 @@ class PizzaItemResponseMapper {
 
   static List<PizzaVariant> _mapVariants(from) {
     final List<PizzaVariant> variants = [];
-    if (from['is_big'] == 1) variants.add(_mapVariantsData(from, PizzaSize.big));
-    if (from['is_medium'] == 1) variants.add(_mapVariantsData(from, PizzaSize.medium));
-    if (from['is_thin'] == 1) variants.add(_mapVariantsData(from, PizzaSize.thin));
+    if (from['is_big'] == 1) variants.add(_mapVariantsData(from, ProductSize.big));
+    if (from['is_medium'] == 1) variants.add(_mapVariantsData(from, ProductSize.medium));
+    if (from['is_thin'] == 1) variants.add(_mapVariantsData(from, ProductSize.thin));
     return variants;
   }
 
-  static PizzaVariant _mapVariantsData(from, PizzaSize size) => PizzaVariant(
+  static PizzaVariant _mapVariantsData(from, ProductSize size) => PizzaVariant(
       size: size,
       weight: from['${size.name}_weight'],
       diameter: from['${size.name}_diameter'],

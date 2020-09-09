@@ -11,8 +11,9 @@ class AppState {
   AppState({
     this.isLoading = false,
     this.pizzas = const [],
-    this.basket,
-  });
+    this.basket = const Basket([]),
+  })  : assert(pizzas != null),
+        assert(basket != null);
 
   @override
   bool operator ==(Object other) =>

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:pzz/models/basket.dart';
 import 'package:pzz/models/pizza.dart';
 
@@ -19,16 +20,24 @@ class BasketLoadedAction {
   BasketLoadedAction(this.basket);
 }
 
-class AddPizzaAction {
-  final Pizza pizza;
-  final PizzaSize size;
+class AddProductAction {
+  final Product product;
 
-  AddPizzaAction(this.pizza, this.size);
+  AddProductAction(this.product);
 }
 
-class RemovePizzaAction {
-  final Pizza pizza;
-  final PizzaSize size;
+class RemoveProductAction {
+  final Product product;
 
-  RemovePizzaAction(this.pizza, this.size);
+  RemoveProductAction(this.product);
+}
+
+class Product {
+  final int id;
+  final ProductSize size;
+  final ProductType type;
+
+  Product({@required this.id, @required this.type, this.size})
+      : assert(id != null),
+        assert(type != null);
 }

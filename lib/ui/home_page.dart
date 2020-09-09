@@ -5,9 +5,11 @@ import 'package:pzz/domain/selectors/selector.dart';
 import 'package:pzz/models/app_state.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/res/strings.dart';
+import 'package:pzz/routes.dart';
 import 'package:pzz/ui/widgets/badge_counter.dart';
 import 'package:pzz/ui/widgets/pizza.dart';
 import 'package:redux/redux.dart';
+import 'package:pzz/utils/extensions/to_product_ext.dart';
 
 class HomePage extends StatefulWidget {
   final VoidCallback onInit;
@@ -65,7 +67,9 @@ class _HomePageState extends State<HomePage> {
         count: basketCount,
         child: FloatingActionButton(
           child: const Icon(Icons.shopping_cart),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).pushNamed(Routes.basketScreen);
+          },
         ));
   }
 }
@@ -74,9 +78,9 @@ class _ViewModel {
   final List<Pizza> pizzas;
   final bool loading;
   final int basketCount;
-  final void Function(Pizza, PizzaSize) onAddPizzaClick;
-  final void Function(Pizza, PizzaSize) onRemovePizzaClick;
-  final Map<PizzaSize, int> Function(Pizza) getBasketCountMap;
+  final void Function(Pizza, ProductSize) onAddPizzaClick;
+  final void Function(Pizza, ProductSize) onRemovePizzaClick;
+  final Map<ProductSize, int> Function(Pizza) getBasketCountMap;
 
   bool get isBasketButtonVisible => basketCount != 0;
 
@@ -95,17 +99,17 @@ class _ViewModel {
 
   static _ViewModel formStore(Store<AppState> store) {
     return _ViewModel(
-      pizzas: store.state.pizzas ?? [],
+      pizzas: pizzasSelector(store.state),
       loading: store.state.isLoading,
-      basketCount: basketCountSelector(store),
+      basketCount: basketCountSelector(store.state),
       getBasketCountMap: (pizza) {
-        return basketCountMap(store, pizza);
+        return {}; //basketCountMap(store, pizza);
       },
       onAddPizzaClick: (pizza, size) => store.dispatch(
-        AddPizzaAction(pizza, size),
+        AddProductAction(pizza.toProduct(size)),
       ),
       onRemovePizzaClick: (pizza, size) => store.dispatch(
-        RemovePizzaAction(pizza, size),
+        RemoveProductAction(pizza.toProduct(size)),
       ),
     );
   }

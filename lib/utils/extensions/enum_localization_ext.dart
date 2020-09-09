@@ -1,19 +1,22 @@
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/res/strings.dart';
-import 'package:pzz/utils/describe_enum.dart';
 
-extension PizzaSizeLocalExt on PizzaSize {
-  static Map<PizzaSize, String> _localizedMap = {
-    PizzaSize.big: StringRes.pizza_size_big,
-    PizzaSize.medium: StringRes.pizza_size_medium,
-    PizzaSize.thin: StringRes.pizza_size_thin
+extension ProductSizeLocalExt on ProductSize {
+  static Map<ProductSize, String> _localizedMap = {
+    ProductSize.big: StringRes.pizza_size_big,
+    ProductSize.medium: StringRes.pizza_size_medium,
+    ProductSize.thin: StringRes.pizza_size_thin
   };
 
-  static PizzaSize fromString(String size) {
-    final sizeEnum = PizzaSize.values.firstWhere((element) => element.name == size);
+  static ProductSize fromString(String size) {
+    final sizeEnum = fromStringOrNull(size);
     assert(sizeEnum != null);
     return sizeEnum;
   }
+  static ProductSize fromStringOrNull(String size) {
+    final sizeEnum = ProductSize.values.firstWhere((element) => element.name == size);
+    return sizeEnum;
+  }
 
-  String get localizedString => PizzaSizeLocalExt._localizedMap[this];
+  String get localizedString => ProductSizeLocalExt._localizedMap[this];
 }
