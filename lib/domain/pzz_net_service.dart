@@ -7,6 +7,7 @@ import 'package:pzz/models/dto/basket_dto.dart';
 import 'package:pzz/models/mappers/basket_item_response_mapper.dart';
 import 'package:pzz/models/mappers/pizza_item_response_mapper.dart';
 import 'package:pzz/models/pizza.dart';
+import 'package:pzz/models/product.dart';
 
 class PzzNetService {
   final baseUrl = 'https://pzz.by/api/v1/';

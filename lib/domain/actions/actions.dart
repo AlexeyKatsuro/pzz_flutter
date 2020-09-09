@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:pzz/models/basket.dart';
 import 'package:pzz/models/pizza.dart';
+import 'package:pzz/models/product.dart';
 
 class InitialAction {}
 
@@ -30,14 +31,4 @@ class RemoveProductAction {
   final Product product;
 
   RemoveProductAction(this.product);
-}
-
-class Product {
-  final int id;
-  final ProductSize size;
-  final ProductType type;
-
-  Product({@required this.id, @required this.type, this.size})
-      : assert(id != null),
-        assert(type != null);
 }

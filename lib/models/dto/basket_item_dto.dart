@@ -17,7 +17,7 @@ class BasketItemDto {
   int packed;
   int prepared;
   int isFree;
-  int price;
+  num price;
 
   BasketItemDto(
       {this.type,
