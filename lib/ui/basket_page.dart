@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:pzz/domain/actions/actions.dart';
@@ -56,7 +58,7 @@ class _ViewModel {
   final void Function(BasketProduct) onRemoveItemClick;
   final List<CombinedBasketProduct> items;
 
-  bool get isBasketEmpty => basketCount != 0;
+  bool get isBasketEmpty => basketCount == 0;
 
   _ViewModel({
     @required this.items,

@@ -10,6 +10,7 @@ import 'package:pzz/models/mappers/sause_item_response_mapper.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/models/product.dart';
 import 'package:pzz/models/sauce.dart';
+import 'package:pzz/models/mappers/mapper.dart';
 
 class PzzNetService {
   final baseUrl = 'https://pzz.by/api/v1/';
@@ -20,94 +21,29 @@ class PzzNetService {
 
   Future<List<Pizza>> loadPizzas() async {
     final path = 'pizzas?load=ingredients,filters&filter=meal_only:0&order=position:asc';
-    return client.get(baseUrl + path).then((response) {
-      if (response.statusCode == 200) {
-        final body = jsonDecode(response.body);
-        if (body['error'] == false) {
-          final data = body['response']['data'];
-          return _pizzaResponseMapper(data);
-        } else {
-          print(body['data']);
-        }
-      }
-    }).catchError((ex, StackTrace stackTrace) {
-      print(ex);
-      print(stackTrace);
-    });
+    return client.get(baseUrl + path).handleResponse(_pizzaResponseMapper);
   }
 
   Future<List<Sauce>> loadSauces() {
     final path = 'sauces?order=title:asc';
-    return client.get(baseUrl + path).then((response) {
-      if (response.statusCode == 200) {
-        final body = jsonDecode(response.body);
-        if (body['error'] == false) {
-          final data = body['response']['data'];
-          return _sauceResponseMapper(data);
-        } else {
-          print(body['data']);
-        }
-      }
-    }).catchError((ex, StackTrace stackTrace) {
-      print(ex);
-      print(stackTrace);
-    });
+    return client.get(baseUrl + path).handleResponse(_sauceResponseMapper);
   }
 
   Future<Basket> loadBasket() async {
     final path = 'basket';
-    return client.get(baseUrl + path).then((response) {
-      if (response.statusCode == 200) {
-        final body = jsonDecode(response.body);
-        if (body['error'] == false) {
-          final data = body['response']['data'];
-          return _basketResponseMapper(data);
-        } else {
-          print(body['data']);
-        }
-      }
-    }).catchError((ex, StackTrace stackTrace) {
-      print(ex);
-      print(stackTrace);
-    });
+    return client.get(baseUrl + path).handleResponse(_basketResponseMapper);
   }
 
   Future<Basket> addProductToBasket(Product product) async {
     final path = 'basket/add-item';
     final formData = makeFormData(product);
-    return client.post(baseUrl + path, body: formData).then((response) {
-      if (response.statusCode == 200) {
-        final body = jsonDecode(response.body);
-        if (body['error'] == false) {
-          final data = body['response']['data'];
-          return _basketResponseMapper(data);
-        } else {
-          print(body['data']);
-        }
-      }
-    }).catchError((ex, StackTrace stackTrace) {
-      print(ex);
-      print(stackTrace);
-    });
+    return client.post(baseUrl + path, body: formData).handleResponse(_basketResponseMapper);
   }
 
   Future<Basket> removePizzaFromBasket(Product product) async {
     final path = 'basket/remove-item';
     final formData = makeFormData(product);
-    return client.post(baseUrl + path, body: formData).then((response) {
-      if (response.statusCode == 200) {
-        final body = jsonDecode(response.body);
-        if (body['error'] == false) {
-          final data = body['response']['data'];
-          return _basketResponseMapper(data);
-        } else {
-          print(body['data']);
-        }
-      }
-    }).catchError((ex, StackTrace stackTrace) {
-      print(ex);
-      print(stackTrace);
-    });
+    return client.post(baseUrl + path, body: formData).handleResponse(_basketResponseMapper);
   }
 
   List<Pizza> _pizzaResponseMapper(dynamic data) {
@@ -135,8 +71,8 @@ class PzzNetService {
   }
 }
 
-extension<T> on Future<http.Response> {
-  Future<T> handleResponse(T Function(dynamic) mapper) {
+extension on Future<http.Response> {
+  Future<T> handleResponse<T>(T Function(dynamic data) mapper) {
     return then((response) {
       if (response.statusCode == 200) {
         final body = jsonDecode(response.body);
