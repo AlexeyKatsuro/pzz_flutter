@@ -47,7 +47,7 @@ class BasketItem extends StatelessWidget {
                 textAlign: TextAlign.right,
                 style: Theme.of(context)
                     .textTheme
-                    .headline5
+                    .headline6
                     .copyWith(color: Theme.of(context).colorScheme.onSurface, fontWeight: FontWeight.bold),
               ),
             )

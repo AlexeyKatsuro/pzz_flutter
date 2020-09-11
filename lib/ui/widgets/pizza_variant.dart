@@ -35,7 +35,7 @@ class PizzaVariantWidget extends StatelessWidget {
                 '${variant.price.toStringAsFixed(2)} р.',
                 style: Theme.of(context)
                     .textTheme
-                    .headline5
+                    .headline6
                     .copyWith(color: Theme.of(context).colorScheme.onSurface, fontWeight: FontWeight.bold),
               ),
               Text(

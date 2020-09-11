@@ -21,21 +21,21 @@ class Counter extends StatelessWidget {
           onPressed: onRemoveClick,
           child: Text(
             '-',
-            style: Theme.of(context).accentTextTheme.headline5.copyWith(fontWeight: FontWeight.bold),
+            style: Theme.of(context).accentTextTheme.headline6.copyWith(fontWeight: FontWeight.bold),
           ),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Text(
             '$count',
-            style: Theme.of(context).textTheme.headline5,
+            style: Theme.of(context).textTheme.headline6,
           ),
         ),
         CircularButton(
           onPressed: onAddClick,
           child: Text(
             '+',
-            style: Theme.of(context).accentTextTheme.headline5.copyWith(fontWeight: FontWeight.bold),
+            style: Theme.of(context).accentTextTheme.headline6.copyWith(fontWeight: FontWeight.bold),
           ),
         ),
       ],

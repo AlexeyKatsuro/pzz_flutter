@@ -53,7 +53,7 @@ class _BasketPageState extends State<BasketPage> {
                   ),
                 ),
               Container(
-                height: 280,
+                height: 240,
                 child: ListView.separated(
                   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   separatorBuilder: (context, index) => Divider(),

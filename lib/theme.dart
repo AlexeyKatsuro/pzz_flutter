@@ -14,11 +14,18 @@ ThemeData _buildPzzThemeData() {
 //  );
   final base = ThemeData.from(colorScheme: colorScheme);
   final textTheme = _buildTextTheme(base);
+  final at = textTheme.apply(bodyColor: colorScheme.primary);
   return base.copyWith(
     cardTheme: _buildCardTheme(base, colorScheme),
     textTheme: _buildTextTheme(base),
     accentTextTheme: _buildColorTextTheme(textTheme, colorScheme.secondary),
-    primaryTextTheme: _buildColorTextTheme(textTheme, colorScheme.primary),
+    // primaryTextTheme: _buildColorTextTheme(textTheme, colorScheme.primary),
+    appBarTheme: AppBarTheme(
+      textTheme: at,
+      color: colorScheme.background,
+      iconTheme: IconThemeData(color: colorScheme.primary),
+      brightness: colorScheme.brightness,
+    ),
 //    appBarTheme: AppBarTheme(
 //      color: colorScheme.onPrimary,
 //      textTheme: base.primaryTextTheme.apply(bodyColor: colorScheme.primary),
@@ -32,7 +39,7 @@ TextTheme _buildTextTheme(ThemeData base) {
   final textTheme = base.textTheme;
   return textTheme.copyWith(
     headline5: textTheme.headline5.apply(fontFamily: fontFamily),
-    headline6: textTheme.headline6.apply(fontFamily: fontFamily),
+    headline6: textTheme.headline6.apply(fontFamily: fontFamily).copyWith(fontSize: 20),
     bodyText2: textTheme.bodyText2.apply(color: defaultTextColor.withOpacity(0.5)),
     button: textTheme.button.apply(fontFamily: fontFamily),
   );
