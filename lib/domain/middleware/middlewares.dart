@@ -11,12 +11,31 @@ typedef MiddlewareTyped<State, Action> = dynamic Function(
 
 List<Middleware<AppState>> createPzzMiddleware(PzzRepository repository) {
   return [
+    TypedMiddleware<AppState, InitialAction>(_createInitial(repository)),
     TypedMiddleware<AppState, LoadPizzasAction>(_createLoadPizzas(repository)),
     TypedMiddleware<AppState, LoadBasketAction>(_createLoadBasket(repository)),
-    TypedMiddleware<AppState, InitialAction>(_createInitial(repository)),
     TypedMiddleware<AppState, AddProductAction>(_createAddPizzaItem(repository)),
     TypedMiddleware<AppState, RemoveProductAction>(_createRemovePizzaItem(repository)),
   ];
+}
+
+Middleware<AppState> _createInitial(PzzRepository repository) {
+  return (Store<AppState> store, dynamic action, NextDispatcher next) async {
+    next(StartLoadingAction());
+    try {
+      final pizzas = repository.loadPizzas();
+      final sauces = repository.loadSauces();
+      store.dispatch(PizzasLoadedAction(await pizzas));
+      store.dispatch(SaucesLoadedAction(await sauces));
+
+      final basket = await repository.loadBasket();
+      store.dispatch(BasketLoadedAction(basket));
+    } catch (ex) {
+      print(ex);
+    }
+    next(StopLoadingAction());
+    next(action);
+  };
 }
 
 Middleware<AppState> _createLoadPizzas(PzzRepository repository) {
@@ -39,20 +58,6 @@ Middleware<AppState> _createLoadBasket(PzzRepository repository) {
       print(ex);
     });
 
-    next(action);
-  };
-}
-
-Middleware<AppState> _createInitial(PzzRepository repository) {
-  return (Store<AppState> store, dynamic action, NextDispatcher next) async {
-    try {
-      final pizzas = await repository.loadPizzas();
-      store.dispatch(PizzasLoadedAction(pizzas));
-      final basket = await repository.loadBasket();
-      store.dispatch(BasketLoadedAction(basket));
-    } catch (ex) {
-      print(ex);
-    }
     next(action);
   };
 }

@@ -19,6 +19,11 @@ class _BasketPageState extends State<BasketPage> {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, _ViewModel>(
+      onWillChange: (previousViewModel, newViewModel) {
+        if (newViewModel.isBasketEmpty) {
+          Navigator.of(context).pop();
+        }
+      },
       converter: (store) {
         return _ViewModel.formStore(store);
       },
@@ -46,32 +51,25 @@ class _BasketPageState extends State<BasketPage> {
 }
 
 class _ViewModel {
-  final bool loading;
   final int basketCount;
   final void Function(BasketProduct) onAddItemClick;
   final void Function(BasketProduct) onRemoveItemClick;
   final List<CombinedBasketProduct> items;
 
-  // final Map<ProductSize, int> Function(Pizza) getBasketCountMap;
-
-  bool get isBasketButtonVisible => basketCount != 0;
+  bool get isBasketEmpty => basketCount != 0;
 
   _ViewModel({
     @required this.items,
-    @required this.loading,
     @required this.onAddItemClick,
     @required this.onRemoveItemClick,
     @required this.basketCount,
   })  : assert(items != null),
-        assert(loading != null),
-        assert(loading != null),
         assert(basketCount != null),
         assert(onAddItemClick != null);
 
   static _ViewModel formStore(Store<AppState> store) {
     return _ViewModel(
       items: combinedBasketProducts(store.state),
-      loading: store.state.isLoading,
       basketCount: basketCountSelector(store.state),
       onAddItemClick: (item) {
         store.dispatch(AddProductAction(item.toProduct()));

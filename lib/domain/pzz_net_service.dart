@@ -1,13 +1,15 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:pzz/domain/actions/actions.dart';
 import 'package:pzz/models/basket.dart';
 import 'package:pzz/models/dto/basket_dto.dart';
+import 'package:pzz/models/dto/sause_dto.dart';
 import 'package:pzz/models/mappers/basket_item_response_mapper.dart';
 import 'package:pzz/models/mappers/pizza_item_response_mapper.dart';
+import 'package:pzz/models/mappers/sause_item_response_mapper.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/models/product.dart';
+import 'package:pzz/models/sauce.dart';
 
 class PzzNetService {
   final baseUrl = 'https://pzz.by/api/v1/';
@@ -24,6 +26,24 @@ class PzzNetService {
         if (body['error'] == false) {
           final data = body['response']['data'];
           return _pizzaResponseMapper(data);
+        } else {
+          print(body['data']);
+        }
+      }
+    }).catchError((ex, StackTrace stackTrace) {
+      print(ex);
+      print(stackTrace);
+    });
+  }
+
+  Future<List<Sauce>> loadSauces() {
+    final path = 'sauces?order=title:asc';
+    return client.get(baseUrl + path).then((response) {
+      if (response.statusCode == 200) {
+        final body = jsonDecode(response.body);
+        if (body['error'] == false) {
+          final data = body['response']['data'];
+          return _sauceResponseMapper(data);
         } else {
           print(body['data']);
         }
@@ -92,6 +112,10 @@ class PzzNetService {
 
   List<Pizza> _pizzaResponseMapper(dynamic data) {
     return (data as Iterable).map(PizzaItemResponseMapper.map).toList(growable: false);
+  }
+
+  List<Sauce> _sauceResponseMapper(dynamic data) {
+    return (data as Iterable).map((e) => SauceDto.fromJson(e)).map(SauceItemResponseMapper.map).toList(growable: false);
   }
 
   Basket _basketResponseMapper(dynamic data) {

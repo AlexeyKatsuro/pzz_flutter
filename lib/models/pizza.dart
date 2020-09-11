@@ -24,6 +24,8 @@ class Pizza {
         assert(variants != null),
         assert(photo != null);
 
+  ProductType get type => ProductType.pizza;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||

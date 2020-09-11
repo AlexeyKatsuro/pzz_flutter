@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:pzz/models/sauce.dart';
 import 'package:pzz/models/basket.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/models/product.dart';
@@ -13,6 +13,12 @@ class PizzasLoadedAction {
   final List<Pizza> pizzas;
 
   PizzasLoadedAction(this.pizzas);
+}
+
+class SaucesLoadedAction {
+  final List<Sauce> sauces;
+
+  SaucesLoadedAction(this.sauces);
 }
 
 class BasketLoadedAction {
@@ -32,3 +38,7 @@ class RemoveProductAction {
 
   RemoveProductAction(this.product);
 }
+
+class StartLoadingAction {}
+
+class StopLoadingAction {}

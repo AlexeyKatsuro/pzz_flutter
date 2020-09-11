@@ -3,6 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:pzz/domain/actions/actions.dart';
 import 'package:pzz/domain/selectors/selector.dart';
 import 'package:pzz/models/app_state.dart';
+import 'package:pzz/models/combined_basket_product.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/res/strings.dart';
 import 'package:pzz/routes.dart';
@@ -46,12 +47,15 @@ class _HomePageState extends State<HomePage> {
   Widget _buildPizzasList(_ViewModel vm) {
     return ListView.separated(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        itemBuilder: (context, index) => PizzaWidget(
-              basketCountMap: vm.getBasketCountMap(vm.pizzas[index]),
-              pizza: vm.pizzas[index],
-              onRemovePizzaClick: vm.onRemovePizzaClick,
-              onAddPizzaClick: vm.onAddPizzaClick,
-            ),
+        itemBuilder: (context, index) {
+          final pizza = vm.pizzas[index];
+          return PizzaWidget(
+            combinedProduct: vm.getCombinedProduct(pizza.type, pizza.id),
+            pizza: pizza,
+            onRemovePizzaClick: vm.onRemovePizzaClick,
+            onAddPizzaClick: vm.onAddPizzaClick,
+          );
+        },
         separatorBuilder: (context, index) => SizedBox(height: 8),
         itemCount: vm.pizzas.length);
   }
@@ -80,8 +84,7 @@ class _ViewModel {
   final int basketCount;
   final void Function(Pizza, ProductSize) onAddPizzaClick;
   final void Function(Pizza, ProductSize) onRemovePizzaClick;
-  final Map<ProductSize, int> Function(Pizza) getBasketCountMap;
-
+  final CombinedBasketProduct Function(ProductType type, int productId) getCombinedProduct;
   bool get isBasketButtonVisible => basketCount != 0;
 
   _ViewModel({
@@ -89,12 +92,12 @@ class _ViewModel {
     @required this.loading,
     @required this.onAddPizzaClick,
     @required this.onRemovePizzaClick,
-    @required this.getBasketCountMap,
+    @required this.getCombinedProduct,
     @required this.basketCount,
   })  : assert(pizzas != null),
         assert(loading != null),
-        assert(getBasketCountMap != null),
         assert(basketCount != null),
+        assert(getCombinedProduct != null),
         assert(onAddPizzaClick != null);
 
   static _ViewModel formStore(Store<AppState> store) {
@@ -102,9 +105,7 @@ class _ViewModel {
       pizzas: pizzasSelector(store.state),
       loading: store.state.isLoading,
       basketCount: basketCountSelector(store.state),
-      getBasketCountMap: (pizza) {
-        return {}; //basketCountMap(store, pizza);
-      },
+      getCombinedProduct: (type, productId) => combinedProductSelectorBy(store.state, type, productId),
       onAddPizzaClick: (pizza, size) => store.dispatch(
         AddProductAction(pizza.toProduct(size)),
       ),

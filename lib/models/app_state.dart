@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:pzz/models/sauce.dart';
 import 'package:pzz/models/basket.dart';
 import 'package:pzz/models/pizza.dart';
 
@@ -6,11 +7,13 @@ import 'package:pzz/models/pizza.dart';
 class AppState {
   final bool isLoading;
   final List<Pizza> pizzas;
+  final List<Sauce> sauce;
   final Basket basket;
 
   AppState({
     this.isLoading = false,
     this.pizzas = const [],
+    this.sauce = const [],
     this.basket = const Basket([]),
   })  : assert(pizzas != null),
         assert(basket != null);

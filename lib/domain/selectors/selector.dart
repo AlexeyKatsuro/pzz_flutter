@@ -39,3 +39,9 @@ Selector<AppState, List<CombinedBasketProduct>> combinedBasketProducts =
     createSelector1(combinedBasketProductsTypedMap, (Map<ProductType, List<CombinedBasketProduct>> combinedProductMap) {
   return combinedProductMap.values.fold([], (value, element) => value + element);
 });
+
+CombinedBasketProduct combinedProductSelectorBy(AppState state, ProductType type, int productId) {
+  final map = combinedBasketProductsTypedMap(state);
+  final typedProducts = map[type];
+  return typedProducts?.firstWhere((element) => element.id == productId, orElse: () => null);
+}

@@ -17,23 +17,11 @@ class Counter extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SizedBox(
-          width: 36,
-          height: 36,
-          child: RaisedButton(
-            padding: EdgeInsets.zero,
-            shape: CircleBorder(),
-            textColor: Theme.of(context).colorScheme.onSecondary,
-            color: Theme.of(context).colorScheme.secondary,
-            elevation: 0,
-            highlightElevation: 0,
-            focusElevation: 0,
-            hoverElevation: 0,
-            onPressed: onRemoveClick,
-            child: Text(
-              '-',
-              style: Theme.of(context).accentTextTheme.headline5.copyWith(fontWeight: FontWeight.bold),
-            ),
+        _CircularButton(
+          onPressed: onRemoveClick,
+          child: Text(
+            '-',
+            style: Theme.of(context).accentTextTheme.headline5.copyWith(fontWeight: FontWeight.bold),
           ),
         ),
         Padding(
@@ -43,26 +31,45 @@ class Counter extends StatelessWidget {
             style: Theme.of(context).textTheme.headline5,
           ),
         ),
-        SizedBox(
-          width: 36,
-          height: 36,
-          child: RaisedButton(
-            padding: EdgeInsets.zero,
-            shape: CircleBorder(),
-            textColor: Theme.of(context).colorScheme.onSecondary,
-            color: Theme.of(context).colorScheme.secondary,
-            elevation: 0,
-            highlightElevation: 0,
-            focusElevation: 0,
-            hoverElevation: 0,
-            onPressed: onAddClick,
-            child: Text(
-              '+',
-              style: Theme.of(context).accentTextTheme.headline5.copyWith(fontWeight: FontWeight.bold),
-            ),
+        _CircularButton(
+          onPressed: onAddClick,
+          child: Text(
+            '+',
+            style: Theme.of(context).accentTextTheme.headline5.copyWith(fontWeight: FontWeight.bold),
           ),
         ),
       ],
+    );
+  }
+}
+
+class _CircularButton extends StatelessWidget {
+  const _CircularButton({
+    Key key,
+    @required this.onPressed,
+    this.child,
+  }) : super(key: key);
+
+  final VoidCallback onPressed;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 36,
+      height: 36,
+      child: RaisedButton(
+        padding: EdgeInsets.zero,
+        shape: CircleBorder(),
+        textColor: Theme.of(context).colorScheme.onSecondary,
+        color: Theme.of(context).colorScheme.secondary,
+        elevation: 0,
+        highlightElevation: 0,
+        focusElevation: 0,
+        hoverElevation: 0,
+        onPressed: onPressed,
+        child: child,
+      ),
     );
   }
 }
