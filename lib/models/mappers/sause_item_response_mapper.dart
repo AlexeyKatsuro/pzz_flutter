@@ -6,7 +6,7 @@ class SauceItemResponseMapper {
     return Sauce(
       id: dto.id,
       title: dto.title,
-      price: dto.price,
+      price: dto.price / 10000,
       photo: dto.photoSmall,
     );
   }

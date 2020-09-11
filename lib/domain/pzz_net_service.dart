@@ -10,7 +10,6 @@ import 'package:pzz/models/mappers/sause_item_response_mapper.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/models/product.dart';
 import 'package:pzz/models/sauce.dart';
-import 'package:pzz/models/mappers/mapper.dart';
 
 class PzzNetService {
   final baseUrl = 'https://pzz.by/api/v1/';
@@ -56,7 +55,8 @@ class PzzNetService {
 
   Basket _basketResponseMapper(dynamic data) {
     final basketDto = BasketDto.fromJson(data);
-    return Basket(basketDto.items.map(BasketItemResponseMapper.map).toList(growable: false));
+    final products = basketDto.items.map(BasketItemResponseMapper.map).toList(growable: false);
+    return Basket(items: products, totalAmount: basketDto.total / 10000);
   }
 
   Map<String, dynamic> makeFormData(Product product) {

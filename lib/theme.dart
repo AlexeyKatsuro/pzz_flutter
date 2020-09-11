@@ -17,7 +17,8 @@ ThemeData _buildPzzThemeData() {
   return base.copyWith(
     cardTheme: _buildCardTheme(base, colorScheme),
     textTheme: _buildTextTheme(base),
-    accentTextTheme: _buildAccentTextTheme(textTheme, colorScheme),
+    accentTextTheme: _buildColorTextTheme(textTheme, colorScheme.secondary),
+    primaryTextTheme: _buildColorTextTheme(textTheme, colorScheme.primary),
 //    appBarTheme: AppBarTheme(
 //      color: colorScheme.onPrimary,
 //      textTheme: base.primaryTextTheme.apply(bodyColor: colorScheme.primary),
@@ -37,8 +38,8 @@ TextTheme _buildTextTheme(ThemeData base) {
   );
 }
 
-TextTheme _buildAccentTextTheme(TextTheme baseTextTheme, ColorScheme colorScheme) {
-  final accentBrightness = ThemeData.estimateBrightnessForColor(colorScheme.secondary);
+TextTheme _buildColorTextTheme(TextTheme baseTextTheme, Color color) {
+  final accentBrightness = ThemeData.estimateBrightnessForColor(color);
   final isDark = accentBrightness == Brightness.dark;
   return baseTextTheme.apply(
     displayColor: isDark ? Colors.white : Colors.black,

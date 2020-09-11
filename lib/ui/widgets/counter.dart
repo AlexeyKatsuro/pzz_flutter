@@ -17,7 +17,7 @@ class Counter extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        _CircularButton(
+        CircularButton(
           onPressed: onRemoveClick,
           child: Text(
             '-',
@@ -31,7 +31,7 @@ class Counter extends StatelessWidget {
             style: Theme.of(context).textTheme.headline5,
           ),
         ),
-        _CircularButton(
+        CircularButton(
           onPressed: onAddClick,
           child: Text(
             '+',
@@ -43,8 +43,8 @@ class Counter extends StatelessWidget {
   }
 }
 
-class _CircularButton extends StatelessWidget {
-  const _CircularButton({
+class CircularButton extends StatelessWidget {
+  const CircularButton({
     Key key,
     @required this.onPressed,
     this.child,
