@@ -14,22 +14,33 @@ ThemeData _buildPzzThemeData() {
 //  );
   final base = ThemeData.from(colorScheme: colorScheme);
   final textTheme = _buildTextTheme(base);
-  final at = textTheme.apply(bodyColor: colorScheme.primary);
   return base.copyWith(
     cardTheme: _buildCardTheme(base, colorScheme),
     textTheme: _buildTextTheme(base),
     accentTextTheme: _buildColorTextTheme(textTheme, colorScheme.secondary),
-    // primaryTextTheme: _buildColorTextTheme(textTheme, colorScheme.primary),
-    appBarTheme: AppBarTheme(
-      textTheme: at,
-      color: colorScheme.background,
-      iconTheme: IconThemeData(color: colorScheme.primary),
-      brightness: colorScheme.brightness,
-    ),
-//    appBarTheme: AppBarTheme(
-//      color: colorScheme.onPrimary,
-//      textTheme: base.primaryTextTheme.apply(bodyColor: colorScheme.primary),
-//    ),
+    primaryTextTheme: _buildColorTextTheme(textTheme, colorScheme.primary),
+    appBarTheme: _buildAppBarTheme(textTheme, colorScheme),
+    inputDecorationTheme: _buildInputDecorationTheme(),
+    buttonTheme: ButtonThemeData(
+        shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(6),
+    )),
+  );
+}
+
+InputDecorationTheme _buildInputDecorationTheme() {
+  return InputDecorationTheme(
+    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+    isDense: true,
+  );
+}
+
+AppBarTheme _buildAppBarTheme(TextTheme textTheme, ColorScheme colorScheme) {
+  return AppBarTheme(
+    textTheme: textTheme.apply(bodyColor: colorScheme.primary),
+    color: colorScheme.surface,
+    iconTheme: IconThemeData(color: colorScheme.primary),
+    brightness: colorScheme.brightness,
   );
 }
 

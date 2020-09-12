@@ -1,4 +1,5 @@
 import 'package:pzz/domain/actions/actions.dart';
+import 'package:pzz/domain/repository/preference_repository.dart';
 import 'package:pzz/domain/repository/pzz_repository.dart';
 import 'package:pzz/models/app_state.dart';
 import 'package:redux/redux.dart';
@@ -9,13 +10,17 @@ typedef MiddlewareTyped<State, Action> = dynamic Function(
   NextDispatcher next,
 );
 
-List<Middleware<AppState>> createPzzMiddleware(PzzRepository repository) {
+List<Middleware<AppState>> createPzzMiddleware(
+  PzzRepository pzzRepository,
+  PreferenceRepository preferenceRepository,
+) {
   return [
-    TypedMiddleware<AppState, InitialAction>(_createInitial(repository)),
-    TypedMiddleware<AppState, LoadPizzasAction>(_createLoadPizzas(repository)),
-    TypedMiddleware<AppState, LoadBasketAction>(_createLoadBasket(repository)),
-    TypedMiddleware<AppState, AddProductAction>(_createAddPizzaItem(repository)),
-    TypedMiddleware<AppState, RemoveProductAction>(_createRemovePizzaItem(repository)),
+    TypedMiddleware<AppState, InitialAction>(_createInitial(pzzRepository)),
+    TypedMiddleware<AppState, LoadPizzasAction>(_createLoadPizzas(pzzRepository)),
+    TypedMiddleware<AppState, LoadBasketAction>(_createLoadBasket(pzzRepository)),
+    TypedMiddleware<AppState, AddProductAction>(_createAddPizzaItem(pzzRepository)),
+    TypedMiddleware<AppState, RemoveProductAction>(_createRemovePizzaItem(pzzRepository)),
+    TypedMiddleware<AppState, SavePersonalInfoAction>(_createSavePersonalInfo(preferenceRepository)),
   ];
 }
 
@@ -80,6 +85,13 @@ MiddlewareTyped<AppState, RemoveProductAction> _createRemovePizzaItem(PzzReposit
     }).catchError((ex) {
       print(ex);
     });
+    next(action);
+  };
+}
+
+MiddlewareTyped<AppState, SavePersonalInfoAction> _createSavePersonalInfo(PreferenceRepository repository) {
+  return (Store<AppState> store, SavePersonalInfoAction action, NextDispatcher next) {
+    repository.savePersonalInfo(action.info);
     next(action);
   };
 }

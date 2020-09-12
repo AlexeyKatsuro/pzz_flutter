@@ -5,6 +5,7 @@ import 'package:pzz/models/app_state.dart';
 import 'package:pzz/models/basket.dart';
 import 'package:pzz/models/basket_product.dart';
 import 'package:pzz/models/combined_basket_product.dart';
+import 'package:pzz/models/personal_info.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/models/sauce.dart';
 import 'package:reselect/reselect.dart';
@@ -18,6 +19,8 @@ int basketCountSelector(AppState state) => basketProductsSelector(state).length;
 List<Pizza> pizzasSelector(AppState state) => state.pizzas;
 
 List<Sauce> saucesSelector(AppState state) => state.sauce;
+
+PersonalInfo personalInfoSelector(AppState state) => state.personalInfo;
 
 Selector<AppState, Map<ProductType, List<CombinedBasketProduct>>> combinedBasketProductsTypedMap =
     createSelector1(basketProductsSelector, (List<BasketProduct> products) {

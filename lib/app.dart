@@ -6,6 +6,7 @@ import 'package:pzz/routes.dart';
 import 'package:pzz/theme.dart';
 import 'package:pzz/ui/basket_page.dart';
 import 'package:pzz/ui/home_page.dart';
+import 'package:pzz/ui/person_info_page.dart';
 import 'package:redux/redux.dart';
 
 class PzzApp extends StatelessWidget {
@@ -27,7 +28,8 @@ class PzzApp extends StatelessWidget {
                   StoreProvider.of<AppState>(context).dispatch(InitialAction());
                 },
               ),
-          Routes.basketScreen: (context) => BasketPage()
+          Routes.basketScreen: (context) => BasketPage(),
+          Routes.personalInfoScreen: (context) => PersonalInfoPage(),
         },
       ),
     );

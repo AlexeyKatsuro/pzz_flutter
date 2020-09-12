@@ -9,8 +9,8 @@ import 'package:pzz/res/strings.dart';
 import 'package:pzz/routes.dart';
 import 'package:pzz/ui/widgets/badge_counter.dart';
 import 'package:pzz/ui/widgets/pizza.dart';
-import 'package:redux/redux.dart';
 import 'package:pzz/utils/extensions/to_product_ext.dart';
+import 'package:redux/redux.dart';
 
 class HomePage extends StatefulWidget {
   final VoidCallback onInit;
@@ -36,6 +36,14 @@ class _HomePageState extends State<HomePage> {
         return Scaffold(
           appBar: AppBar(
             title: const Text(StringRes.appName),
+            actions: [
+              IconButton(
+                icon: Icon(Icons.person_outline),
+                onPressed: () {
+                  Navigator.of(context).pushNamed(Routes.personalInfoScreen);
+                },
+              ),
+            ],
           ),
           body: vm.loading ? _buildLoader() : _buildPizzasList(vm),
           floatingActionButton: vm.isBasketButtonVisible ? _buildBasketButton(vm.basketCount) : null,
@@ -85,6 +93,7 @@ class _ViewModel {
   final void Function(Pizza, ProductSize) onAddPizzaClick;
   final void Function(Pizza, ProductSize) onRemovePizzaClick;
   final CombinedBasketProduct Function(ProductType type, int productId) getCombinedProduct;
+
   bool get isBasketButtonVisible => basketCount != 0;
 
   _ViewModel({

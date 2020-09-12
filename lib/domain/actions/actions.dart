@@ -1,3 +1,4 @@
+import 'package:pzz/models/personal_info.dart';
 import 'package:pzz/models/sauce.dart';
 import 'package:pzz/models/basket.dart';
 import 'package:pzz/models/pizza.dart';
@@ -42,3 +43,9 @@ class RemoveProductAction {
 class StartLoadingAction {}
 
 class StopLoadingAction {}
+
+class SavePersonalInfoAction {
+  final PersonalInfo info;
+
+  SavePersonalInfoAction(this.info);
+}
