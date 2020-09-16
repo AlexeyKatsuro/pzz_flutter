@@ -1,6 +1,7 @@
 import 'package:pzz/domain/actions/actions.dart';
 import 'package:pzz/domain/repository/preference_repository.dart';
 import 'package:pzz/domain/repository/pzz_repository.dart';
+import 'package:pzz/domain/selectors/selector.dart';
 import 'package:pzz/models/app_state.dart';
 import 'package:redux/redux.dart';
 
@@ -15,18 +16,20 @@ List<Middleware<AppState>> createPzzMiddleware(
   PreferenceRepository preferenceRepository,
 ) {
   return [
-    TypedMiddleware<AppState, InitialAction>(_createInitial(pzzRepository)),
+    TypedMiddleware<AppState, InitialAction>(_createInitial(pzzRepository, preferenceRepository)),
     TypedMiddleware<AppState, LoadPizzasAction>(_createLoadPizzas(pzzRepository)),
     TypedMiddleware<AppState, LoadBasketAction>(_createLoadBasket(pzzRepository)),
     TypedMiddleware<AppState, AddProductAction>(_createAddPizzaItem(pzzRepository)),
     TypedMiddleware<AppState, RemoveProductAction>(_createRemovePizzaItem(pzzRepository)),
     TypedMiddleware<AppState, SavePersonalInfoAction>(_createSavePersonalInfo(preferenceRepository)),
+    TypedMiddleware<AppState, SelectStreetAction>(_createSelectStreet(preferenceRepository)),
   ];
 }
 
-Middleware<AppState> _createInitial(PzzRepository repository) {
+Middleware<AppState> _createInitial(PzzRepository repository, PreferenceRepository preferenceRepository) {
   return (Store<AppState> store, dynamic action, NextDispatcher next) async {
     next(StartLoadingAction());
+    next(SavePersonalInfoAction(preferenceRepository.getPersonalInfo()));
     try {
       final pizzas = repository.loadPizzas();
       final sauces = repository.loadSauces();
@@ -93,5 +96,12 @@ MiddlewareTyped<AppState, SavePersonalInfoAction> _createSavePersonalInfo(Prefer
   return (Store<AppState> store, SavePersonalInfoAction action, NextDispatcher next) {
     repository.savePersonalInfo(action.info);
     next(action);
+  };
+}
+
+MiddlewareTyped<AppState, SelectStreetAction> _createSelectStreet(PreferenceRepository repository) {
+  return (Store<AppState> store, SelectStreetAction action, NextDispatcher next) {
+    next(action);
+    repository.savePersonalInfo(personalInfoSelector(store.state));
   };
 }

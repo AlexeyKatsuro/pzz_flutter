@@ -3,6 +3,7 @@ import 'package:pzz/models/sauce.dart';
 import 'package:pzz/models/basket.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/models/product.dart';
+import 'package:pzz/models/street.dart';
 
 class InitialAction {}
 
@@ -48,4 +49,30 @@ class SavePersonalInfoAction {
   final PersonalInfo info;
 
   SavePersonalInfoAction(this.info);
+}
+
+class PerformStreetSearchAction {
+  final String query;
+
+  PerformStreetSearchAction(this.query);
+}
+
+class SearchStreetErrorAction {
+  final dynamic error;
+
+  SearchStreetErrorAction(this.error);
+}
+
+class SearchStreetResultAction {
+  final List<Street> streets;
+
+  SearchStreetResultAction(this.streets);
+}
+
+class CancelStreetSearchAction {}
+
+class SelectStreetAction {
+  final Street street;
+
+  SelectStreetAction(this.street);
 }

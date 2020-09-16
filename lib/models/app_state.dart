@@ -3,6 +3,7 @@ import 'package:pzz/models/personal_info.dart';
 import 'package:pzz/models/sauce.dart';
 import 'package:pzz/models/basket.dart';
 import 'package:pzz/models/pizza.dart';
+import 'package:pzz/models/street.dart';
 
 @immutable
 class AppState {
@@ -11,6 +12,7 @@ class AppState {
   final List<Sauce> sauce;
   final Basket basket;
   final PersonalInfo personalInfo;
+  final List<Street> suggestedStreets;
 
   AppState({
     this.isLoading = false,
@@ -18,20 +20,9 @@ class AppState {
     this.sauce = const [],
     this.basket = const Basket(),
     this.personalInfo = const PersonalInfo(),
+    this.suggestedStreets = const [],
   })  : assert(pizzas != null),
         assert(basket != null),
         assert(sauce != null),
         assert(personalInfo != null);
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is AppState &&
-          runtimeType == other.runtimeType &&
-          isLoading == other.isLoading &&
-          pizzas == other.pizzas &&
-          basket == other.basket;
-
-  @override
-  int get hashCode => isLoading.hashCode ^ pizzas.hashCode ^ basket.hashCode;
 }

@@ -2,6 +2,7 @@ import 'package:pzz/models/basket.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/models/product.dart';
 import 'package:pzz/models/sauce.dart';
+import 'package:pzz/models/street.dart';
 
 abstract class PzzRepository {
   Future<List<Pizza>> loadPizzas();
@@ -13,4 +14,6 @@ abstract class PzzRepository {
   Future<Basket> addProductToBasket(Product product);
 
   Future<Basket> removeProductFromBasket(Product product);
+
+  Future<List<Street>> searchStreet(String query);
 }

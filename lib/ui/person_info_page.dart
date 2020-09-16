@@ -4,7 +4,9 @@ import 'package:pzz/domain/actions/actions.dart';
 import 'package:pzz/domain/selectors/selector.dart';
 import 'package:pzz/models/app_state.dart';
 import 'package:pzz/models/personal_info.dart';
+import 'package:pzz/models/street.dart';
 import 'package:pzz/res/strings.dart';
+import 'package:pzz/routes.dart';
 import 'package:redux/redux.dart';
 
 class PersonalInfoPage extends StatefulWidget {
@@ -64,6 +66,8 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
   }
 
   Widget _build(BuildContext context, _ViewModel vm) {
+    streetController.text = vm.street;
+    houseController.text = vm.house;
     return Scaffold(
       appBar: AppBar(
         title: Text(StringRes.delivery_address),
@@ -83,14 +87,22 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
           ),
           const SizedBox(height: 12),
           TextFormField(
+            enableInteractiveSelection: false,
+            // will disable paste operation
+            focusNode: new AlwaysDisabledFocusNode(),
+            onTap: () {
+              Navigator.of(context).pushNamed(Routes.searchScreen);
+            },
             decoration: InputDecoration(
               labelText: StringRes.street,
-              suffixIcon: Icon(Icons.keyboard_arrow_down),
+              suffixIcon: Icon(Icons.search),
             ),
             controller: streetController,
           ),
           const SizedBox(height: 12),
           TextFormField(
+            enableInteractiveSelection: false, // will disable paste operation
+            focusNode: new AlwaysDisabledFocusNode(),
             decoration: InputDecoration(
               labelText: StringRes.house,
               suffixIcon: Icon(Icons.keyboard_arrow_down),
@@ -173,16 +185,32 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
 
 class _ViewModel {
   final PersonalInfo personalInfo;
+  final List<Street> suggestedStreets;
   final void Function(PersonalInfo info) onSaveClick;
+  final void Function(String query) onPerformStreetSearch;
+
+  String get street => personalInfo.street;
+
+  String get house => personalInfo.house;
 
   static _ViewModel fromStore(Store<AppState> store) {
     return _ViewModel(
+      suggestedStreets: suggestedStreetsSelector(store.state),
       personalInfo: personalInfoSelector(store.state),
-      onSaveClick: (info) => store.dispatch(
-        SavePersonalInfoAction(info),
-      ),
+      onSaveClick: (info) => store.dispatch(SavePersonalInfoAction(info)),
+      onPerformStreetSearch: (query) => store.dispatch(PerformStreetSearchAction(query)),
     );
   }
 
-  _ViewModel({@required this.onSaveClick, @required this.personalInfo});
+  _ViewModel({
+    @required this.suggestedStreets,
+    @required this.onSaveClick,
+    @required this.onPerformStreetSearch,
+    @required this.personalInfo,
+  });
+}
+
+class AlwaysDisabledFocusNode extends FocusNode {
+  @override
+  bool get hasFocus => false;
 }

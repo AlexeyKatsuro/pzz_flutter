@@ -7,15 +7,24 @@ import 'package:pzz/domain/repository/pzz_repository.dart';
 import 'package:pzz/models/app_state.dart';
 import 'package:pzz/service_locator.dart';
 import 'package:redux/redux.dart';
+import 'package:redux_epics/redux_epics.dart';
+
+import 'domain/middleware/epics.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initDependencies();
+
+  final pzzRepository = getIt<PzzRepository>();
+  final preferenceRepository = getIt<PreferenceRepository>();
+
+  final epicMiddleware = EpicMiddleware(createAppEpic(pzzRepository, preferenceRepository));
+  final middleware = createPzzMiddleware(pzzRepository, preferenceRepository) + [epicMiddleware];
   runApp(PzzApp(
     store: Store<AppState>(
       appReducer,
       initialState: AppState(isLoading: false),
-      middleware: createPzzMiddleware(getIt<PzzRepository>(), getIt<PreferenceRepository>()),
+      middleware: middleware,
     ),
   ));
 }

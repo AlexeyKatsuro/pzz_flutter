@@ -4,6 +4,7 @@ import 'package:pzz/models/basket.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/models/product.dart';
 import 'package:pzz/models/sauce.dart';
+import 'package:pzz/models/street.dart';
 
 class PzzRepositoryImpl implements PzzRepository {
   PzzRepositoryImpl(this._service);
@@ -33,5 +34,10 @@ class PzzRepositoryImpl implements PzzRepository {
   @override
   Future<Basket> removeProductFromBasket(Product product) {
     return _service.removePizzaFromBasket(product);
+  }
+
+  @override
+  Future<List<Street>> searchStreet(String query) {
+    return _service.searchStreet(query);
   }
 }

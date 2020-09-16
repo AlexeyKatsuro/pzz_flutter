@@ -17,4 +17,5 @@ abstract class StringRes {
   static const intercom = 'Домофон';
   static const comments_to_order = 'Комментарий к заказу';
   static const save = 'Сохранить';
+  static const search = 'Найти...';
 }

@@ -29,17 +29,17 @@ class PersonalInfo {
   });
 
   PersonalInfo copyWith({
-    name,
-    phone,
-    streetI,
-    houseI,
-    street,
-    house,
-    flat,
-    entrance,
-    floor,
-    intercom,
-    comment,
+    String name,
+    String phone,
+    int streetId,
+    int houseId,
+    String street,
+    String house,
+    String flat,
+    String entrance,
+    String floor,
+    String intercom,
+    String comment,
   }) {
     return PersonalInfo(
       name: name ?? this.name,

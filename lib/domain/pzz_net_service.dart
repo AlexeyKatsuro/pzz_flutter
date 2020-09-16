@@ -10,6 +10,7 @@ import 'package:pzz/models/mappers/sause_item_response_mapper.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/models/product.dart';
 import 'package:pzz/models/sauce.dart';
+import 'package:pzz/models/street.dart';
 
 class PzzNetService {
   final baseUrl = 'https://pzz.by/api/v1/';
@@ -45,8 +46,22 @@ class PzzNetService {
     return client.post(baseUrl + path, body: formData).handleResponse(_basketResponseMapper);
   }
 
+  Future<List<Street>> searchStreet(String query) async {
+    final path = Uri.encodeFull('streets?order=title:asc&search=title:$query');
+    return client.get(baseUrl + path).handleResponse(_searchedStreetResponseMapper);
+  }
+
   List<Pizza> _pizzaResponseMapper(dynamic data) {
     return (data as Iterable).map(PizzaItemResponseMapper.map).toList(growable: false);
+  }
+
+  List<Street> _searchedStreetResponseMapper(dynamic data) {
+    return (data as Iterable).map((item) {
+      return Street(
+        id: item['id'],
+        title: item['title'],
+      );
+    }).toList(growable: false);
   }
 
   List<Sauce> _sauceResponseMapper(dynamic data) {
