@@ -3,6 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:pzz/domain/actions/actions.dart';
 import 'package:pzz/domain/selectors/selector.dart';
 import 'package:pzz/models/app_state.dart';
+import 'package:pzz/models/house.dart';
 import 'package:pzz/models/personal_info.dart';
 import 'package:pzz/models/street.dart';
 import 'package:pzz/res/strings.dart';
@@ -108,6 +109,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
               suffixIcon: Icon(Icons.keyboard_arrow_down),
             ),
             controller: houseController,
+            onTap: () => _showPickHouseDialog(context, vm),
           ),
           const SizedBox(height: 12),
           Row(
@@ -181,13 +183,48 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
       ),
     );
   }
+
+  void _showPickHouseDialog(BuildContext context, _ViewModel vm) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return ListView.separated(
+          padding: EdgeInsets.all(8),
+          itemBuilder: (context, index) => _buildItems(context, index, vm),
+          separatorBuilder: (context, index) => SizedBox(height: 4),
+          itemCount: vm.suggestedHouses.length,
+        );
+      },
+    );
+  }
+
+  Widget _buildItems(BuildContext context, int index, _ViewModel vm) {
+    final item = vm.suggestedHouses[index];
+    return Card(
+      child: InkWell(
+        onTap: () {
+          vm.onSelectHouse(item);
+          Navigator.pop(context); // TODO, do navigation by Redux.
+        },
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 12, 12, 16),
+          child: Text(
+            item.title,
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class _ViewModel {
   final PersonalInfo personalInfo;
   final List<Street> suggestedStreets;
+  final List<House> suggestedHouses;
   final void Function(PersonalInfo info) onSaveClick;
   final void Function(String query) onPerformStreetSearch;
+  final void Function(House house) onSelectHouse;
 
   String get street => personalInfo.street;
 
@@ -196,17 +233,21 @@ class _ViewModel {
   static _ViewModel fromStore(Store<AppState> store) {
     return _ViewModel(
       suggestedStreets: suggestedStreetsSelector(store.state),
+      suggestedHouses: suggestedHousesSelector(store.state),
       personalInfo: personalInfoSelector(store.state),
       onSaveClick: (info) => store.dispatch(SavePersonalInfoAction(info)),
       onPerformStreetSearch: (query) => store.dispatch(PerformStreetSearchAction(query)),
+      onSelectHouse: (house) => store.dispatch(SelectHouseAction(house)),
     );
   }
 
   _ViewModel({
     @required this.suggestedStreets,
+    @required this.suggestedHouses,
+    @required this.personalInfo,
     @required this.onSaveClick,
     @required this.onPerformStreetSearch,
-    @required this.personalInfo,
+    @required this.onSelectHouse,
   });
 }
 

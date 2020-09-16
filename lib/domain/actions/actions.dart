@@ -1,3 +1,4 @@
+import 'package:pzz/models/house.dart';
 import 'package:pzz/models/personal_info.dart';
 import 'package:pzz/models/sauce.dart';
 import 'package:pzz/models/basket.dart';
@@ -75,4 +76,16 @@ class SelectStreetAction {
   final Street street;
 
   SelectStreetAction(this.street);
+}
+
+class LoadedHouseAction {
+  final List<House> houses;
+
+  LoadedHouseAction(this.houses);
+}
+
+class SelectHouseAction {
+  final House house;
+
+  SelectHouseAction(this.house);
 }

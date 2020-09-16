@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:pzz/models/basket.dart';
 import 'package:pzz/models/dto/basket_dto.dart';
 import 'package:pzz/models/dto/sause_dto.dart';
+import 'package:pzz/models/house.dart';
 import 'package:pzz/models/mappers/basket_item_response_mapper.dart';
 import 'package:pzz/models/mappers/pizza_item_response_mapper.dart';
 import 'package:pzz/models/mappers/sause_item_response_mapper.dart';
@@ -51,6 +52,11 @@ class PzzNetService {
     return client.get(baseUrl + path).handleResponse(_searchedStreetResponseMapper);
   }
 
+  Future<List<House>> loadHousesByStreet(int streetId) async {
+    final path = Uri.encodeFull('streets/$streetId?order=title:asc&load=region.pizzeria');
+    return client.get(baseUrl + path).handleResponse(_houseResponseMapper);
+  }
+
   List<Pizza> _pizzaResponseMapper(dynamic data) {
     return (data as Iterable).map(PizzaItemResponseMapper.map).toList(growable: false);
   }
@@ -58,6 +64,15 @@ class PzzNetService {
   List<Street> _searchedStreetResponseMapper(dynamic data) {
     return (data as Iterable).map((item) {
       return Street(
+        id: item['id'],
+        title: item['title'],
+      );
+    }).toList(growable: false);
+  }
+
+  List<House> _houseResponseMapper(dynamic data) {
+    return (data as Iterable).map((item) {
+      return House(
         id: item['id'],
         title: item['title'],
       );

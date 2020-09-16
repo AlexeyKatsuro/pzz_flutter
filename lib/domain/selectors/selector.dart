@@ -5,6 +5,7 @@ import 'package:pzz/models/app_state.dart';
 import 'package:pzz/models/basket.dart';
 import 'package:pzz/models/basket_product.dart';
 import 'package:pzz/models/combined_basket_product.dart';
+import 'package:pzz/models/house.dart';
 import 'package:pzz/models/personal_info.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/models/sauce.dart';
@@ -24,6 +25,7 @@ List<Sauce> saucesSelector(AppState state) => state.sauce;
 PersonalInfo personalInfoSelector(AppState state) => state.personalInfo;
 
 List<Street> suggestedStreetsSelector(AppState state) => state.suggestedStreets;
+List<House> suggestedHousesSelector(AppState state) => state.suggestedHouses;
 
 Selector<AppState, Street> personalInfoStreetSelector = createSelector1(personalInfoSelector, (PersonalInfo info) {
   return Street(id: info.streetId, title: info.street);
