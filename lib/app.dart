@@ -31,7 +31,6 @@ class PzzApp extends StatelessWidget {
               ),
           Routes.basketScreen: (context) => BasketPage(),
           Routes.personalInfoScreen: (context) => PersonalInfoPage(),
-          Routes.searchScreen: (context) => SearchPage(),
         },
       ),
     );

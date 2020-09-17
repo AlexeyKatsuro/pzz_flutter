@@ -1,24 +1,41 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:pzz/domain/actions/actions.dart';
 import 'package:pzz/domain/selectors/selector.dart';
 import 'package:pzz/models/app_state.dart';
-import 'package:pzz/models/street.dart';
 import 'package:pzz/res/strings.dart';
 import 'package:redux/redux.dart';
 
-class SearchPage extends StatelessWidget {
+class SearchStreetPage<T> extends StatelessWidget {
   final queryTextController = TextEditingController();
+  final dynamic Function(String query) createPerformSearchAction;
+  final dynamic Function(T item) createSelectItemAction;
+  final String Function(T item) itemToString;
+  final List<T> Function(AppState state) itemsSelector;
+  final String prefill;
+
+  SearchStreetPage({
+    @required this.createPerformSearchAction,
+    @required this.createSelectItemAction,
+    @required this.itemsSelector,
+    @required this.itemToString,
+    @required this.prefill,
+  });
+
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, _ViewModel>(
+    return StoreConnector<AppState, _ViewModel<T>>(
       onInit: (store) {
-        final streetTitle = personalInfoStreetSelector(store.state).title;
-        queryTextController.text = streetTitle;
-        store.dispatch(PerformStreetSearchAction(streetTitle));
+        queryTextController.text = prefill;
+        store.dispatch(createPerformSearchAction(prefill));
       },
-      converter: _ViewModel.fromStore,
+      converter: (store) {
+        return _ViewModel.fromStore(
+            store: store,
+            createPerformSearchAction: createPerformSearchAction,
+            createSelectItemAction: createSelectItemAction,
+            itemsSelector: itemsSelector);
+      },
       builder: (context, vm) {
         return _build(context, vm);
       },
@@ -51,18 +68,18 @@ class SearchPage extends StatelessWidget {
     );
   }
 
-  Widget _buildItems(BuildContext context, int index, _ViewModel vm) {
+  Widget _buildItems(BuildContext context, int index, _ViewModel<T> vm) {
     final item = vm.items[index];
     return Card(
       child: InkWell(
         onTap: () {
-          vm.onStreetClick(item);
+          vm.onItemClick(item);
           Navigator.pop(context); // TODO, do navigation by Redux.
         },
         child: Padding(
           padding: const EdgeInsets.fromLTRB(16, 12, 12, 16),
           child: Text(
-            item.title,
+            itemToString(item),
           ),
         ),
       ),
@@ -70,22 +87,26 @@ class SearchPage extends StatelessWidget {
   }
 }
 
-class _ViewModel {
-  final List<Street> items;
+class _ViewModel<T> {
+  final List<T> items;
   final void Function(String query) onTyping;
-  final void Function(Street street) onStreetClick;
+  final void Function(T item) onItemClick;
 
   _ViewModel({
     @required this.items,
     @required this.onTyping,
-    @required this.onStreetClick,
+    @required this.onItemClick,
   });
 
-  static _ViewModel fromStore(Store<AppState> store) {
-    return _ViewModel(
-      items: suggestedStreetSelector(store.state),
-      onTyping: (query) => store.dispatch(PerformStreetSearchAction(query)),
-      onStreetClick: (street) => store.dispatch(SelectStreetAction(street)),
+  static _ViewModel<T> fromStore<T>(
+      {@required Store<AppState> store,
+      @required List<T> itemsSelector(AppState state),
+      @required dynamic createPerformSearchAction(String query),
+      @required dynamic createSelectItemAction(T item)}) {
+    return _ViewModel<T>(
+      items: itemsSelector(store.state),
+      onTyping: (query) => store.dispatch(createPerformSearchAction(query)),
+      onItemClick: (item) => store.dispatch(createSelectItemAction(item)),
     );
   }
 }

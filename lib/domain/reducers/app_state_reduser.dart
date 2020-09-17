@@ -14,6 +14,7 @@ AppState appReducer(AppState state, dynamic action) {
     basket: basketReducer(state.basket, action),
     personalInfo: personalInfoReducer(state.personalInfo, action),
     suggestedStreets: suggestedStreetsReducer(state.suggestedStreets, action),
-    suggestedHouses: suggestedHousesReducer(state.suggestedHouses, action),
+    totalHouses: totalHousesReducer(state.totalHouses, action),
+    suggestedHouses: suggestedHousesReducer(state.totalHouses, action),
   );
 }

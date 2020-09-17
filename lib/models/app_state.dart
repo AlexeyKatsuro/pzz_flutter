@@ -14,6 +14,7 @@ class AppState {
   final Basket basket;
   final PersonalInfo personalInfo;
   final List<Street> suggestedStreets;
+  final List<House> totalHouses;
   final List<House> suggestedHouses;
 
   AppState({
@@ -23,11 +24,13 @@ class AppState {
     this.basket = const Basket(),
     this.personalInfo = const PersonalInfo(),
     this.suggestedStreets = const [],
+    this.totalHouses = const [],
     this.suggestedHouses = const [],
   })  : assert(pizzas != null),
         assert(basket != null),
         assert(sauce != null),
         assert(suggestedStreets != null),
+        assert(totalHouses != null),
         assert(suggestedHouses != null),
         assert(personalInfo != null);
 }

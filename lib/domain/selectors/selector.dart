@@ -31,8 +31,6 @@ Selector<AppState, Street> personalInfoStreetSelector = createSelector1(personal
   return Street(id: info.streetId, title: info.street);
 });
 
-List<Street> suggestedStreetSelector(AppState state) => state.suggestedStreets;
-
 Selector<AppState, Map<ProductType, List<CombinedBasketProduct>>> combinedBasketProductsTypedMap =
     createSelector1(basketProductsSelector, (List<BasketProduct> products) {
   Map<ProductType, List<BasketProduct>> typeMap = groupBy(products, (BasketProduct e) => e.type);

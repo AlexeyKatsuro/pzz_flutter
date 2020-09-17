@@ -1,9 +1,9 @@
+import 'package:pzz/models/basket.dart';
 import 'package:pzz/models/house.dart';
 import 'package:pzz/models/personal_info.dart';
-import 'package:pzz/models/sauce.dart';
-import 'package:pzz/models/basket.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/models/product.dart';
+import 'package:pzz/models/sauce.dart';
 import 'package:pzz/models/street.dart';
 
 class InitialAction {}
@@ -56,6 +56,12 @@ class PerformStreetSearchAction {
   final String query;
 
   PerformStreetSearchAction(this.query);
+}
+
+class PerformHouseSearchAction {
+  final String query;
+
+  PerformHouseSearchAction(this.query);
 }
 
 class SearchStreetErrorAction {

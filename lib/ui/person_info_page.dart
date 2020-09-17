@@ -7,7 +7,7 @@ import 'package:pzz/models/house.dart';
 import 'package:pzz/models/personal_info.dart';
 import 'package:pzz/models/street.dart';
 import 'package:pzz/res/strings.dart';
-import 'package:pzz/routes.dart';
+import 'package:pzz/ui/search_page.dart';
 import 'package:redux/redux.dart';
 
 class PersonalInfoPage extends StatefulWidget {
@@ -92,7 +92,19 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
             // will disable paste operation
             focusNode: new AlwaysDisabledFocusNode(),
             onTap: () {
-              Navigator.of(context).pushNamed(Routes.searchScreen);
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) {
+                    return SearchStreetPage<Street>(
+                      createPerformSearchAction: (query) => PerformStreetSearchAction(query),
+                      createSelectItemAction: (item) => SelectStreetAction(item),
+                      itemsSelector: suggestedStreetsSelector,
+                      itemToString: (item) => item.title,
+                      prefill: vm.personalInfo.street,
+                    );
+                  },
+                ),
+              );
             },
             decoration: InputDecoration(
               labelText: StringRes.street,
@@ -102,14 +114,29 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
           ),
           const SizedBox(height: 12),
           TextFormField(
-            enableInteractiveSelection: false, // will disable paste operation
+            enableInteractiveSelection: false,
+            // will disable paste operation
             focusNode: new AlwaysDisabledFocusNode(),
             decoration: InputDecoration(
               labelText: StringRes.house,
               suffixIcon: Icon(Icons.keyboard_arrow_down),
             ),
             controller: houseController,
-            onTap: () => _showPickHouseDialog(context, vm),
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) {
+                    return SearchStreetPage<House>(
+                      createPerformSearchAction: (query) => PerformHouseSearchAction(query),
+                      createSelectItemAction: (item) => SelectHouseAction(item),
+                      itemsSelector: suggestedHousesSelector,
+                      itemToString: (item) => item.title,
+                      prefill: vm.personalInfo.house,
+                    );
+                  },
+                ),
+              );
+            },
           ),
           const SizedBox(height: 12),
           Row(
@@ -183,39 +210,6 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
       ),
     );
   }
-
-  void _showPickHouseDialog(BuildContext context, _ViewModel vm) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (context) {
-        return ListView.separated(
-          padding: EdgeInsets.all(8),
-          itemBuilder: (context, index) => _buildItems(context, index, vm),
-          separatorBuilder: (context, index) => SizedBox(height: 4),
-          itemCount: vm.suggestedHouses.length,
-        );
-      },
-    );
-  }
-
-  Widget _buildItems(BuildContext context, int index, _ViewModel vm) {
-    final item = vm.suggestedHouses[index];
-    return Card(
-      child: InkWell(
-        onTap: () {
-          vm.onSelectHouse(item);
-          Navigator.pop(context); // TODO, do navigation by Redux.
-        },
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 12, 12, 16),
-          child: Text(
-            item.title,
-          ),
-        ),
-      ),
-    );
-  }
 }
 
 class _ViewModel {
@@ -223,8 +217,6 @@ class _ViewModel {
   final List<Street> suggestedStreets;
   final List<House> suggestedHouses;
   final void Function(PersonalInfo info) onSaveClick;
-  final void Function(String query) onPerformStreetSearch;
-  final void Function(House house) onSelectHouse;
 
   String get street => personalInfo.street;
 
@@ -236,8 +228,6 @@ class _ViewModel {
       suggestedHouses: suggestedHousesSelector(store.state),
       personalInfo: personalInfoSelector(store.state),
       onSaveClick: (info) => store.dispatch(SavePersonalInfoAction(info)),
-      onPerformStreetSearch: (query) => store.dispatch(PerformStreetSearchAction(query)),
-      onSelectHouse: (house) => store.dispatch(SelectHouseAction(house)),
     );
   }
 
@@ -246,8 +236,6 @@ class _ViewModel {
     @required this.suggestedHouses,
     @required this.personalInfo,
     @required this.onSaveClick,
-    @required this.onPerformStreetSearch,
-    @required this.onSelectHouse,
   });
 }
 
