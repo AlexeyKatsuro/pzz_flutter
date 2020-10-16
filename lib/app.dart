@@ -7,7 +7,6 @@ import 'package:pzz/theme.dart';
 import 'package:pzz/ui/basket_page.dart';
 import 'package:pzz/ui/home_page.dart';
 import 'package:pzz/ui/person_info_page.dart';
-import 'package:pzz/ui/search_page.dart';
 import 'package:redux/redux.dart';
 
 class PzzApp extends StatelessWidget {

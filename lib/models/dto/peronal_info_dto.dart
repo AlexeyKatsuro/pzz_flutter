@@ -1,4 +1,4 @@
-import 'package:pzz/models/personal_info.dart';
+import 'package:pzz/models/person_info/personal_info.dart';
 
 class PersonalInfoDto {
   final int streetId;

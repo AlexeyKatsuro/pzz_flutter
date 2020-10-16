@@ -1,10 +1,10 @@
 import 'package:pzz/models/basket.dart';
-import 'package:pzz/models/house.dart';
-import 'package:pzz/models/personal_info.dart';
+import 'package:pzz/models/person_info/house.dart';
+import 'package:pzz/models/person_info/personal_info.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/models/product.dart';
 import 'package:pzz/models/sauce.dart';
-import 'package:pzz/models/street.dart';
+import 'package:pzz/models/person_info/street.dart';
 
 class InitialAction {}
 

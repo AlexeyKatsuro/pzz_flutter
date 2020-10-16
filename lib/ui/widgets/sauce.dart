@@ -18,44 +18,45 @@ class SauceWidget extends StatelessWidget {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
+        child: Row(
           children: [
-            Image.network(item.photo),
-            Divider(),
-            Text(
-              item.title,
-              textAlign: TextAlign.center,
-              style: Theme.of(context)
-                  .textTheme
-                  .headline6
-                  .copyWith(color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold),
+            CircleAvatar(
+              radius: 25,
+              backgroundImage: NetworkImage(item.photo),
+              backgroundColor: Colors.transparent,
             ),
             SizedBox(
-              height: 4,
+              width: 12,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${item.price.toStringAsFixed(2)} р.',
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline6
-                      .copyWith(color: Theme.of(context).colorScheme.onSurface, fontWeight: FontWeight.bold),
+                  item.title,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.headline6.copyWith(color: Theme.of(context).primaryColor),
                 ),
-                SizedBox(
-                  width: 12,
-                ),
-                CircularButton(
-                  onPressed: onAddClick,
-                  child: Icon(
-                    Icons.add_shopping_cart,
-                    size: 21,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      '${item.price.toStringAsFixed(2)} р.',
+                      style: Theme.of(context).textTheme.headline6.copyWith(
+                            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+                          ),
+                    ),
+                  ],
                 )
               ],
+            ),
+            Spacer(),
+            CircularButton(
+              onPressed: onAddClick,
+              child: Icon(
+                Icons.add_shopping_cart,
+                size: 21,
+              ),
             )
           ],
         ),

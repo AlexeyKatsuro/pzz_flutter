@@ -1,7 +1,6 @@
 import 'package:pzz/domain/actions/actions.dart';
 import 'package:pzz/domain/repository/preference_repository.dart';
 import 'package:pzz/domain/repository/pzz_repository.dart';
-import 'package:pzz/domain/selectors/selector.dart';
 import 'package:pzz/models/app_state.dart';
 import 'package:redux/redux.dart';
 
@@ -30,7 +29,6 @@ List<Middleware<AppState>> createPzzMiddleware(
 Middleware<AppState> _createInitial(PzzRepository repository, PreferenceRepository preferenceRepository) {
   return (Store<AppState> store, dynamic action, NextDispatcher next) async {
     next(StartLoadingAction());
-    next(SavePersonalInfoAction(preferenceRepository.getPersonalInfo()));
     try {
       final pizzas = repository.loadPizzas();
       final sauces = repository.loadSauces();
@@ -95,7 +93,7 @@ MiddlewareTyped<AppState, RemoveProductAction> _createRemovePizzaItem(PzzReposit
 
 MiddlewareTyped<AppState, SavePersonalInfoAction> _createSavePersonalInfo(PreferenceRepository repository) {
   return (Store<AppState> store, SavePersonalInfoAction action, NextDispatcher next) {
-    repository.savePersonalInfo(action.info);
+    //repository.savePersonalInfo(action.info);
     next(action);
   };
 }
@@ -104,7 +102,7 @@ MiddlewareTyped<AppState, SelectStreetAction> _createSelectStreet(
     PzzRepository pzzRepository, PreferenceRepository repository) {
   return (Store<AppState> store, SelectStreetAction action, NextDispatcher next) async {
     next(action);
-    repository.savePersonalInfo(personalInfoSelector(store.state));
+    //repository.savePersonalInfo(personalInfoSelector(store.state));
     final houses = await pzzRepository.loadHousesByStreet(action.street.id);
     next(LoadedHouseAction(houses));
   };
@@ -113,6 +111,6 @@ MiddlewareTyped<AppState, SelectStreetAction> _createSelectStreet(
 MiddlewareTyped<AppState, SelectHouseAction> _createSelectHouse(PreferenceRepository repository) {
   return (Store<AppState> store, SelectHouseAction action, NextDispatcher next) async {
     next(action);
-    repository.savePersonalInfo(personalInfoSelector(store.state));
+    //repository.savePersonalInfo(personalInfoSelector(store.state));
   };
 }

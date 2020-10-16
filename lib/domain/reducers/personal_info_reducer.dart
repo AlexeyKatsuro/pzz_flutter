@@ -1,29 +1,38 @@
 import 'package:pzz/domain/actions/actions.dart';
-import 'package:pzz/models/personal_info.dart';
+import 'package:pzz/domain/person_info_form/reducers/person_info_form_reducers.dart';
+import 'package:pzz/models/person_info/house.dart';
+import 'package:pzz/models/person_info/personal_info_state.dart';
 import 'package:redux/redux.dart';
 
-final personalInfoReducer = combineReducers<PersonalInfo>([
-  TypedReducer<PersonalInfo, SavePersonalInfoAction>(_setPersonalInfo),
-  TypedReducer<PersonalInfo, SelectStreetAction>(_setSelectedStreet),
-  TypedReducer<PersonalInfo, SelectHouseAction>(_setSelectedHouse),
+final personalInfoStateReducer = combineReducers<PersonalInfoState>([
+  TypedReducer<PersonalInfoState, SearchStreetResultAction>(_setSuggestedStreets),
+  TypedReducer<PersonalInfoState, LoadedHouseAction>(_setTotalHouses),
+  TypedReducer<PersonalInfoState, PerformHouseSearchAction>(_setSuggestedHouses),
+  TypedReducer<PersonalInfoState, SavePersonalInfoAction>(_setPersonalInfo),
+  _fromInfoReducer,
 ]);
 
-PersonalInfo _setPersonalInfo(PersonalInfo info, SavePersonalInfoAction action) {
-  return action.info;
+PersonalInfoState _fromInfoReducer(PersonalInfoState state, dynamic action) {
+  return state.copyWith(formInfo: personalInfoReducer(state.formInfo, action));
 }
 
-PersonalInfo _setSelectedStreet(PersonalInfo info, SelectStreetAction action) {
-  return info.copyWith(
-    street: action.street.title,
-    streetId: action.street.id,
-    house: '',
-    houseId: 0,
-  );
+PersonalInfoState _setPersonalInfo(PersonalInfoState state, SavePersonalInfoAction action) {
+  return state.copyWith(formInfo: action.info);
 }
 
-PersonalInfo _setSelectedHouse(PersonalInfo info, SelectHouseAction action) {
-  return info.copyWith(
-    house: action.house.title,
-    houseId: action.house.id,
-  );
+PersonalInfoState _setSuggestedStreets(PersonalInfoState state, SearchStreetResultAction action) {
+  return state.copyWith(suggestedStreets: action.streets);
+}
+
+PersonalInfoState _setTotalHouses(PersonalInfoState state, LoadedHouseAction action) {
+  return state.copyWith(totalHouses: action.houses);
+}
+
+PersonalInfoState _setSuggestedHouses(PersonalInfoState state, PerformHouseSearchAction action) {
+  List<House> suggestedHouses;
+  if (action.query == null || action.query.isEmpty) {
+    suggestedHouses = state.totalHouses;
+  }
+  suggestedHouses = state.totalHouses.where((element) => element.title.contains(action.query)).toList(growable: false);
+  return state.copyWith(suggestedHouses: suggestedHouses);
 }

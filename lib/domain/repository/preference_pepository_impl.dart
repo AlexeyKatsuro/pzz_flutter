@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:pzz/domain/repository/preference_repository.dart';
 import 'package:pzz/models/dto/peronal_info_dto.dart';
-import 'package:pzz/models/personal_info.dart';
+import 'package:pzz/models/person_info/personal_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PreferenceRepositoryImpl extends PreferenceRepository {
@@ -14,7 +14,9 @@ class PreferenceRepositoryImpl extends PreferenceRepository {
 
   @override
   PersonalInfo getPersonalInfo() {
-    var json = jsonDecode(_preferences.getString(KEY_PERSONAL_INFO));
+    final source = _preferences.getString(KEY_PERSONAL_INFO);
+    if (source == null) return null;
+    var json = jsonDecode(source);
     final PersonalInfoDto dto = PersonalInfoDto.fromJson(json);
     return dto.toModel();
   }

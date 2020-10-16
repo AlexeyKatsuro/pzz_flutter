@@ -5,11 +5,11 @@ import 'package:pzz/models/app_state.dart';
 import 'package:pzz/models/basket.dart';
 import 'package:pzz/models/basket_product.dart';
 import 'package:pzz/models/combined_basket_product.dart';
-import 'package:pzz/models/house.dart';
-import 'package:pzz/models/personal_info.dart';
+import 'package:pzz/models/person_info/house.dart';
+import 'package:pzz/models/person_info/personal_info.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/models/sauce.dart';
-import 'package:pzz/models/street.dart';
+import 'package:pzz/models/person_info/street.dart';
 import 'package:reselect/reselect.dart';
 
 Basket basketSelector(AppState state) => state.basket;
@@ -22,10 +22,11 @@ List<Pizza> pizzasSelector(AppState state) => state.pizzas;
 
 List<Sauce> saucesSelector(AppState state) => state.sauce;
 
-PersonalInfo personalInfoSelector(AppState state) => state.personalInfo;
+PersonalInfo personalInfoSelector(AppState state) => state.personalInfoState.formInfo;
+bool isHomeSelectionAllowSelector(AppState state) => state.personalInfoState.totalHouses.isNotEmpty;
 
-List<Street> suggestedStreetsSelector(AppState state) => state.suggestedStreets;
-List<House> suggestedHousesSelector(AppState state) => state.suggestedHouses;
+List<Street> suggestedStreetsSelector(AppState state) => state.personalInfoState.suggestedStreets;
+List<House> suggestedHousesSelector(AppState state) => state.personalInfoState.suggestedHouses;
 
 Selector<AppState, Street> personalInfoStreetSelector = createSelector1(personalInfoSelector, (PersonalInfo info) {
   return Street(id: info.streetId, title: info.street);

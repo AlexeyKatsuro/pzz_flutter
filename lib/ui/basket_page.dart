@@ -9,6 +9,7 @@ import 'package:pzz/models/product.dart';
 import 'package:pzz/models/sauce.dart';
 import 'package:pzz/res/strings.dart';
 import 'package:pzz/ui/widgets/basket_combined_item.dart';
+import 'package:pzz/ui/widgets/personal_info_form.dart';
 import 'package:pzz/ui/widgets/sauce.dart';
 import 'package:pzz/utils/extensions/to_product_ext.dart';
 import 'package:redux/redux.dart';
@@ -22,6 +23,7 @@ class _BasketPageState extends State<BasketPage> {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, _ViewModel>(
+      distinct: true,
       onWillChange: (previousViewModel, newViewModel) {
         if (newViewModel.isBasketEmpty) {
           Navigator.of(context).pop();
@@ -30,48 +32,46 @@ class _BasketPageState extends State<BasketPage> {
       converter: (store) {
         return _ViewModel.formStore(store);
       },
-      builder: (context, vm) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text('${StringRes.total}: ${vm.totalAmount.toStringAsFixed(2)} р.'),
-          ),
-          body: ListView(
-            padding: EdgeInsets.symmetric(vertical: 12),
-            children: [
-              for (int index = 0; index < vm.items.length; index++)
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Column(
-                    children: [
-                      BasketCombinedItem(
-                        combinedProduct: vm.items[index],
-                        onAddClick: (p) => vm.onAddItemClick(p.toProduct()),
-                        onRemoveClick: (p) => vm.onRemoveItemClick(p.toProduct()),
-                      ),
-                      if (index != vm.items.length - 1) Divider(),
-                    ],
+      builder: _build,
+    );
+  }
+
+  Widget _build(BuildContext context, _ViewModel vm) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('${StringRes.total}: ${vm.totalAmount.toStringAsFixed(2)} р.'),
+      ),
+      body: ListView(
+        padding: EdgeInsets.symmetric(vertical: 12),
+        children: [
+          for (int index = 0; index < vm.items.length; index++)
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: [
+                  BasketCombinedItem(
+                    combinedProduct: vm.items[index],
+                    onAddClick: (p) => vm.onAddItemClick(p.toProduct()),
+                    onRemoveClick: (p) => vm.onRemoveItemClick(p.toProduct()),
                   ),
-                ),
-              Container(
-                height: 240,
-                child: ListView.separated(
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  separatorBuilder: (context, index) => Divider(),
-                  itemCount: vm.sauces.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    final item = vm.sauces[index];
-                    return SauceWidget(
-                      item: item,
-                      onAddClick: () => vm.onAddItemClick(item.toProduct()),
-                    );
-                  },
-                ),
+                  if (index != vm.items.length - 1) Divider(),
+                ],
               ),
-            ],
+            ),
+          for (int index = 0; index < vm.sauces.length; index++)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: SauceWidget(
+                item: vm.sauces[index],
+                onAddClick: () => vm.onAddItemClick(vm.sauces[index].toProduct()),
+              ),
+            ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+            child: PersonalInfoFormContainer(),
           ),
-        );
-      },
+        ],
+      ),
     );
   }
 }

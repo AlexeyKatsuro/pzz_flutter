@@ -4,14 +4,14 @@ import 'package:http/http.dart' as http;
 import 'package:pzz/models/basket.dart';
 import 'package:pzz/models/dto/basket_dto.dart';
 import 'package:pzz/models/dto/sause_dto.dart';
-import 'package:pzz/models/house.dart';
 import 'package:pzz/models/mappers/basket_item_response_mapper.dart';
 import 'package:pzz/models/mappers/pizza_item_response_mapper.dart';
 import 'package:pzz/models/mappers/sause_item_response_mapper.dart';
+import 'package:pzz/models/person_info/house.dart';
+import 'package:pzz/models/person_info/street.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/models/product.dart';
 import 'package:pzz/models/sauce.dart';
-import 'package:pzz/models/street.dart';
 
 class PzzNetService {
   final baseUrl = 'https://pzz.by/api/v1/';
