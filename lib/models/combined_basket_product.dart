@@ -19,6 +19,8 @@ class CombinedBasketProduct {
   final ProductType type;
   final List<BasketProduct> products;
 
+  int get productsCount => products.length;
+
   num get price => products.fold(0, (sum, element) => sum + element.price);
 
   bool hasSize(ProductSize size) => products.any((element) => element.size == size);
@@ -54,4 +56,8 @@ class CombinedBasketProduct {
 
   @override
   int get hashCode => id.hashCode ^ type.hashCode ^ products.hashCode;
+}
+
+extension ListCombinedBasketProductExt on List<CombinedBasketProduct> {
+  int get allProductsCount => this.fold(0, (previousValue, element) => previousValue + element.productsCount);
 }

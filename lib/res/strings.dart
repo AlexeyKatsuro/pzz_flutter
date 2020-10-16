@@ -18,4 +18,20 @@ abstract class StringRes {
   static const comments_to_order = 'Комментарий к заказу';
   static const save = 'Сохранить';
   static const search = 'Найти...';
+
+  // TODO Use plurals
+  static String chooseFeeSauces(int count) {
+    if (count <= 0) return chooseSauces; // TODO it check should not be here
+    if (count == 1) return 'Выберите $count бесплатный соус';
+    return 'Выберите $count бесплатных соусов';
+  }
+
+  static const String chooseSauces = 'Выберите соус';
+
+  static const pizzas = 'Пиццы';
+  static const sauces = 'Соусы';
+  static const snacks = 'Закуски';
+  static const desserts = 'Дисерты';
+  static const drinks = 'Напитки';
+  static const deliveryAddress = 'Адресс доставки';
 }

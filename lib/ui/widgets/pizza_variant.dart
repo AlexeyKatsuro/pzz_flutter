@@ -63,8 +63,7 @@ class PizzaVariantWidget extends StatelessWidget {
   }
 
   Widget _buildToBasketButton(BuildContext context) {
-    return OutlineButton(
-      textColor: Theme.of(context).colorScheme.primary,
+    return OutlinedButton(
       onPressed: () {
         onAddPizzaClick(variant.size);
       },

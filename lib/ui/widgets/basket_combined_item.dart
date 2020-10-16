@@ -26,7 +26,6 @@ class BasketCombinedItem extends StatelessWidget {
           combinedProduct.title,
           style: theme.textTheme.headline6.copyWith(
             color: theme.primaryColor,
-            fontWeight: FontWeight.bold,
           ),
         ),
         for (ProductSize size in combinedProduct.availableSizes) ...[

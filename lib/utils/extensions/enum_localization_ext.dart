@@ -13,10 +13,30 @@ extension ProductSizeLocalExt on ProductSize {
     assert(sizeEnum != null);
     return sizeEnum;
   }
+
   static ProductSize fromStringOrNull(String size) {
     final sizeEnum = ProductSize.values.firstWhere((element) => element.name == size);
     return sizeEnum;
   }
 
   String get localizedString => ProductSizeLocalExt._localizedMap[this];
+}
+
+extension ProductTypeLocalExt on ProductType {
+  String get localizedPluralsString {
+    switch (this) {
+      case ProductType.pizza:
+        return StringRes.pizzas;
+      case ProductType.sauce:
+        return StringRes.sauces;
+      case ProductType.snack:
+        return StringRes.snacks;
+      case ProductType.dessert:
+        return StringRes.desserts;
+      case ProductType.drink:
+        return StringRes.drinks;
+    }
+    assert(false);
+    return null;
+  }
 }
