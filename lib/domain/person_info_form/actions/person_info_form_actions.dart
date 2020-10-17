@@ -1,4 +1,4 @@
- import 'package:pzz/models/payment_way.dart';
+import 'package:pzz/models/payment_way.dart';
 
 class NameChangedAction {
   const NameChangedAction(this.text);
