@@ -20,6 +20,8 @@ class Sauce {
 
   ProductType get type => ProductType.sauce;
 
+  String get priceText => '${price.toStringAsFixed(2)} р.';
+
   @override
   String toString() {
     return 'SauceDto{id: $id, title: $title, photo: $photo, price: $price}';

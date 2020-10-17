@@ -10,8 +10,10 @@ import 'package:pzz/models/person_info/street.dart';
 import 'package:pzz/res/strings.dart';
 import 'package:pzz/ui/search_page.dart';
 import 'package:redux/redux.dart';
+import 'package:pzz/utils/extensions/text_form_field_ext.dart';
 
 class PersonalInfoFormContainer extends StatelessWidget {
+  const PersonalInfoFormContainer({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, _ViewModel>(
@@ -279,12 +281,4 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
 class AlwaysDisabledFocusNode extends FocusNode {
   @override
   bool get hasFocus => false;
-}
-
-extension on TextEditingController {
-  void setTextIfNew(String newText) {
-    if (this.text != newText) {
-      this.text = newText;
-    }
-  }
 }

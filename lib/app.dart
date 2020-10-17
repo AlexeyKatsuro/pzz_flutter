@@ -7,6 +7,7 @@ import 'package:pzz/theme.dart';
 import 'package:pzz/ui/basket_page.dart';
 import 'package:pzz/ui/home_page.dart';
 import 'package:pzz/ui/person_info_page.dart';
+import 'package:pzz/ui/sauces_page.dart';
 import 'package:redux/redux.dart';
 
 class PzzApp extends StatelessWidget {
@@ -30,6 +31,7 @@ class PzzApp extends StatelessWidget {
               ),
           Routes.basketScreen: (context) => BasketPage(),
           Routes.personalInfoScreen: (context) => PersonalInfoPage(),
+          Routes.saucesScreen: (context) => SaucesPage(),
         },
       ),
     );

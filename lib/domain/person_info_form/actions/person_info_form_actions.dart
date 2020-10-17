@@ -1,3 +1,5 @@
+ import 'package:pzz/models/payment_way.dart';
+
 class NameChangedAction {
   const NameChangedAction(this.text);
 
@@ -48,6 +50,18 @@ class IntercomChangedAction {
 
 class CommentChangedAction {
   const CommentChangedAction(this.text);
+
+  final String text;
+}
+
+class PaymentWayChangedAction {
+  const PaymentWayChangedAction(this.paymentWay);
+
+  final PaymentWay paymentWay;
+}
+
+class RentingChangedAction {
+  const RentingChangedAction(this.text);
 
   final String text;
 }

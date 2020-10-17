@@ -28,7 +28,7 @@ class BasketDto {
   String discountUnit;
   String discountComment;
   String status;
-  String renting;
+  String renting; // С какой суммы подготовить сдачу
   String itemListFlat;
   String comment;
   String failureComment;

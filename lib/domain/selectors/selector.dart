@@ -5,6 +5,7 @@ import 'package:pzz/models/app_state.dart';
 import 'package:pzz/models/basket.dart';
 import 'package:pzz/models/basket_product.dart';
 import 'package:pzz/models/combined_basket_product.dart';
+import 'package:pzz/models/payment_way.dart';
 import 'package:pzz/models/person_info/house.dart';
 import 'package:pzz/models/person_info/personal_info.dart';
 import 'package:pzz/models/person_info/street.dart';
@@ -53,6 +54,19 @@ Selector<AppState, Map<ProductType, List<CombinedBasketProduct>>> combinedBasket
   });
 });
 
+/// Curried function from 2 arguments
+Selector<AppState, List<CombinedBasketProduct>> combinedBasketProductsByTypeSelector2(ProductType type) =>
+    createSelector1(
+      combinedBasketProductsTypedMap,
+      (Map<ProductType, List<CombinedBasketProduct>> productMap) {
+        return productMap[type] ?? [];
+      },
+    );
+
+/// Return list of combined sauces in basket
+Selector<AppState, List<CombinedBasketProduct>> combinedBasketSaucesSelector =
+    combinedBasketProductsByTypeSelector2(ProductType.sauce);
+
 Selector<AppState, List<CombinedBasketProduct>> combinedBasketProducts =
     createSelector1(combinedBasketProductsTypedMap, (Map<ProductType, List<CombinedBasketProduct>> combinedProductMap) {
   return combinedProductMap.values.fold([], (value, element) => value + element);
@@ -64,10 +78,29 @@ CombinedBasketProduct combinedProductSelectorBy(AppState state, ProductType type
   return typedProducts?.firstWhere((element) => element.id == productId, orElse: () => null);
 }
 
+/// Return count of free sauces
 Selector<AppState, int> freeSauceCountsSelector = createSelector1(
   combinedBasketProductsTypedMap,
   (Map<ProductType, List<CombinedBasketProduct>> productMap) {
-    return (productMap[ProductType.pizza]?.allProductsCount ?? 0) -
-        (productMap[ProductType.sauce]?.allProductsCount ?? 0);
+    final count =
+        (productMap[ProductType.pizza]?.allProductsCount ?? 0) - (productMap[ProductType.sauce]?.allProductsCount ?? 0);
+    return count > 0 ? count : 0;
   },
 );
+
+Selector<AppState, Map<int, int>> saucesCountsMapSelector = createSelector2(
+  saucesSelector,
+  combinedBasketSaucesSelector,
+  (List<Sauce> sauces, List<CombinedBasketProduct> combinedSauces) {
+    final Map<int, int> saucesCountsMap = {};
+    for (final sauce in sauces) {
+      saucesCountsMap[sauce.id] =
+          combinedSauces.firstWhere((element) => element.id == sauce.id, orElse: () => null)?.productsCount ?? 0;
+    }
+    return saucesCountsMap;
+  },
+);
+
+PaymentWay paymentWaySelector(AppState state) => state.personalInfoState.formInfo.paymentWay;
+
+String rentingSelector(AppState state) => state.personalInfoState.formInfo.renting;

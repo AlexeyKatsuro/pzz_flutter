@@ -21,17 +21,24 @@ abstract class StringRes {
 
   // TODO Use plurals
   static String chooseFeeSauces(int count) {
-    if (count <= 0) return chooseSauces; // TODO it check should not be here
     if (count == 1) return 'Выберите $count бесплатный соус';
+    if (count >= 2 && count < 5) return 'Выберите $count бесплатных соуса';
     return 'Выберите $count бесплатных соусов';
   }
 
-  static const String chooseSauces = 'Выберите соус';
+  static const String addSauces = 'Добавить соус';
 
   static const pizzas = 'Пиццы';
   static const sauces = 'Соусы';
   static const snacks = 'Закуски';
   static const desserts = 'Дисерты';
   static const drinks = 'Напитки';
-  static const deliveryAddress = 'Адресс доставки';
+
+  static const payment_way = 'Способы оплаты';
+  static const charge = 'Картой';
+  static const cash = 'Наличными';
+  static const online = 'Онлайн';
+  static const halva = 'Халва';
+  static const prepare_to_charge = 'С какой суммы подготовить сдачу?';
+  static const place_order = 'Оформить заказ';
 }

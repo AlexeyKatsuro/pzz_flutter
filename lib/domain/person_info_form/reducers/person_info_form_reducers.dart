@@ -1,5 +1,6 @@
 import 'package:pzz/domain/actions/actions.dart';
 import 'package:pzz/domain/person_info_form/actions/person_info_form_actions.dart';
+import 'package:pzz/models/payment_way.dart';
 import 'package:pzz/models/person_info/personal_info.dart';
 import 'package:redux/redux.dart';
 
@@ -15,6 +16,9 @@ final personalInfoReducer = combineReducers<PersonalInfo>([
   TypedReducer<PersonalInfo, FloorChangedAction>(floorChangedReducer),
   TypedReducer<PersonalInfo, IntercomChangedAction>(intercomChangedReducer),
   TypedReducer<PersonalInfo, CommentChangedAction>(commentChangedReducer),
+  TypedReducer<PersonalInfo, PaymentWayChangedAction>(paymentWayChangeReducer),
+  TypedReducer<PersonalInfo, PaymentWayChangedAction>(clearRentingReducer),
+  TypedReducer<PersonalInfo, RentingChangedAction>(rentingChangedReducer),
 ]);
 
 PersonalInfo _setSelectedStreet(PersonalInfo info, SelectStreetAction action) {
@@ -84,5 +88,25 @@ PersonalInfo intercomChangedReducer(PersonalInfo state, IntercomChangedAction ac
 PersonalInfo commentChangedReducer(PersonalInfo state, CommentChangedAction action) {
   return state.copyWith(
     comment: action.text,
+  );
+}
+
+PersonalInfo paymentWayChangeReducer(PersonalInfo state, PaymentWayChangedAction action) {
+  return state.copyWith(
+    paymentWay: action.paymentWay,
+  );
+}
+
+PersonalInfo clearRentingReducer(PersonalInfo state, PaymentWayChangedAction action) {
+  return action.paymentWay != PaymentWay.cash
+      ? state.copyWith(
+          renting: '',
+        )
+      : state;
+}
+
+PersonalInfo rentingChangedReducer(PersonalInfo state, RentingChangedAction action) {
+  return state.copyWith(
+    renting: action.text,
   );
 }

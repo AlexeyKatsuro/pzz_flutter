@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:pzz/models/payment_way.dart';
 
 @immutable
 class PersonalInfo {
@@ -13,6 +14,8 @@ class PersonalInfo {
   final String floor;
   final String intercom;
   final String comment;
+  final PaymentWay paymentWay;
+  final String renting;
 
   const PersonalInfo({
     this.name = '',
@@ -26,6 +29,8 @@ class PersonalInfo {
     this.floor = '',
     this.intercom = '',
     this.comment = '',
+    this.paymentWay,
+    this.renting = '',
   });
 
   PersonalInfo copyWith({
@@ -40,6 +45,8 @@ class PersonalInfo {
     String floor,
     String intercom,
     String comment,
+    PaymentWay paymentWay,
+    String renting,
   }) {
     return PersonalInfo(
       name: name ?? this.name,
@@ -53,6 +60,8 @@ class PersonalInfo {
       floor: floor ?? this.floor,
       intercom: intercom ?? this.intercom,
       comment: comment ?? this.comment,
+      paymentWay: paymentWay ?? this.paymentWay,
+      renting: renting ?? this.renting,
     );
   }
 }

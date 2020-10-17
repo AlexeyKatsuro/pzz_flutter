@@ -14,6 +14,12 @@ ThemeData _buildPzzThemeData() {
 //  );
   final base = ThemeData.from(colorScheme: colorScheme);
   final textTheme = _buildTextTheme(base);
+
+  final buttonsShapeStateProp = MaterialStateProperty.all(
+    RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(6),
+    ),
+  );
   return base.copyWith(
     cardTheme: _buildCardTheme(base, colorScheme),
     textTheme: _buildTextTheme(base),
@@ -21,6 +27,15 @@ ThemeData _buildPzzThemeData() {
     primaryTextTheme: _buildColorTextTheme(textTheme, colorScheme.primary),
     appBarTheme: _buildAppBarTheme(textTheme, colorScheme),
     inputDecorationTheme: _buildInputDecorationTheme(),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ButtonStyle(
+        elevation: MaterialStateProperty.all(0),
+        shape: buttonsShapeStateProp,
+      ),
+    ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: ButtonStyle(shape: buttonsShapeStateProp),
+    ),
     buttonTheme: ButtonThemeData(
         shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(6),
@@ -51,7 +66,7 @@ TextTheme _buildTextTheme(ThemeData base) {
   return textTheme.copyWith(
     headline5: textTheme.headline5.apply(fontFamily: fontFamily),
     headline6: textTheme.headline6.apply(fontFamily: fontFamily).copyWith(fontSize: 20),
-    bodyText2: textTheme.bodyText2.apply(color: defaultTextColor.withOpacity(0.5)),
+    bodyText2: textTheme.bodyText2.apply(color: defaultTextColor.withOpacity(0.84)),
     button: textTheme.button.apply(fontFamily: fontFamily),
   );
 }

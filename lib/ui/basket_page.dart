@@ -7,8 +7,9 @@ import 'package:pzz/models/basket.dart';
 import 'package:pzz/models/combined_basket_product.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/models/product.dart';
-import 'package:pzz/models/sauce.dart';
 import 'package:pzz/res/strings.dart';
+import 'package:pzz/routes.dart';
+import 'package:pzz/ui/containers/payment_way_container.dart';
 import 'package:pzz/ui/widgets/basket_combined_item.dart';
 import 'package:pzz/ui/widgets/personal_info_form.dart';
 import 'package:pzz/utils/extensions/enum_localization_ext.dart';
@@ -43,19 +44,23 @@ class _BasketPageState extends State<BasketPage> {
         title: Text('${StringRes.total}: ${vm.totalAmount.toStringAsFixed(2)} р.'),
       ),
       body: ListView(
-        padding: EdgeInsets.symmetric(vertical: 12),
         children: [
+          SizedBox(
+            height: 12,
+          ),
           ..._buildProducts(context, vm, ProductType.pizza),
           ..._buildProducts(context, vm, ProductType.sauce),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: OutlinedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, Routes.saucesScreen);
+              },
               child: Row(
                 children: [
                   Expanded(
                     child: Text(
-                      StringRes.chooseFeeSauces(vm.freeSauceCounts),
+                      vm.freeSauceCounts != 0 ? StringRes.chooseFeeSauces(vm.freeSauceCounts) : StringRes.addSauces,
                     ),
                   ),
                   Icon(
@@ -66,19 +71,27 @@ class _BasketPageState extends State<BasketPage> {
               ),
             ),
           ),
-          /* for (int index = 0; index < vm.sauces.length; index++)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: SauceWidget(
-                item: vm.sauces[index],
-                onAddClick: () => vm.onAddItemClick(vm.sauces[index].toProduct()),
-              ),
-            ),*/
-          DividedCenterTitle(StringRes.deliveryAddress),
+          DividedCenterTitle(StringRes.delivery_address),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: PersonalInfoFormContainer(),
           ),
+          DividedCenterTitle(StringRes.payment_way),
+          SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: PaymentWayContainer(),
+          ),
+          SizedBox(
+            height: 12,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: ElevatedButton(
+              onPressed: () {},
+              child: Text(StringRes.place_order),
+            ),
+          )
         ],
       ),
     );
@@ -138,7 +151,6 @@ class _ViewModel {
   final void Function(Product) onAddItemClick;
   final void Function(Product) onRemoveItemClick;
   final Map<ProductType, List<CombinedBasketProduct>> itemsMap;
-  final List<Sauce> sauces;
 
   final Basket basket;
 
@@ -150,7 +162,6 @@ class _ViewModel {
 
   _ViewModel({
     @required this.itemsMap,
-    @required this.sauces,
     @required this.basket,
     @required this.onAddItemClick,
     @required this.onRemoveItemClick,
@@ -158,13 +169,11 @@ class _ViewModel {
     @required this.freeSauceCounts,
   })  : assert(itemsMap != null),
         assert(basketCount != null),
-        assert(sauces != null),
         assert(onAddItemClick != null);
 
   static _ViewModel formStore(Store<AppState> store) {
     return _ViewModel(
       basket: basketSelector(store.state),
-      sauces: saucesSelector(store.state),
       itemsMap: combinedBasketProductsTypedMap(store.state),
       basketCount: basketCountSelector(store.state),
       freeSauceCounts: freeSauceCountsSelector(store.state),

@@ -1,3 +1,4 @@
+import 'package:pzz/models/payment_way.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/res/strings.dart';
 
@@ -35,6 +36,23 @@ extension ProductTypeLocalExt on ProductType {
         return StringRes.desserts;
       case ProductType.drink:
         return StringRes.drinks;
+    }
+    assert(false);
+    return null;
+  }
+}
+
+extension PaymentWayLocalExt on PaymentWay {
+  String get localized {
+    switch (this) {
+      case PaymentWay.charge:
+        return StringRes.charge;
+      case PaymentWay.cash:
+        return StringRes.cash;
+      case PaymentWay.online:
+        return StringRes.online;
+      case PaymentWay.halva:
+        return StringRes.halva;
     }
     assert(false);
     return null;

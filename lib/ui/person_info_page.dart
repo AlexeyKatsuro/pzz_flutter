@@ -19,13 +19,7 @@ class PersonalInfoPage extends StatelessWidget {
         children: [
           PersonalInfoFormContainer(),
           const SizedBox(height: 12),
-          RaisedButton(
-            elevation: 0,
-            focusElevation: 0,
-            highlightElevation: 0,
-            hoverElevation: 0,
-            color: Theme.of(context).colorScheme.primary,
-            textColor: Theme.of(context).colorScheme.onPrimary,
+          ElevatedButton(
             onPressed: () {
               final store = StoreProvider.of<AppState>(context);
               store.dispatch(SavePersonalInfoAction(personalInfoSelector(store.state)));

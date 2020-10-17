@@ -7,11 +7,17 @@ class SauceWidget extends StatelessWidget {
     Key key,
     @required this.item,
     @required this.onAddClick,
+    @required this.onRemoveClick,
+    @required this.isFree,
+    @required this.count,
   })  : assert(item != null),
         super(key: key);
 
   final Sauce item;
   final VoidCallback onAddClick;
+  final VoidCallback onRemoveClick;
+  final bool isFree;
+  final int count;
 
   @override
   Widget build(BuildContext context) {
@@ -28,35 +34,31 @@ class SauceWidget extends StatelessWidget {
             SizedBox(
               width: 12,
             ),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  item.title,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headline6.copyWith(color: Theme.of(context).primaryColor),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      '${item.price.toStringAsFixed(2)} р.',
-                      style: Theme.of(context).textTheme.headline6.copyWith(
-                            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
-                          ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-            Spacer(),
-            CircularButton(
-              onPressed: onAddClick,
-              child: Icon(
-                Icons.add_shopping_cart,
-                size: 21,
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item.title,
+                    style: Theme.of(context).textTheme.headline6.copyWith(color: Theme.of(context).primaryColor),
+                  ),
+                  Text(
+                    isFree ? '0.00 р' : item.priceText,
+                    style: Theme.of(context).textTheme.headline6.copyWith(
+                          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+                        ),
+                  )
+                ],
               ),
+            ),
+            const SizedBox(
+              width: 12,
+            ),
+            Counter(
+              count: count,
+              onRemoveClick: count > 0 ? onRemoveClick : null,
+              onAddClick: onAddClick,
             )
           ],
         ),
