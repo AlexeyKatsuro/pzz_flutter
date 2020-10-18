@@ -23,7 +23,7 @@ void main() async {
   runApp(PzzApp(
     store: Store<AppState>(
       appReducer,
-      initialState: AppState(isLoading: false),
+      initialState: AppState.initial(),
       middleware: middleware,
     ),
   ));

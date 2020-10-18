@@ -1,5 +1,6 @@
 import 'package:pzz/models/basket.dart';
 import 'package:pzz/models/person_info/house.dart';
+import 'package:pzz/models/person_info/personal_info.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/models/product.dart';
 import 'package:pzz/models/sauce.dart';
@@ -19,4 +20,6 @@ abstract class PzzRepository {
   Future<List<Street>> searchStreet(String query);
 
   Future<List<House>> loadHousesByStreet(int streetId);
+
+  Future<Basket> updateAddress(PersonalInfo personalInfo);
 }

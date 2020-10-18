@@ -8,6 +8,14 @@ import 'house.dart';
 @immutable
 class PersonalInfoState {
   const PersonalInfoState({
+    @required this.suggestedStreets,
+    @required this.totalHouses,
+    @required this.suggestedHouses,
+    @required this.formInfo,
+    @required this.formInfoErrors,
+  });
+
+  const PersonalInfoState.initial({
     this.suggestedStreets = const [],
     this.totalHouses = const [],
     this.suggestedHouses = const [],

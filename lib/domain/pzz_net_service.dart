@@ -4,10 +4,13 @@ import 'package:http/http.dart' as http;
 import 'package:pzz/models/basket.dart';
 import 'package:pzz/models/dto/basket_dto.dart';
 import 'package:pzz/models/dto/sause_dto.dart';
+import 'package:pzz/models/mappers/address_response_mapper.dart';
 import 'package:pzz/models/mappers/basket_item_response_mapper.dart';
 import 'package:pzz/models/mappers/pizza_item_response_mapper.dart';
 import 'package:pzz/models/mappers/sause_item_response_mapper.dart';
+import 'package:pzz/models/payment_way.dart';
 import 'package:pzz/models/person_info/house.dart';
+import 'package:pzz/models/person_info/personal_info.dart';
 import 'package:pzz/models/person_info/street.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/models/product.dart';
@@ -37,13 +40,13 @@ class PzzNetService {
 
   Future<Basket> addProductToBasket(Product product) async {
     final path = 'basket/add-item';
-    final formData = makeFormData(product);
+    final formData = _makeProductFormData(product);
     return client.post(baseUrl + path, body: formData).handleResponse(_basketResponseMapper);
   }
 
   Future<Basket> removePizzaFromBasket(Product product) async {
     final path = 'basket/remove-item';
-    final formData = makeFormData(product);
+    final formData = _makeProductFormData(product);
     return client.post(baseUrl + path, body: formData).handleResponse(_basketResponseMapper);
   }
 
@@ -55,6 +58,16 @@ class PzzNetService {
   Future<List<House>> loadHousesByStreet(int streetId) async {
     final path = Uri.encodeFull('streets/$streetId?order=title:asc&load=region.pizzeria');
     return client.get(baseUrl + path).handleResponse(_houseResponseMapper);
+  }
+
+  Future<Basket> updateAddress(PersonalInfo personalInfo) async {
+    final path = 'basket/update-address';
+    return client
+        .post(
+          baseUrl + path,
+          body: _makePersonalInfoFormData(personalInfo),
+        )
+        .handleResponse(_basketResponseMapper);
   }
 
   List<Pizza> _pizzaResponseMapper(dynamic data) {
@@ -86,10 +99,14 @@ class PzzNetService {
   Basket _basketResponseMapper(dynamic data) {
     final basketDto = BasketDto.fromJson(data);
     final products = basketDto.items.map(BasketItemResponseMapper.map).toList(growable: false);
-    return Basket(items: products, totalAmount: basketDto.total / 10000);
+    return Basket(
+      items: products,
+      totalAmount: basketDto.total / 10000,
+      address: AddressResponseMapper.map(basketDto.address),
+    );
   }
 
-  Map<String, dynamic> makeFormData(Product product) {
+  Map<String, dynamic> _makeProductFormData(Product product) {
     // CRUTCH for back end, this props non nullable only for pizzas and hardcoded as 'thin'
     final String dough = product.type == ProductType.pizza ? 'thin' : null;
     return {
@@ -99,6 +116,27 @@ class PzzNetService {
       'dough': '$dough',
     };
   }
+}
+
+Map<String, dynamic> _makePersonalInfoFormData(PersonalInfo personalInfo) {
+  return {
+    'name': personalInfo.name,
+    'flat': personalInfo.flat,
+    'entrance': personalInfo.entrance,
+    'floor': personalInfo.floor,
+    'intercom': personalInfo.intercom,
+    'comment': personalInfo.comment,
+    'preorder_datetime': '',
+    'no-contact-delivery': '1',
+    'renting': personalInfo.renting,
+    'phone': personalInfo.phone,
+    'preorder_date': '',
+    'preorder_time': '',
+    'no_contact_delivery': '0',
+    'street': personalInfo.street,
+    'house': personalInfo.house,
+    'payment': personalInfo.paymentWay.name
+  };
 }
 
 extension on Future<http.Response> {

@@ -2,6 +2,7 @@ import 'package:pzz/domain/actions/actions.dart';
 import 'package:pzz/domain/person_info_form/actions/person_info_form_actions.dart';
 import 'package:pzz/domain/repository/preference_repository.dart';
 import 'package:pzz/domain/repository/pzz_repository.dart';
+import 'package:pzz/domain/selectors/selector.dart';
 import 'package:pzz/models/app_state.dart';
 import 'package:redux/redux.dart';
 
@@ -24,6 +25,7 @@ List<Middleware<AppState>> createPzzMiddleware(
     TypedMiddleware<AppState, SavePersonalInfoAction>(_createSavePersonalInfo(preferenceRepository)),
     TypedMiddleware<AppState, SelectStreetAction>(_createSelectStreet(pzzRepository, preferenceRepository)),
     TypedMiddleware<AppState, SelectHouseAction>(_createSelectHouse(preferenceRepository)),
+    TypedMiddleware<AppState, TryPlaceOrderAction>(_createUpdateAddress(pzzRepository)),
   ];
 }
 
@@ -113,5 +115,14 @@ MiddlewareTyped<AppState, SelectHouseAction> _createSelectHouse(PreferenceReposi
   return (Store<AppState> store, SelectHouseAction action, NextDispatcher next) async {
     next(action);
     //repository.savePersonalInfo(personalInfoSelector(store.state));
+  };
+}
+
+MiddlewareTyped<AppState, TryPlaceOrderAction> _createUpdateAddress(PzzRepository repository) {
+  return (Store<AppState> store, TryPlaceOrderAction action, NextDispatcher next) async {
+    next(action);
+    if (isPersonInfoValid(store.state)) {
+      repository.updateAddress(personalInfoSelector(store.state));
+    }
   };
 }

@@ -106,6 +106,15 @@ Selector<AppState, Map<int, int>> saucesCountsMapSelector = createSelector2(
 
 PaymentWay paymentWaySelector(AppState state) => state.personalInfoState.formInfo.paymentWay;
 
-String paymentWayErrorSelector(AppState state) => state.personalInfoState.formInfoErrors.paymentWay;
+PersonalInfoErrors personInfoFormErrorsSelector(AppState state) => state.personalInfoState.formInfoErrors;
+
+String paymentWayErrorSelector(AppState state) => personInfoFormErrorsSelector(state).paymentWay;
+
+Selector<AppState, bool> isPersonInfoValid = createSelector1(
+  personInfoFormErrorsSelector,
+  (PersonalInfoErrors errors) {
+    return !errors.hasErrors;
+  },
+);
 
 String rentingSelector(AppState state) => state.personalInfoState.formInfo.renting;

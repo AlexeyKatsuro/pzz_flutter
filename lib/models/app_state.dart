@@ -15,12 +15,20 @@ class AppState {
   final PersonalInfoState personalInfoState;
 
   AppState({
+    @required this.isLoading,
+    @required this.pizzas,
+    @required this.sauce,
+    @required this.basket,
+    @required this.personalInfoState,
+  });
+
+  const AppState.initial({
     this.isLoading = false,
     this.pizzas = const [],
     this.sauce = const [],
-    this.basket = const Basket(),
+    this.basket = const Basket.initial(),
     //this.personalInfo = const PersonalInfo(),
-    this.personalInfoState = const PersonalInfoState(),
+    this.personalInfoState = const PersonalInfoState.initial(),
   })  : assert(pizzas != null),
         assert(basket != null),
         assert(sauce != null),

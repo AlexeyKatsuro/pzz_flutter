@@ -27,4 +27,6 @@ class PersonalInfoErrors {
       paymentWay: paymentWay ?? this.paymentWay,
     );
   }
+
+  bool get hasErrors => phone.isNotEmpty || street.isNotEmpty || house.isNotEmpty || paymentWay.isNotEmpty;
 }
