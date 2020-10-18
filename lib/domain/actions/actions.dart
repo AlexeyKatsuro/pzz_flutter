@@ -1,10 +1,7 @@
 import 'package:pzz/models/basket.dart';
-import 'package:pzz/models/person_info/house.dart';
-import 'package:pzz/models/person_info/personal_info.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/models/product.dart';
 import 'package:pzz/models/sauce.dart';
-import 'package:pzz/models/person_info/street.dart';
 
 class InitialAction {}
 
@@ -46,52 +43,4 @@ class StartLoadingAction {}
 
 class StopLoadingAction {}
 
-class SavePersonalInfoAction {
-  final PersonalInfo info;
-
-  SavePersonalInfoAction(this.info);
-}
-
-class PerformStreetSearchAction {
-  final String query;
-
-  PerformStreetSearchAction(this.query);
-}
-
-class PerformHouseSearchAction {
-  final String query;
-
-  PerformHouseSearchAction(this.query);
-}
-
-class SearchStreetErrorAction {
-  final dynamic error;
-
-  SearchStreetErrorAction(this.error);
-}
-
-class SearchStreetResultAction {
-  final List<Street> streets;
-
-  SearchStreetResultAction(this.streets);
-}
-
-class CancelStreetSearchAction {}
-
-class SelectStreetAction {
-  final Street street;
-
-  SelectStreetAction(this.street);
-}
-
-class LoadedHouseAction {
-  final List<House> houses;
-
-  LoadedHouseAction(this.houses);
-}
-
-class SelectHouseAction {
-  final House house;
-
-  SelectHouseAction(this.house);
-}
+class TryPlaceOrderAction {}

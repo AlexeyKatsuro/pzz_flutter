@@ -1,4 +1,4 @@
-import 'package:pzz/domain/actions/actions.dart';
+import 'package:pzz/domain/person_info_form/actions/person_info_form_actions.dart';
 import 'package:pzz/domain/repository/pzz_repository.dart';
 import 'package:pzz/models/app_state.dart';
 import 'package:redux_epics/redux_epics.dart';

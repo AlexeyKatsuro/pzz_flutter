@@ -88,7 +88,7 @@ class _BasketPageState extends State<BasketPage> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: vm.onPlaceOrderClick,
               child: Text(StringRes.place_order),
             ),
           )
@@ -150,6 +150,7 @@ class _ViewModel {
   final int basketCount;
   final void Function(Product) onAddItemClick;
   final void Function(Product) onRemoveItemClick;
+  final VoidCallback onPlaceOrderClick;
   final Map<ProductType, List<CombinedBasketProduct>> itemsMap;
 
   final Basket basket;
@@ -163,26 +164,29 @@ class _ViewModel {
   _ViewModel({
     @required this.itemsMap,
     @required this.basket,
-    @required this.onAddItemClick,
-    @required this.onRemoveItemClick,
     @required this.basketCount,
     @required this.freeSauceCounts,
+    @required this.onAddItemClick,
+    @required this.onRemoveItemClick,
+    @required this.onPlaceOrderClick,
   })  : assert(itemsMap != null),
         assert(basketCount != null),
         assert(onAddItemClick != null);
 
   static _ViewModel formStore(Store<AppState> store) {
     return _ViewModel(
-      basket: basketSelector(store.state),
-      itemsMap: combinedBasketProductsTypedMap(store.state),
-      basketCount: basketCountSelector(store.state),
-      freeSauceCounts: freeSauceCountsSelector(store.state),
-      onAddItemClick: (item) {
-        store.dispatch(AddProductAction(item));
-      },
-      onRemoveItemClick: (item) {
-        store.dispatch(RemoveProductAction(item));
-      },
-    );
+        basket: basketSelector(store.state),
+        itemsMap: combinedBasketProductsTypedMap(store.state),
+        basketCount: basketCountSelector(store.state),
+        freeSauceCounts: freeSauceCountsSelector(store.state),
+        onAddItemClick: (item) {
+          store.dispatch(AddProductAction(item));
+        },
+        onRemoveItemClick: (item) {
+          store.dispatch(RemoveProductAction(item));
+        },
+        onPlaceOrderClick: () {
+          store.dispatch(TryPlaceOrderAction());
+        });
   }
 }

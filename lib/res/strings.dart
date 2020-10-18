@@ -41,4 +41,9 @@ abstract class StringRes {
   static const halva = 'Халва';
   static const prepare_to_charge = 'С какой суммы подготовить сдачу?';
   static const place_order = 'Оформить заказ';
+
+  static const error_empty_phone = 'Введите номер телефона';
+  static const error_empty_street = 'Выберите название улицы';
+  static const error_empty_home = 'Выберите номер дома';
+  static const error_empty_payment_pay = 'Выберите способ оплаты';
 }

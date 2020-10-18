@@ -26,6 +26,17 @@ class SaucesPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(StringRes.sauces),
+        actions: [
+          IconButton(
+              icon: Icon(
+                Icons.check,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+              onPressed: () {
+                // TODO navigation by Redux
+                Navigator.pop(context);
+              })
+        ],
       ),
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),

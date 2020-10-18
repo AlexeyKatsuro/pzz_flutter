@@ -36,14 +36,14 @@ class _HomePageState extends State<HomePage> {
         return Scaffold(
           appBar: AppBar(
             title: const Text(StringRes.appName),
-            actions: [
-              IconButton(
-                icon: Icon(Icons.person_outline),
-                onPressed: () {
-                  Navigator.of(context).pushNamed(Routes.personalInfoScreen);
-                },
-              ),
-            ],
+            // actions: [
+            //   IconButton(
+            //     icon: Icon(Icons.person_outline),
+            //     onPressed: () {
+            //       Navigator.of(context).pushNamed(Routes.personalInfoScreen);
+            //     },
+            //   ),
+            // ],
           ),
           body: vm.loading ? _buildLoader() : _buildPizzasList(vm),
           floatingActionButton: vm.isBasketButtonVisible ? _buildBasketButton(vm.basketCount) : null,

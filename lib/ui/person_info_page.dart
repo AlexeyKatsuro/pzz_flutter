@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:pzz/domain/actions/actions.dart';
+import 'package:pzz/domain/person_info_form/actions/person_info_form_actions.dart';
 import 'package:pzz/domain/selectors/selector.dart';
 import 'package:pzz/models/app_state.dart';
 import 'package:pzz/res/strings.dart';

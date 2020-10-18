@@ -6,8 +6,8 @@ import 'package:pzz/models/app_state.dart';
 import 'package:pzz/models/payment_way.dart';
 import 'package:pzz/res/strings.dart';
 import 'package:pzz/ui/widgets/payment_way.dart';
-import 'package:redux/redux.dart';
 import 'package:pzz/utils/extensions/text_form_field_ext.dart';
+import 'package:redux/redux.dart';
 
 class PaymentWayContainer extends StatefulWidget {
   @override
@@ -30,13 +30,18 @@ class _PaymentWayContainerState extends State<PaymentWayContainer> {
 
   Widget _build(BuildContext context, _ViewModel viewModel) {
     textRentingController.setTextIfNew(viewModel.renting);
-
+    final theme = Theme.of(context);
     return Column(
       children: [
         PaymentWayView(
           initialValue: viewModel.paymentWay,
           onSelected: viewModel.onPaymentWayChanged,
         ),
+        if (viewModel.hasError)
+          Text(
+            viewModel.paymentWayError,
+            style: theme.textTheme.caption.copyWith(color: theme.colorScheme.error),
+          ),
         if (viewModel.isCash)
           Padding(
             padding: EdgeInsets.only(top: 12),
@@ -57,12 +62,14 @@ class _PaymentWayContainerState extends State<PaymentWayContainer> {
 
 class _ViewModel {
   final PaymentWay paymentWay;
+  final String paymentWayError;
   final String renting;
   final ValueChanged<PaymentWay> onPaymentWayChanged;
   final ValueChanged<String> onRentingChanged;
 
   _ViewModel({
     @required this.paymentWay,
+    @required this.paymentWayError,
     @required this.renting,
     @required this.onPaymentWayChanged,
     @required this.onRentingChanged,
@@ -70,8 +77,11 @@ class _ViewModel {
 
   bool get isCash => paymentWay == PaymentWay.cash;
 
+  bool get hasError => paymentWayError.isNotEmpty;
+
   factory _ViewModel.fromStore(Store<AppState> store) {
     return _ViewModel(
+      paymentWayError: paymentWayErrorSelector(store.state),
       paymentWay: paymentWaySelector(store.state),
       renting: rentingSelector(store.state),
       onPaymentWayChanged: (paymentWay) => store.dispatch(PaymentWayChangedAction(paymentWay)),

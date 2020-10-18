@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:pzz/domain/actions/actions.dart';
 import 'package:pzz/domain/person_info_form/actions/person_info_form_actions.dart';
 import 'package:pzz/domain/selectors/selector.dart';
 import 'package:pzz/models/app_state.dart';
 import 'package:pzz/models/person_info/house.dart';
+import 'package:pzz/models/person_info/person_info_errors.dart';
 import 'package:pzz/models/person_info/personal_info.dart';
 import 'package:pzz/models/person_info/street.dart';
 import 'package:pzz/res/strings.dart';
 import 'package:pzz/ui/search_page.dart';
-import 'package:redux/redux.dart';
 import 'package:pzz/utils/extensions/text_form_field_ext.dart';
+import 'package:redux/redux.dart';
 
 class PersonalInfoFormContainer extends StatelessWidget {
   const PersonalInfoFormContainer({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, _ViewModel>(
@@ -26,6 +27,7 @@ class PersonalInfoFormContainer extends StatelessWidget {
 
   Widget _build(BuildContext context, _ViewModel vm) {
     return PersonalInfoForm(
+      errors: vm.errors,
       personalInfo: vm.personalInfo,
       isHomeSelectionAllow: vm.isHomeSelectionAllow,
       onNameChange: vm.onNameChange,
@@ -44,6 +46,7 @@ class PersonalInfoFormContainer extends StatelessWidget {
 class _ViewModel {
   _ViewModel({
     @required this.personalInfo,
+    @required this.errors,
     @required this.isHomeSelectionAllow,
     @required this.onNameChange,
     @required this.onPhoneChange,
@@ -57,6 +60,7 @@ class _ViewModel {
   });
 
   final PersonalInfo personalInfo;
+  final PersonalInfoErrors errors;
   final bool isHomeSelectionAllow;
   final ValueChanged<String> onNameChange;
   final ValueChanged<String> onPhoneChange;
@@ -71,6 +75,7 @@ class _ViewModel {
   factory _ViewModel.formStore(Store<AppState> store) {
     return _ViewModel(
       personalInfo: personalInfoSelector(store.state),
+      errors: personalInfoErrorsSelector(store.state),
       isHomeSelectionAllow: isHomeSelectionAllowSelector(store.state),
       onNameChange: (text) => store.dispatch(NameChangedAction(text)),
       onPhoneChange: (text) => store.dispatch(PhoneChangedAction(text)),
@@ -88,6 +93,7 @@ class _ViewModel {
 class PersonalInfoForm extends StatefulWidget {
   const PersonalInfoForm({
     @required this.personalInfo,
+    @required this.errors,
     @required this.isHomeSelectionAllow,
     @required this.onNameChange,
     @required this.onPhoneChange,
@@ -101,6 +107,7 @@ class PersonalInfoForm extends StatefulWidget {
   });
 
   final PersonalInfo personalInfo;
+  final PersonalInfoErrors errors;
   final bool isHomeSelectionAllow;
   final ValueChanged<String> onNameChange;
   final ValueChanged<String> onPhoneChange;
@@ -165,7 +172,10 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
         ),
         const SizedBox(height: 12),
         TextFormField(
-          decoration: InputDecoration(labelText: StringRes.your_phone_number),
+          decoration: InputDecoration(
+            labelText: StringRes.your_phone_number,
+            errorText: widget.errors.phone.toNullIfEmpty(),
+          ),
           controller: phoneController,
           keyboardType: TextInputType.phone,
           onChanged: widget.onPhoneChange,
@@ -194,6 +204,7 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
           decoration: InputDecoration(
             labelText: StringRes.street,
             suffixIcon: Icon(Icons.search),
+            errorText: widget.errors.street.toNullIfEmpty(),
           ),
           controller: streetController,
         ),
@@ -206,6 +217,7 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
           decoration: InputDecoration(
             labelText: StringRes.house,
             suffixIcon: Icon(Icons.keyboard_arrow_down),
+            errorText: widget.isHomeSelectionAllow ? widget.errors.house.toNullIfEmpty() : null,
           ),
           enabled: widget.isHomeSelectionAllow,
           controller: houseController,
@@ -281,4 +293,10 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
 class AlwaysDisabledFocusNode extends FocusNode {
   @override
   bool get hasFocus => false;
+}
+
+extension on String {
+  String toNullIfEmpty() {
+    return this.isEmpty ? null : this;
+  }
 }

@@ -7,6 +7,7 @@ import 'package:pzz/models/basket_product.dart';
 import 'package:pzz/models/combined_basket_product.dart';
 import 'package:pzz/models/payment_way.dart';
 import 'package:pzz/models/person_info/house.dart';
+import 'package:pzz/models/person_info/person_info_errors.dart';
 import 'package:pzz/models/person_info/personal_info.dart';
 import 'package:pzz/models/person_info/street.dart';
 import 'package:pzz/models/pizza.dart';
@@ -24,6 +25,8 @@ List<Pizza> pizzasSelector(AppState state) => state.pizzas;
 List<Sauce> saucesSelector(AppState state) => state.sauce;
 
 PersonalInfo personalInfoSelector(AppState state) => state.personalInfoState.formInfo;
+
+PersonalInfoErrors personalInfoErrorsSelector(AppState state) => state.personalInfoState.formInfoErrors;
 
 bool isHomeSelectionAllowSelector(AppState state) => state.personalInfoState.totalHouses.isNotEmpty;
 
@@ -102,5 +105,7 @@ Selector<AppState, Map<int, int>> saucesCountsMapSelector = createSelector2(
 );
 
 PaymentWay paymentWaySelector(AppState state) => state.personalInfoState.formInfo.paymentWay;
+
+String paymentWayErrorSelector(AppState state) => state.personalInfoState.formInfoErrors.paymentWay;
 
 String rentingSelector(AppState state) => state.personalInfoState.formInfo.renting;

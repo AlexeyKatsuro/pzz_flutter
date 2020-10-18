@@ -1,5 +1,7 @@
 import 'package:pzz/domain/actions/actions.dart';
+import 'package:pzz/domain/person_info_form/actions/person_info_form_actions.dart';
 import 'package:pzz/domain/person_info_form/reducers/person_info_form_reducers.dart';
+import 'package:pzz/domain/person_info_form/reducers/personal_info_error_reducer.dart';
 import 'package:pzz/models/person_info/house.dart';
 import 'package:pzz/models/person_info/personal_info_state.dart';
 import 'package:redux/redux.dart';
@@ -10,10 +12,16 @@ final personalInfoStateReducer = combineReducers<PersonalInfoState>([
   TypedReducer<PersonalInfoState, PerformHouseSearchAction>(_setSuggestedHouses),
   TypedReducer<PersonalInfoState, SavePersonalInfoAction>(_setPersonalInfo),
   _fromInfoReducer,
+  TypedReducer<PersonalInfoState, TryPlaceOrderAction>(validateFormReducer),
+  _clearErrorReducer,
 ]);
 
 PersonalInfoState _fromInfoReducer(PersonalInfoState state, dynamic action) {
   return state.copyWith(formInfo: personalInfoReducer(state.formInfo, action));
+}
+
+PersonalInfoState _clearErrorReducer(PersonalInfoState state, dynamic action) {
+  return state.copyWith(formInfoErrors: clearPersonalInfoErrorsReducer(state.formInfoErrors, action));
 }
 
 PersonalInfoState _setPersonalInfo(PersonalInfoState state, SavePersonalInfoAction action) {
