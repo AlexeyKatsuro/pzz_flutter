@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:pzz/res/strings.dart';
 
 @immutable
 class BasketAddress {
@@ -47,4 +48,14 @@ class BasketAddress {
   final String floor;
 
   final String intercom;
+}
+
+extension BasketAddressExt on BasketAddress {
+  String get makeFullAddress {
+    if (flat != null && flat.isNotEmpty) {
+      return StringRes.streetHouseFlat(street, house, flat);
+    } else {
+      return StringRes.streetHouse(street, house);
+    }
+  }
 }

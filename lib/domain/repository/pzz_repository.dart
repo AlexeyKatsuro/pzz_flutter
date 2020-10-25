@@ -22,4 +22,6 @@ abstract class PzzRepository {
   Future<List<House>> loadHousesByStreet(int streetId);
 
   Future<Basket> updateAddress(PersonalInfo personalInfo);
+
+  Future<Basket> placeOrder();
 }

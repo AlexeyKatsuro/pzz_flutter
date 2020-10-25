@@ -44,3 +44,15 @@ class StartLoadingAction {}
 class StopLoadingAction {}
 
 class TryPlaceOrderAction {}
+
+class ConfirmPlaceOrderAction {}
+
+class ConfirmLoadingAction {
+  ConfirmLoadingAction({this.isLoading});
+
+  final bool isLoading;
+}
+
+class ShowConfirmOrderDialogAction {}
+
+class HandleConfirmOrderDialogAction {}

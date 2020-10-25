@@ -21,4 +21,6 @@ class Basket {
   final List<BasketProduct> items;
   final num totalAmount;
   final BasketAddress address;
+
+  String get totalAmountText => '${totalAmount.toStringAsFixed(2)} р.';
 }

@@ -5,7 +5,7 @@ abstract class StringRes {
   static const pizza_size_thin = 'Тонкое тесто';
   static const in_basket = 'В корзину';
   static const basket = 'Корзина';
-  static const total = 'Итого';
+  static const total_price = 'Итого';
   static const delivery_address = 'Адрес доставки';
   static const your_name = 'Ваше имя';
   static const your_phone_number = 'Ваш мобильный телефон';
@@ -46,4 +46,12 @@ abstract class StringRes {
   static const error_empty_street = 'Выберите название улицы';
   static const error_empty_home = 'Выберите номер дома';
   static const error_empty_payment_pay = 'Выберите способ оплаты';
+
+  static const to_confirm_title = 'Подтвердите заказ';
+  static const to_confirm_phone = 'Контактный телефон';
+  static const to_confirm_address = 'На адрес';
+  static const to_confirm_button = 'Подтвердить';
+  static const to_confirm_total_price = 'К оплате:';
+  static String streetHouse(String street, String house) => 'ул. $street, д. $house';
+  static String streetHouseFlat(String street, String house, String flat) => 'ул. $street, д. $house, кв. $flat';
 }

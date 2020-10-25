@@ -34,6 +34,8 @@ List<Street> suggestedStreetsSelector(AppState state) => state.personalInfoState
 
 List<House> suggestedHousesSelector(AppState state) => state.personalInfoState.suggestedHouses;
 
+bool showConfirmOrderDialogEventSelector(AppState state) => state.showConfirmOrderDialogEvent;
+
 Selector<AppState, Street> personalInfoStreetSelector = createSelector1(personalInfoSelector, (PersonalInfo info) {
   return Street(id: info.streetId, title: info.street);
 });
@@ -118,3 +120,5 @@ Selector<AppState, bool> isPersonInfoValid = createSelector1(
 );
 
 String rentingSelector(AppState state) => state.personalInfoState.formInfo.renting;
+
+bool isConfirmLoadingSelector(AppState state) => state.isConfirmLoading;

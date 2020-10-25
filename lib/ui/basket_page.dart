@@ -9,6 +9,7 @@ import 'package:pzz/models/pizza.dart';
 import 'package:pzz/models/product.dart';
 import 'package:pzz/res/strings.dart';
 import 'package:pzz/routes.dart';
+import 'package:pzz/ui/containers/confirm_place_order_container.dart';
 import 'package:pzz/ui/containers/payment_way_container.dart';
 import 'package:pzz/ui/widgets/basket_combined_item.dart';
 import 'package:pzz/ui/widgets/personal_info_form.dart';
@@ -30,6 +31,21 @@ class _BasketPageState extends State<BasketPage> {
         if (newViewModel.isBasketEmpty) {
           Navigator.of(context).pop();
         }
+        if (newViewModel.showConfirmOrderDialogEvent) {
+          StoreProvider.of<AppState>(context).dispatch(HandleConfirmOrderDialogAction());
+          showModalBottomSheet<void>(
+            backgroundColor: Theme.of(context).colorScheme.background,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(10),
+              ),
+            ),
+            context: context,
+            builder: (BuildContext context) {
+              return ConfirmPlaceOrderContainer();
+            },
+          );
+        }
       },
       converter: (store) {
         return _ViewModel.formStore(store);
@@ -41,7 +57,7 @@ class _BasketPageState extends State<BasketPage> {
   Widget _build(BuildContext context, _ViewModel vm) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('${StringRes.total}: ${vm.totalAmount.toStringAsFixed(2)} р.'),
+        title: Text('${StringRes.total_price}: ${vm.totalAmount.toStringAsFixed(2)} р.'),
       ),
       body: ListView(
         children: [
@@ -82,11 +98,8 @@ class _BasketPageState extends State<BasketPage> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: PaymentWayContainer(),
           ),
-          SizedBox(
-            height: 12,
-          ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: ElevatedButton(
               onPressed: vm.onPlaceOrderClick,
               child: Text(StringRes.place_order),
@@ -156,6 +169,7 @@ class _ViewModel {
   final Basket basket;
 
   final int freeSauceCounts;
+  final bool showConfirmOrderDialogEvent;
 
   bool get isBasketEmpty => basketCount == 0;
 
@@ -166,6 +180,7 @@ class _ViewModel {
     @required this.basket,
     @required this.basketCount,
     @required this.freeSauceCounts,
+    @required this.showConfirmOrderDialogEvent,
     @required this.onAddItemClick,
     @required this.onRemoveItemClick,
     @required this.onPlaceOrderClick,
@@ -175,6 +190,7 @@ class _ViewModel {
 
   static _ViewModel formStore(Store<AppState> store) {
     return _ViewModel(
+        showConfirmOrderDialogEvent: showConfirmOrderDialogEventSelector(store.state),
         basket: basketSelector(store.state),
         itemsMap: combinedBasketProductsTypedMap(store.state),
         basketCount: basketCountSelector(store.state),

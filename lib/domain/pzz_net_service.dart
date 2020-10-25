@@ -70,6 +70,13 @@ class PzzNetService {
         .handleResponse(_basketResponseMapper);
   }
 
+  Future<Basket> placeOrder() async {
+    await Future.delayed(Duration(seconds: 3));
+    throw "TODO";
+    final path = 'basket/save';
+    return client.post(baseUrl + path).handleResponse(_basketResponseMapper);
+  }
+
   List<Pizza> _pizzaResponseMapper(dynamic data) {
     return (data as Iterable).map(PizzaItemResponseMapper.map).toList(growable: false);
   }

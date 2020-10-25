@@ -26,6 +26,7 @@ List<Middleware<AppState>> createPzzMiddleware(
     TypedMiddleware<AppState, SelectStreetAction>(_createSelectStreet(pzzRepository, preferenceRepository)),
     TypedMiddleware<AppState, SelectHouseAction>(_createSelectHouse(preferenceRepository)),
     TypedMiddleware<AppState, TryPlaceOrderAction>(_createUpdateAddress(pzzRepository)),
+    TypedMiddleware<AppState, ConfirmPlaceOrderAction>(_createConfirmPlaceOrder(pzzRepository)),
   ];
 }
 
@@ -122,7 +123,26 @@ MiddlewareTyped<AppState, TryPlaceOrderAction> _createUpdateAddress(PzzRepositor
   return (Store<AppState> store, TryPlaceOrderAction action, NextDispatcher next) async {
     next(action);
     if (isPersonInfoValid(store.state)) {
-      repository.updateAddress(personalInfoSelector(store.state));
+      repository.updateAddress(personalInfoSelector(store.state)).then((basket) {
+        store.dispatch(BasketLoadedAction(basket));
+        store.dispatch(ShowConfirmOrderDialogAction());
+      }).catchError((ex) {
+        print(ex);
+      });
     }
+  };
+}
+
+MiddlewareTyped<AppState, ConfirmPlaceOrderAction> _createConfirmPlaceOrder(PzzRepository repository) {
+  return (Store<AppState> store, ConfirmPlaceOrderAction action, NextDispatcher next) async {
+    next(action);
+    store.dispatch(ConfirmLoadingAction(isLoading: true));
+    repository.placeOrder().then((basket) {
+      store.dispatch(BasketLoadedAction(basket));
+    }).catchError((ex) {
+      print(ex);
+    }).whenComplete(() {
+      store.dispatch(ConfirmLoadingAction(isLoading: false));
+    });
   };
 }

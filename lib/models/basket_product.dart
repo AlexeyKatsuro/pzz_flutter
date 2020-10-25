@@ -18,6 +18,8 @@ class BasketProduct {
   })  : assert(id != null),
         assert(type != null);
 
+  String get priceText => '${price.toStringAsFixed(2)} р.';
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||

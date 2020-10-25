@@ -52,4 +52,9 @@ class PzzRepositoryImpl implements PzzRepository {
   Future<Basket> updateAddress(PersonalInfo personalInfo) {
     return _service.updateAddress(personalInfo);
   }
+
+  @override
+  Future<Basket> placeOrder() {
+    return _service.placeOrder();
+  }
 }

@@ -10,28 +10,30 @@ class AppState {
   final List<Pizza> pizzas;
   final List<Sauce> sauce;
   final Basket basket;
-
-  //final PersonalInfo personalInfo;
   final PersonalInfoState personalInfoState;
+  final bool showConfirmOrderDialogEvent;
+  final bool isConfirmLoading;
 
-  AppState({
+  const AppState({
     @required this.isLoading,
     @required this.pizzas,
     @required this.sauce,
     @required this.basket,
     @required this.personalInfoState,
+    @required this.showConfirmOrderDialogEvent,
+    @required this.isConfirmLoading,
   });
 
   const AppState.initial({
     this.isLoading = false,
+    this.isConfirmLoading = false,
     this.pizzas = const [],
     this.sauce = const [],
     this.basket = const Basket.initial(),
-    //this.personalInfo = const PersonalInfo(),
     this.personalInfoState = const PersonalInfoState.initial(),
+    this.showConfirmOrderDialogEvent = false,
   })  : assert(pizzas != null),
         assert(basket != null),
         assert(sauce != null),
         assert(personalInfoState != null);
-//assert(personalInfo != null);
 }
