@@ -58,9 +58,9 @@ class BasketDto {
   Null mealRestrictionId;
   String external;
   String externalId;
-  int isDisabledPaymentByCard;
+  //int isDisabledPaymentByCard; bool/int
   String basketAt;
-  int isDisabledNoContactDelivery;
+  // int isDisabledNoContactDelivery; bool/int
   String err;
   int hiddenActionDisabled;
   int halvaPreorderDisabled;
@@ -134,9 +134,9 @@ class BasketDto {
       this.mealRestrictionId,
       this.external,
       this.externalId,
-      this.isDisabledPaymentByCard,
+      //this.isDisabledPaymentByCard,
       this.basketAt,
-      this.isDisabledNoContactDelivery,
+      //    this.isDisabledNoContactDelivery,
       this.err,
       this.hiddenActionDisabled,
       this.halvaPreorderDisabled,
@@ -156,7 +156,7 @@ class BasketDto {
   BasketDto.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     sync = json['sync'];
-    num = json['num'];
+    num = json['num'].toString();
     onEdit = json['on_edit'];
     fullEdit = json['full_edit'];
     createdDate = json['created_date'];
@@ -210,9 +210,9 @@ class BasketDto {
     mealRestrictionId = json['meal_restriction_id'];
     external = json['external'];
     externalId = json['external_id'];
-    isDisabledPaymentByCard = json['is_disabled_payment_by_card'];
+    //isDisabledPaymentByCard = json['is_disabled_payment_by_card'];
     basketAt = json['basket_at'];
-    isDisabledNoContactDelivery = json['is_disabled_no_contact_delivery'];
+//    isDisabledNoContactDelivery = json['is_disabled_no_contact_delivery'];
     err = json['err'];
     hiddenActionDisabled = json['hidden_action_disabled'];
     halvaPreorderDisabled = json['halva_preorder_disabled'];
@@ -235,6 +235,8 @@ class BasketDto {
       json['items'].forEach((v) {
         items.add(new BasketItemDto.fromJson(v));
       });
+    } else {
+      items = new List<BasketItemDto>();
     }
     address = json['address'] != null ? new AddressDto.fromJson(json['address']) : null;
     publicCommentHtml = json['public_comment_html'];
@@ -298,9 +300,9 @@ class BasketDto {
     data['meal_restriction_id'] = this.mealRestrictionId;
     data['external'] = this.external;
     data['external_id'] = this.externalId;
-    data['is_disabled_payment_by_card'] = this.isDisabledPaymentByCard;
+    // data['is_disabled_payment_by_card'] = this.isDisabledPaymentByCard;
     data['basket_at'] = this.basketAt;
-    data['is_disabled_no_contact_delivery'] = this.isDisabledNoContactDelivery;
+    // data['is_disabled_no_contact_delivery'] = this.isDisabledNoContactDelivery;
     data['err'] = this.err;
     data['hidden_action_disabled'] = this.hiddenActionDisabled;
     data['halva_preorder_disabled'] = this.halvaPreorderDisabled;

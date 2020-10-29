@@ -71,10 +71,10 @@ class PzzNetService {
   }
 
   Future<Basket> placeOrder() async {
-    await Future.delayed(Duration(seconds: 3));
-    throw "TODO";
-    final path = 'basket/save';
-    return client.post(baseUrl + path).handleResponse(_basketResponseMapper);
+    await Future.delayed(Duration(seconds: 2));
+    return Basket.initial();
+    // final path = 'basket/save';
+    // return client.post(baseUrl + path).handleResponse(_basketResponseMapper);
   }
 
   List<Pizza> _pizzaResponseMapper(dynamic data) {

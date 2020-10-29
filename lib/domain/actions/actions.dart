@@ -24,7 +24,7 @@ class SaucesLoadedAction {
 class BasketLoadedAction {
   final Basket basket;
 
-  BasketLoadedAction(this.basket);
+  BasketLoadedAction(this.basket) : assert(basket != null);
 }
 
 class AddProductAction {

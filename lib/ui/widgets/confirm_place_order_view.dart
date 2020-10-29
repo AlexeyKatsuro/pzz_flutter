@@ -5,7 +5,7 @@ import 'package:pzz/res/strings.dart';
 import 'package:pzz/utils/extensions/enum_localization_ext.dart';
 import 'package:pzz/utils/extensions/widget_extension.dart';
 
-class ConfirmPlaceOrderView extends StatelessWidget {
+class ConfirmPlaceOrderView extends StatefulWidget {
   ConfirmPlaceOrderView({
     @required this.address,
     @required this.products,
@@ -19,6 +19,13 @@ class ConfirmPlaceOrderView extends StatelessWidget {
   final BasketAddress address;
   final List<BasketProduct> products;
   final VoidCallback onConfirm;
+
+  @override
+  _ConfirmPlaceOrderViewState createState() => _ConfirmPlaceOrderViewState();
+}
+
+class _ConfirmPlaceOrderViewState extends State<ConfirmPlaceOrderView> {
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +47,7 @@ class ConfirmPlaceOrderView extends StatelessWidget {
             ),
           ),
           ...[
-            for (final product in products) _buildProductRow(context, product),
+            for (final product in widget.products) _buildProductRow(context, product),
           ].divideChildren(divider: Divider()),
           SizedBox(
             height: 20,
@@ -54,7 +61,7 @@ class ConfirmPlaceOrderView extends StatelessWidget {
               SizedBox(width: 4),
               Text(StringRes.to_confirm_phone),
               Spacer(),
-              Text(address.phone, style: theme.textTheme.bodyText1),
+              Text(widget.address.phone, style: theme.textTheme.bodyText1),
             ],
           ),
           Divider(),
@@ -67,7 +74,7 @@ class ConfirmPlaceOrderView extends StatelessWidget {
               SizedBox(width: 4),
               Text(StringRes.to_confirm_address),
               Spacer(),
-              Text(address.makeFullAddress, style: theme.textTheme.bodyText1),
+              Text(widget.address.makeFullAddress, style: theme.textTheme.bodyText1),
             ],
           ),
           SizedBox(
@@ -81,7 +88,7 @@ class ConfirmPlaceOrderView extends StatelessWidget {
               ),
               Spacer(),
               Text(
-                totalPriceText,
+                widget.totalPriceText,
                 style: theme.textTheme.headline6.copyWith(fontFamily: 'Malina'),
               ),
             ],
@@ -92,7 +99,7 @@ class ConfirmPlaceOrderView extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: AbsorbPointer(
-              absorbing: isLoading,
+              absorbing: widget.isLoading,
               child: ElevatedButton(
                 child: AnimatedSwitcher(
                   child: isLoading
@@ -106,7 +113,7 @@ class ConfirmPlaceOrderView extends StatelessWidget {
                       : const Text(StringRes.to_confirm_button),
                   duration: Duration(milliseconds: 300),
                 ),
-                onPressed: onConfirm,
+                onPressed: widget.onConfirm,
               ),
             ),
           ),
