@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pzz/models/basket_address.dart';
 import 'package:pzz/models/basket_product.dart';
+import 'package:pzz/res/constants.dart';
 import 'package:pzz/res/strings.dart';
 import 'package:pzz/utils/extensions/enum_localization_ext.dart';
 import 'package:pzz/utils/extensions/widget_extension.dart';
@@ -111,7 +112,7 @@ class _ConfirmPlaceOrderViewState extends State<ConfirmPlaceOrderView> {
                             valueColor: AlwaysStoppedAnimation(Theme.of(context).colorScheme.onPrimary),
                           ))
                       : const Text(StringRes.to_confirm_button),
-                  duration: Duration(milliseconds: 300),
+                  duration: kDurationFast,
                 ),
                 onPressed: widget.onConfirm,
               ),

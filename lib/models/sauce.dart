@@ -15,7 +15,6 @@ class Sauce {
     @required this.price,
   })  : assert(id != null),
         assert(title != null),
-        assert(photo != null),
         assert(price != null);
 
   ProductType get type => ProductType.sauce;

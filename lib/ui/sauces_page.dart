@@ -5,6 +5,7 @@ import 'package:pzz/domain/selectors/selector.dart';
 import 'package:pzz/models/app_state.dart';
 import 'package:pzz/models/product.dart';
 import 'package:pzz/models/sauce.dart';
+import 'package:pzz/res/constants.dart';
 import 'package:pzz/res/strings.dart';
 import 'package:pzz/ui/widgets/sauce.dart';
 import 'package:pzz/utils/extensions/to_product_ext.dart';
@@ -41,14 +42,22 @@ class SaucesPage extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         children: [
-          if (viewModel.freeSauceCounts != 0)
-            Padding(
+          AnimatedContainer(
+            height: viewModel.hasFreeSauce ? 50 : 0, // TODO CRUTCH
+            duration: kDurationFast,
+            child: Padding(
               padding: const EdgeInsets.fromLTRB(0, 12, 0, 8),
-              child: Text(
-                StringRes.chooseFeeSauces(viewModel.freeSauceCounts),
-                style: Theme.of(context).textTheme.headline6.copyWith(color: Colors.black54),
+              child: AnimatedSwitcher(
+                duration: kDurationFast,
+                child: viewModel.hasFreeSauce
+                    ? Text(
+                        StringRes.chooseFeeSauces(viewModel.freeSauceCounts),
+                        style: Theme.of(context).textTheme.headline6.copyWith(color: Colors.black54),
+                      )
+                    : null,
               ),
             ),
+          ),
           for (int index = 0; index < viewModel.sauces.length; index++)
             SauceWidget(
               count: viewModel.saucesCountMap[viewModel.sauces[index].id],
