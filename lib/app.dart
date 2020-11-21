@@ -26,7 +26,7 @@ class PzzApp extends StatelessWidget {
         routes: {
           Routes.homeScreen: (context) => HomePage(
                 onInit: () {
-                  StoreProvider.of<AppState>(context).dispatch(InitialAction());
+                  store.dispatch(InitialAction(scope: Routes.homeScreen));
                 },
               ),
           Routes.basketScreen: (context) => BasketPage(),

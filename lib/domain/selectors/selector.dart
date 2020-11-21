@@ -5,6 +5,7 @@ import 'package:pzz/models/app_state.dart';
 import 'package:pzz/models/basket.dart';
 import 'package:pzz/models/basket_product.dart';
 import 'package:pzz/models/combined_basket_product.dart';
+import 'package:pzz/models/home_page_state.dart';
 import 'package:pzz/models/payment_way.dart';
 import 'package:pzz/models/person_info/house.dart';
 import 'package:pzz/models/person_info/person_info_errors.dart';
@@ -15,6 +16,8 @@ import 'package:pzz/models/sauce.dart';
 import 'package:reselect/reselect.dart';
 
 Basket basketSelector(AppState state) => state.basket;
+
+HomePageState homePageStateSelector(AppState state) => state.homePageState;
 
 List<BasketProduct> basketProductsSelector(AppState state) => basketSelector(state).items;
 

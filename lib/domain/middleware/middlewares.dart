@@ -1,4 +1,5 @@
 import 'package:pzz/domain/actions/actions.dart';
+import 'package:pzz/domain/error/scoped_error_actions.dart';
 import 'package:pzz/domain/person_info_form/actions/person_info_form_actions.dart';
 import 'package:pzz/domain/repository/preference_repository.dart';
 import 'package:pzz/domain/repository/pzz_repository.dart';
@@ -30,31 +31,34 @@ List<Middleware<AppState>> createPzzMiddleware(
   ];
 }
 
-Middleware<AppState> _createInitial(PzzRepository repository, PreferenceRepository preferenceRepository) {
-  return (Store<AppState> store, dynamic action, NextDispatcher next) async {
-    next(StartLoadingAction());
+MiddlewareTyped<AppState, InitialAction> _createInitial(
+    PzzRepository repository, PreferenceRepository preferenceRepository) {
+  return (Store<AppState> store, InitialAction action, NextDispatcher next) async {
+    next(action);
+    next(HomeLoadingAction(true));
     try {
       final pizzas = repository.loadPizzas();
       final sauces = repository.loadSauces();
-      store.dispatch(PizzasLoadedAction(await pizzas));
-      store.dispatch(SaucesLoadedAction(await sauces));
+      next(PizzasLoadedAction(await pizzas));
+      next(SaucesLoadedAction(await sauces));
 
       final basket = await repository.loadBasket();
-      store.dispatch(BasketLoadedAction(basket));
+      next(BasketLoadedAction(basket));
     } catch (ex) {
       print(ex);
+      next(HomeErrorAction(ex.toString()));
     }
-    next(StopLoadingAction());
-    next(action);
+    next(HomeLoadingAction(false));
   };
 }
 
 Middleware<AppState> _createLoadPizzas(PzzRepository repository) {
   return (Store<AppState> store, dynamic action, NextDispatcher next) async {
     repository.loadPizzas().then((pizzas) {
-      store.dispatch(PizzasLoadedAction(pizzas));
+      next(PizzasLoadedAction(pizzas));
     }).catchError((ex) {
       print(ex);
+      next(SetScopedErrorAction(error: ex.toString(), scope: action.scope));
     });
 
     next(action);
@@ -64,7 +68,7 @@ Middleware<AppState> _createLoadPizzas(PzzRepository repository) {
 Middleware<AppState> _createLoadBasket(PzzRepository repository) {
   return (Store<AppState> store, dynamic action, NextDispatcher next) {
     repository.loadBasket().then((basket) {
-      store.dispatch(BasketLoadedAction(basket));
+      next(BasketLoadedAction(basket));
     }).catchError((ex) {
       print(ex);
     });
@@ -76,9 +80,10 @@ Middleware<AppState> _createLoadBasket(PzzRepository repository) {
 MiddlewareTyped<AppState, AddProductAction> _createAddPizzaItem(PzzRepository repository) {
   return (Store<AppState> store, AddProductAction action, NextDispatcher next) {
     repository.addProductToBasket(action.product).then((basket) {
-      store.dispatch(BasketLoadedAction(basket));
+      next(BasketLoadedAction(basket));
     }).catchError((ex) {
       print(ex);
+      next(SetScopedErrorAction(error: ex.toString(), scope: action.scope));
     });
     next(action);
   };
@@ -87,9 +92,10 @@ MiddlewareTyped<AppState, AddProductAction> _createAddPizzaItem(PzzRepository re
 MiddlewareTyped<AppState, RemoveProductAction> _createRemovePizzaItem(PzzRepository repository) {
   return (Store<AppState> store, RemoveProductAction action, NextDispatcher next) {
     repository.removeProductFromBasket(action.product).then((basket) {
-      store.dispatch(BasketLoadedAction(basket));
+      next(BasketLoadedAction(basket));
     }).catchError((ex) {
       print(ex);
+      next(SetScopedErrorAction(error: ex.toString(), scope: action.scope));
     });
     next(action);
   };
@@ -124,8 +130,8 @@ MiddlewareTyped<AppState, TryPlaceOrderAction> _createUpdateAddress(PzzRepositor
     next(action);
     if (isPersonInfoValid(store.state)) {
       repository.updateAddress(personalInfoSelector(store.state)).then((basket) {
-        store.dispatch(BasketLoadedAction(basket));
-        store.dispatch(ShowConfirmOrderDialogAction());
+        next(BasketLoadedAction(basket));
+        next(ShowConfirmOrderDialogAction());
       }).catchError((ex) {
         print(ex);
       });
@@ -136,13 +142,13 @@ MiddlewareTyped<AppState, TryPlaceOrderAction> _createUpdateAddress(PzzRepositor
 MiddlewareTyped<AppState, ConfirmPlaceOrderAction> _createConfirmPlaceOrder(PzzRepository repository) {
   return (Store<AppState> store, ConfirmPlaceOrderAction action, NextDispatcher next) async {
     next(action);
-    store.dispatch(ConfirmLoadingAction(isLoading: true));
+    next(ConfirmLoadingAction(isLoading: true));
     repository.placeOrder().then((basket) {
-      store.dispatch(BasketLoadedAction(basket));
+      next(BasketLoadedAction(basket));
     }).catchError((ex) {
       print(ex);
     }).whenComplete(() {
-      store.dispatch(ConfirmLoadingAction(isLoading: false));
+      next(ConfirmLoadingAction(isLoading: false));
     });
   };
 }

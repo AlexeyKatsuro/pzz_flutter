@@ -15,9 +15,13 @@ import 'package:pzz/ui/widgets/basket_combined_item.dart';
 import 'package:pzz/ui/widgets/personal_info_form.dart';
 import 'package:pzz/utils/extensions/enum_localization_ext.dart';
 import 'package:pzz/utils/extensions/to_product_ext.dart';
+import 'package:pzz/utils/scoped.dart';
+import 'package:pzz/utils/widgets/error_scoped_notifier.dart';
 import 'package:redux/redux.dart';
 
-class BasketPage extends StatefulWidget {
+class BasketPage extends StatefulWidget implements Scoped {
+  final String scope = Routes.basketScreen;
+
   @override
   _BasketPageState createState() => _BasketPageState();
 }
@@ -48,7 +52,7 @@ class _BasketPageState extends State<BasketPage> {
         }
       },
       converter: (store) {
-        return _ViewModel.formStore(store);
+        return _ViewModel.formStore(store, widget.scope);
       },
       builder: _build,
     );
@@ -59,53 +63,56 @@ class _BasketPageState extends State<BasketPage> {
       appBar: AppBar(
         title: Text('${StringRes.total_price}: ${vm.totalAmount.toStringAsFixed(2)} р.'),
       ),
-      body: ListView(
-        children: [
-          SizedBox(
-            height: 12,
-          ),
-          ..._buildProducts(context, vm, ProductType.pizza),
-          ..._buildProducts(context, vm, ProductType.sauce),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: OutlinedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, Routes.saucesScreen);
-              },
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      vm.freeSauceCounts != 0 ? StringRes.chooseFeeSauces(vm.freeSauceCounts) : StringRes.addSauces,
+      body: ErrorScopedNotifier(
+        widget.scope,
+        child: ListView(
+          children: [
+            SizedBox(
+              height: 12,
+            ),
+            ..._buildProducts(context, vm, ProductType.pizza),
+            ..._buildProducts(context, vm, ProductType.sauce),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: OutlinedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, Routes.saucesScreen);
+                },
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        vm.freeSauceCounts != 0 ? StringRes.chooseFeeSauces(vm.freeSauceCounts) : StringRes.addSauces,
+                      ),
                     ),
-                  ),
-                  Icon(
-                    Icons.arrow_forward_ios_rounded,
-                    size: 15,
-                  )
-                ],
+                    Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      size: 15,
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-          DividedCenterTitle(StringRes.delivery_address),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: PersonalInfoFormContainer(),
-          ),
-          DividedCenterTitle(StringRes.payment_way),
-          SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: PaymentWayContainer(),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: ElevatedButton(
-              onPressed: vm.onPlaceOrderClick,
-              child: Text(StringRes.place_order),
+            DividedCenterTitle(StringRes.delivery_address),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: PersonalInfoFormContainer(),
             ),
-          )
-        ],
+            DividedCenterTitle(StringRes.payment_way),
+            SizedBox(height: 8),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: PaymentWayContainer(),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: ElevatedButton(
+                onPressed: vm.onPlaceOrderClick,
+                child: Text(StringRes.place_order),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -190,7 +197,7 @@ class _ViewModel {
         assert(basketCount != null),
         assert(onAddItemClick != null);
 
-  static _ViewModel formStore(Store<AppState> store) {
+  static _ViewModel formStore(Store<AppState> store, String scope) {
     return _ViewModel(
         showConfirmOrderDialogEvent: showConfirmOrderDialogEventSelector(store.state),
         basket: basketSelector(store.state),
@@ -198,10 +205,10 @@ class _ViewModel {
         basketCount: basketCountSelector(store.state),
         freeSauceCounts: freeSauceCountsSelector(store.state),
         onAddItemClick: (item) {
-          store.dispatch(AddProductAction(item));
+          store.dispatch(AddProductAction(product: item, scope: scope));
         },
         handleConfirmOrderDialogEvent: () => store.dispatch(HandleConfirmOrderDialogAction()),
-        onRemoveItemClick: (item) => store.dispatch(RemoveProductAction(item)),
+        onRemoveItemClick: (item) => store.dispatch(RemoveProductAction(product: item, scope: scope)),
         onPlaceOrderClick: () => store.dispatch(TryPlaceOrderAction()));
   }
 }

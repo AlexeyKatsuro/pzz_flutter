@@ -133,7 +133,8 @@ class _ConfirmPlaceOrderViewState extends State<ConfirmPlaceOrderView> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(title),
+        Expanded(child: Text(title)),
+        SizedBox(width: 12),
         Text(
           product.priceText,
           style: theme.textTheme.bodyText1,

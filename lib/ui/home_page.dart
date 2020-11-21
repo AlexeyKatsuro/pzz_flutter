@@ -9,17 +9,23 @@ import 'package:pzz/res/constants.dart';
 import 'package:pzz/res/strings.dart';
 import 'package:pzz/routes.dart';
 import 'package:pzz/ui/widgets/badge_counter.dart';
+import 'package:pzz/ui/widgets/error_view.dart';
 import 'package:pzz/ui/widgets/pizza.dart';
 import 'package:pzz/utils/extensions/to_product_ext.dart';
+import 'package:pzz/utils/scoped.dart';
+import 'package:pzz/utils/widgets/error_scoped_notifier.dart';
 import 'package:redux/redux.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatefulWidget implements Scoped {
   final VoidCallback onInit;
 
   HomePage({@required this.onInit}) : assert(onInit != null);
 
   @override
   _HomePageState createState() => _HomePageState();
+
+  @override
+  String get scope => Routes.homeScreen;
 }
 
 class _HomePageState extends State<HomePage> {
@@ -32,7 +38,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, _ViewModel>(
-      converter: _ViewModel.formStore,
+      converter: (store) => _ViewModel.formStore(store, widget.scope),
       builder: (context, vm) {
         return Scaffold(
           appBar: AppBar(
@@ -46,13 +52,33 @@ class _HomePageState extends State<HomePage> {
             //   ),
             // ],
           ),
-          body: AnimatedSwitcher(
-            duration: kDurationFast,
-            child: vm.loading ? _buildLoader() : _buildPizzasList(vm),
+          body: ErrorScopedNotifier(
+            widget.scope,
+            child: AnimatedSwitcher(
+              duration: kDurationFast,
+              child: _buildContent(context, vm),
+            ),
           ),
           floatingActionButton: vm.isBasketButtonVisible ? _buildBasketButton(vm.basketCount) : null,
         );
       },
+    );
+  }
+
+  Widget _buildContent(BuildContext context, _ViewModel viewModel) {
+    if (viewModel.loading) {
+      return _buildLoader();
+    } else if (viewModel.errorMessage == null) {
+      return _buildPizzasList(viewModel);
+    } else {
+      return _buildError(viewModel);
+    }
+  }
+
+  Widget _buildError(_ViewModel viewModel) {
+    return ErrorView(
+      errorMessage: viewModel.errorMessage,
+      onRepeatClick: viewModel.onRepeat,
     );
   }
 
@@ -94,6 +120,8 @@ class _ViewModel {
   final List<Pizza> pizzas;
   final bool loading;
   final int basketCount;
+  final String errorMessage;
+  final VoidCallback onRepeat;
   final void Function(Pizza, ProductSize) onAddPizzaClick;
   final void Function(Pizza, ProductSize) onRemovePizzaClick;
   final CombinedBasketProduct Function(ProductType type, int productId) getCombinedProduct;
@@ -102,10 +130,12 @@ class _ViewModel {
 
   _ViewModel({
     @required this.pizzas,
+    @required this.errorMessage,
     @required this.loading,
     @required this.onAddPizzaClick,
     @required this.onRemovePizzaClick,
     @required this.getCombinedProduct,
+    @required this.onRepeat,
     @required this.basketCount,
   })  : assert(pizzas != null),
         assert(loading != null),
@@ -113,18 +143,21 @@ class _ViewModel {
         assert(getCombinedProduct != null),
         assert(onAddPizzaClick != null);
 
-  static _ViewModel formStore(Store<AppState> store) {
+  static _ViewModel formStore(Store<AppState> store, String scope) {
     return _ViewModel(
+      errorMessage: homePageStateSelector(store.state).errorMessage,
       pizzas: pizzasSelector(store.state),
-      loading: store.state.isLoading,
+      loading: homePageStateSelector(store.state).isLoading,
       basketCount: basketCountSelector(store.state),
+      // TODO wrong approach, UI doesn't should request data through ViewModel
       getCombinedProduct: (type, productId) => combinedProductSelectorBy(store.state, type, productId),
       onAddPizzaClick: (pizza, size) => store.dispatch(
-        AddProductAction(pizza.toProduct(size)),
+        AddProductAction(scope: scope, product: pizza.toProduct(size)),
       ),
       onRemovePizzaClick: (pizza, size) => store.dispatch(
-        RemoveProductAction(pizza.toProduct(size)),
+        RemoveProductAction(scope: scope, product: pizza.toProduct(size)),
       ),
+      onRepeat: () => store.dispatch(InitialAction(scope: scope)),
     );
   }
 }

@@ -18,6 +18,7 @@ abstract class StringRes {
   static const comments_to_order = 'Комментарий к заказу';
   static const save = 'Сохранить';
   static const search = 'Найти...';
+  static const repeat = 'Повторить';
 
   // TODO Use plurals
   static String chooseFeeSauces(int count) {
@@ -46,6 +47,8 @@ abstract class StringRes {
   static const error_empty_street = 'Выберите название улицы';
   static const error_empty_home = 'Выберите номер дома';
   static const error_empty_payment_pay = 'Выберите способ оплаты';
+  static const error_connection = 'Ошибка подлючения, проверьте соединение с интернетом';
+  static const error_unexpected = 'Неизвестная ошибка';
 
   static const to_confirm_title = 'Подтвердите заказ';
   static const to_confirm_phone = 'Контактный телефон';

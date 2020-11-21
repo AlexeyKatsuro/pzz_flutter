@@ -11,7 +11,7 @@ class BadgeCounter extends StatelessWidget {
     return Stack(
       alignment: Alignment.topRight,
       fit: StackFit.loose,
-      overflow: Overflow.visible,
+      clipBehavior: Clip.none,
       children: [
         child,
         Positioned(

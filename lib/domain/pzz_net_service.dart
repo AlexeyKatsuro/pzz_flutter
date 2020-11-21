@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:pzz/domain/error/error_message_extractor.dart';
+import 'package:pzz/domain/error/standard_pzz_error.dart';
 import 'package:pzz/models/basket.dart';
 import 'package:pzz/models/dto/basket_dto.dart';
 import 'package:pzz/models/dto/sause_dto.dart';
@@ -149,18 +151,23 @@ Map<String, dynamic> _makePersonalInfoFormData(PersonalInfo personalInfo) {
 extension on Future<http.Response> {
   Future<T> handleResponse<T>(T Function(dynamic data) mapper) {
     return then((response) {
+      final body = jsonDecode(response.body) as Map<String, dynamic>;
       if (response.statusCode == 200) {
-        final body = jsonDecode(response.body);
+        // I'm not sure if the error can be true with code 200
+        // But for a restful sleep I will add:)
         if (body['error'] == false) {
           final data = body['response']['data'];
           return mapper(data);
         } else {
-          print(body['data']);
+          throw PzzServerError.fromJson(body);
         }
+      } else {
+        throw PzzServerError.fromJson(body);
       }
     }).catchError((ex, StackTrace stackTrace) {
       print(ex);
       print(stackTrace);
+      throw errorMessageExtractor(ex);
     });
   }
 }

@@ -7,16 +7,21 @@ import 'package:pzz/models/product.dart';
 import 'package:pzz/models/sauce.dart';
 import 'package:pzz/res/constants.dart';
 import 'package:pzz/res/strings.dart';
+import 'package:pzz/routes.dart';
 import 'package:pzz/ui/widgets/sauce.dart';
 import 'package:pzz/utils/extensions/to_product_ext.dart';
+import 'package:pzz/utils/scoped.dart';
 import 'package:redux/redux.dart';
 
-class SaucesPage extends StatelessWidget {
+class SaucesPage extends StatelessWidget implements Scoped {
+  @override
+  final String scope = Routes.saucesScreen;
+
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, _ViewModel>(
       distinct: true,
-      converter: (Store<AppState> store) => _ViewModel.fromStore(store),
+      converter: (Store<AppState> store) => _ViewModel.fromStore(store, scope),
       builder: (_, _ViewModel viewModel) {
         return _build(context, viewModel);
       },
@@ -89,16 +94,16 @@ class _ViewModel {
 
   bool get hasFreeSauce => freeSauceCounts != 0;
 
-  factory _ViewModel.fromStore(Store<AppState> store) {
+  factory _ViewModel.fromStore(Store<AppState> store, String scope) {
     return _ViewModel(
       freeSauceCounts: freeSauceCountsSelector(store.state),
       saucesCountMap: saucesCountsMapSelector(store.state),
       sauces: saucesSelector(store.state),
       onAddItemClick: (item) {
-        store.dispatch(AddProductAction(item));
+        store.dispatch(AddProductAction(product: item, scope: scope));
       },
       onRemoveItemClick: (item) {
-        store.dispatch(RemoveProductAction(item));
+        store.dispatch(RemoveProductAction(product: item, scope: scope));
       },
     );
   }
