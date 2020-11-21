@@ -38,6 +38,7 @@ dependencies:
   flutter_svg: ^0.18.1
   rxdart: ^0.24.1
   redux_epics: ^0.14.0
+  transparent_image: ^1.0.0
 
 dev_dependencies:
   flutter_test:
