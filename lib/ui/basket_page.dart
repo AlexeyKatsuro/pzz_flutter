@@ -32,7 +32,7 @@ class _BasketPageState extends State<BasketPage> {
           Navigator.of(context).pop();
         }
         if (newViewModel.showConfirmOrderDialogEvent) {
-          StoreProvider.of<AppState>(context).dispatch(HandleConfirmOrderDialogAction());
+          newViewModel.handleConfirmOrderDialogEvent();
           showModalBottomSheet<void>(
             backgroundColor: Theme.of(context).colorScheme.background,
             shape: RoundedRectangleBorder(
@@ -164,6 +164,7 @@ class _ViewModel {
   final void Function(Product) onAddItemClick;
   final void Function(Product) onRemoveItemClick;
   final VoidCallback onPlaceOrderClick;
+  final VoidCallback handleConfirmOrderDialogEvent;
   final Map<ProductType, List<CombinedBasketProduct>> itemsMap;
 
   final Basket basket;
@@ -184,6 +185,7 @@ class _ViewModel {
     @required this.onAddItemClick,
     @required this.onRemoveItemClick,
     @required this.onPlaceOrderClick,
+    @required this.handleConfirmOrderDialogEvent,
   })  : assert(itemsMap != null),
         assert(basketCount != null),
         assert(onAddItemClick != null);
@@ -198,11 +200,8 @@ class _ViewModel {
         onAddItemClick: (item) {
           store.dispatch(AddProductAction(item));
         },
-        onRemoveItemClick: (item) {
-          store.dispatch(RemoveProductAction(item));
-        },
-        onPlaceOrderClick: () {
-          store.dispatch(TryPlaceOrderAction());
-        });
+        handleConfirmOrderDialogEvent: () => store.dispatch(HandleConfirmOrderDialogAction()),
+        onRemoveItemClick: (item) => store.dispatch(RemoveProductAction(item)),
+        onPlaceOrderClick: () => store.dispatch(TryPlaceOrderAction()));
   }
 }

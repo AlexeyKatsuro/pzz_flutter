@@ -26,8 +26,6 @@ class ConfirmPlaceOrderView extends StatefulWidget {
 }
 
 class _ConfirmPlaceOrderViewState extends State<ConfirmPlaceOrderView> {
-  bool isLoading = false;
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -103,7 +101,7 @@ class _ConfirmPlaceOrderViewState extends State<ConfirmPlaceOrderView> {
               absorbing: widget.isLoading,
               child: ElevatedButton(
                 child: AnimatedSwitcher(
-                  child: isLoading
+                  child: widget.isLoading
                       ? SizedBox(
                           width: 24,
                           height: 24,

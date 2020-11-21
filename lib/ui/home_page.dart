@@ -5,6 +5,7 @@ import 'package:pzz/domain/selectors/selector.dart';
 import 'package:pzz/models/app_state.dart';
 import 'package:pzz/models/combined_basket_product.dart';
 import 'package:pzz/models/pizza.dart';
+import 'package:pzz/res/constants.dart';
 import 'package:pzz/res/strings.dart';
 import 'package:pzz/routes.dart';
 import 'package:pzz/ui/widgets/badge_counter.dart';
@@ -45,7 +46,10 @@ class _HomePageState extends State<HomePage> {
             //   ),
             // ],
           ),
-          body: vm.loading ? _buildLoader() : _buildPizzasList(vm),
+          body: AnimatedSwitcher(
+            duration: kDurationFast,
+            child: vm.loading ? _buildLoader() : _buildPizzasList(vm),
+          ),
           floatingActionButton: vm.isBasketButtonVisible ? _buildBasketButton(vm.basketCount) : null,
         );
       },

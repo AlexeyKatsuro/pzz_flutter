@@ -71,7 +71,7 @@ class PzzNetService {
   }
 
   Future<Basket> placeOrder() async {
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: 3));
     return Basket.initial();
     // final path = 'basket/save';
     // return client.post(baseUrl + path).handleResponse(_basketResponseMapper);

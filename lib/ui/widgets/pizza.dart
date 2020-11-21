@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pzz/models/combined_basket_product.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/ui/widgets/pizza_variant.dart';
+import 'package:pzz/utils/extensions/widget_extension.dart';
 
 class PizzaWidget extends StatelessWidget {
   final Pizza pizza;
@@ -40,41 +41,21 @@ class PizzaWidget extends StatelessWidget {
                 Text(
                   pizza.name,
                   textAlign: TextAlign.center,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline5
-                      .copyWith(color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold),
+                  style: Theme.of(context).textTheme.headline5.copyWith(color: Theme.of(context).primaryColor),
                 ),
-//                for (PizzaVariant variant in pizza.variants) ...[
-//                  PizzaVariantWidget(
-//                    variant: variant,
-//                    onAddPizzaClick: (size) {
-//                      onAddPizzaClick(pizza, size);
-//                    },
-//                  ),
-//                  Divider()
-//                ],
-
-                ListView.separated(
-                  physics: ScrollPhysics(),
-                  padding: EdgeInsets.symmetric(vertical: 12),
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    ProductSize size = pizza.variants[index].size;
-                    return PizzaVariantWidget(
-                      countInBasket: combinedProduct?.countOfProductsBy(size) ?? 0,
+                ...[
+                  for (final variant in pizza.variants)
+                    PizzaVariantWidget(
+                      countInBasket: combinedProduct?.countOfProductsBy(variant.size) ?? 0,
                       onRemovePizzaClick: (size) {
                         onRemovePizzaClick(pizza, size);
                       },
-                      variant: pizza.variants[index],
+                      variant: variant,
                       onAddPizzaClick: (size) {
                         onAddPizzaClick(pizza, size);
                       },
-                    );
-                  },
-                  separatorBuilder: (context, index) => Divider(height: 12),
-                  itemCount: pizza.variants.length,
-                ),
+                    ),
+                ].divideChildren(divider: Divider(height: 12)),
                 Text(
                   pizza.description,
                   style: Theme.of(context).textTheme.bodyText2,
