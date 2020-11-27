@@ -49,6 +49,8 @@ abstract class StringRes {
   static const error_empty_payment_pay = 'Выберите способ оплаты';
   static const error_connection = 'Ошибка подлючения, проверьте соединение с интернетом';
   static const error_unexpected = 'Неизвестная ошибка';
+  static const error_404 = '404';
+  static const error_404_message = 'Стараница не найдена';
 
   static const to_confirm_title = 'Подтвердите заказ';
   static const to_confirm_phone = 'Контактный телефон';

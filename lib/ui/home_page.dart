@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:pzz/domain/actions/actions.dart';
@@ -16,50 +18,25 @@ import 'package:pzz/utils/scoped.dart';
 import 'package:pzz/utils/widgets/error_scoped_notifier.dart';
 import 'package:redux/redux.dart';
 
-class HomePage extends StatefulWidget implements Scoped {
-  final VoidCallback onInit;
-
-  HomePage({@required this.onInit}) : assert(onInit != null);
-
-  @override
-  _HomePageState createState() => _HomePageState();
-
+class HomePage extends StatelessWidget implements Scoped {
   @override
   String get scope => Routes.homeScreen;
-}
-
-class _HomePageState extends State<HomePage> {
-  @override
-  void initState() {
-    widget.onInit();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, _ViewModel>(
-      converter: (store) => _ViewModel.formStore(store, widget.scope),
+      onInit: (store) => store.dispatch(InitialAction(scope: Routes.homeScreen)),
+      converter: (store) => _ViewModel.formStore(store, scope),
       builder: (context, vm) {
         return Scaffold(
-          appBar: AppBar(
-            title: const Text(StringRes.appName),
-            actions: [
-              IconButton(
-                icon: Icon(Icons.person_outline),
-                onPressed: () {
-                  Navigator.of(context).pushNamed(Routes.personalInfoScreen);
-                },
-              ),
-            ],
-          ),
           body: ErrorScopedNotifier(
-            widget.scope,
+            scope,
             child: AnimatedSwitcher(
               duration: kDurationFast,
               child: _buildContent(context, vm),
             ),
           ),
-          floatingActionButton: vm.isBasketButtonVisible ? _buildBasketButton(vm.basketCount) : null,
+          floatingActionButton: vm.isBasketButtonVisible ? _buildBasketButton(context, vm.basketCount) : null,
         );
       },
     );
@@ -83,19 +60,41 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildPizzasList(_ViewModel vm) {
-    return ListView.separated(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        itemBuilder: (context, index) {
-          final pizza = vm.pizzas[index];
-          return PizzaWidget(
-            combinedProduct: vm.getCombinedProduct(pizza.type, pizza.id),
-            pizza: pizza,
-            onRemovePizzaClick: vm.onRemovePizzaClick,
-            onAddPizzaClick: vm.onAddPizzaClick,
-          );
-        },
-        separatorBuilder: (context, index) => SizedBox(height: 8),
-        itemCount: vm.pizzas.length);
+    return CustomScrollView(
+      slivers: [
+        SliverAppBar(
+          title: const Text(StringRes.appName),
+          floating: true,
+          forceElevated: true,
+          /*  actions: [
+            IconButton(
+              icon: Icon(Icons.person_outline),
+              onPressed: () {
+                Navigator.of(context).pushNamed(Routes.personalInfoScreen);
+              },
+            ),
+          ],*/
+        ),
+        SliverPadding(
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+          sliver: SliverList(
+            delegate: SliverChildBuilderSeparatedDelegate(
+              separatorBuilder: (context, index) => SizedBox(height: 8),
+              itemBuilder: (context, index) {
+                final pizza = vm.pizzas[index];
+                return PizzaWidget(
+                  combinedProduct: vm.getCombinedProduct(pizza.type, pizza.id),
+                  pizza: pizza,
+                  onRemovePizzaClick: vm.onRemovePizzaClick,
+                  onAddPizzaClick: vm.onAddPizzaClick,
+                );
+              },
+              itemCount: vm.pizzas.length,
+            ),
+          ),
+        )
+      ],
+    );
   }
 
   Widget _buildLoader() {
@@ -104,7 +103,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildBasketButton(int basketCount) {
+  Widget _buildBasketButton(BuildContext context, int basketCount) {
     return BadgeCounter(
         count: basketCount,
         child: FloatingActionButton(
@@ -160,4 +159,37 @@ class _ViewModel {
       onRepeat: () => store.dispatch(InitialAction(scope: scope)),
     );
   }
+}
+
+class SliverChildBuilderSeparatedDelegate extends SliverChildBuilderDelegate {
+  SliverChildBuilderSeparatedDelegate(
+      {@required this.itemBuilder, @required this.separatorBuilder, @required int itemCount})
+      : super(
+          _makeSeperatedBuilder(itemBuilder, separatorBuilder),
+          childCount: _makeChildCount(itemCount),
+          //addSemanticIndexes: _makeSemanticIndexCallback(),
+        );
+
+  final IndexedWidgetBuilder itemBuilder;
+  final IndexedWidgetBuilder separatorBuilder;
+
+  static IndexedWidgetBuilder _makeSeperatedBuilder(
+      IndexedWidgetBuilder itemBuilder, IndexedWidgetBuilder separatorBuilder) {
+    return (BuildContext context, int index) {
+      final int itemIndex = index ~/ 2;
+      if (index.isEven) {
+        return itemBuilder(context, itemIndex);
+      }
+      return separatorBuilder(context, itemIndex);
+    };
+  }
+
+  static _makeChildCount(int itemCount) => max(0, itemCount * 2 - 1);
+/*
+  static _makeSemanticIndexCallback() => (Widget widget, int localIndex) {
+        if (localIndex.isEven) {
+          return localIndex ~/ 2;
+        }
+        return null;
+      };*/
 }
