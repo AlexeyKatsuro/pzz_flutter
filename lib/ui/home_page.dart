@@ -11,6 +11,7 @@ import 'package:pzz/res/constants.dart';
 import 'package:pzz/res/strings.dart';
 import 'package:pzz/routes.dart';
 import 'package:pzz/ui/widgets/badge_counter.dart';
+import 'package:pzz/ui/widgets/counter.dart';
 import 'package:pzz/ui/widgets/error_view.dart';
 import 'package:pzz/ui/widgets/pizza.dart';
 import 'package:pzz/utils/extensions/to_product_ext.dart';
@@ -18,25 +19,49 @@ import 'package:pzz/utils/scoped.dart';
 import 'package:pzz/utils/widgets/error_scoped_notifier.dart';
 import 'package:redux/redux.dart';
 
-class HomePage extends StatelessWidget implements Scoped {
+class HomePage extends StatefulWidget implements Scoped {
   @override
   String get scope => Routes.homeScreen;
 
   @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  ScrollController scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
     return StoreConnector<AppState, _ViewModel>(
       onInit: (store) => store.dispatch(InitialAction(scope: Routes.homeScreen)),
-      converter: (store) => _ViewModel.formStore(store, scope),
+      converter: (store) => _ViewModel.formStore(store, widget.scope),
       builder: (context, vm) {
         return Scaffold(
           body: ErrorScopedNotifier(
-            scope,
+            widget.scope,
             child: AnimatedSwitcher(
               duration: kDurationFast,
               child: _buildContent(context, vm),
             ),
           ),
-          floatingActionButton: vm.isBasketButtonVisible ? _buildBasketButton(context, vm.basketCount) : null,
+          floatingActionButton: _HomeFab(
+            scrollController: scrollController,
+            basketCount: vm.basketCount,
+            showOnOffset: screenSize.height,
+          ),
         );
       },
     );
@@ -61,6 +86,7 @@ class HomePage extends StatelessWidget implements Scoped {
 
   Widget _buildPizzasList(_ViewModel vm) {
     return CustomScrollView(
+      controller: scrollController,
       slivers: [
         SliverAppBar(
           title: const Text(StringRes.appName),
@@ -101,17 +127,6 @@ class HomePage extends StatelessWidget implements Scoped {
     return Center(
       child: CircularProgressIndicator(),
     );
-  }
-
-  Widget _buildBasketButton(BuildContext context, int basketCount) {
-    return BadgeCounter(
-        count: basketCount,
-        child: FloatingActionButton(
-          child: const Icon(Icons.shopping_cart),
-          onPressed: () {
-            Navigator.of(context).pushNamed(Routes.basketScreen);
-          },
-        ));
   }
 }
 
@@ -192,4 +207,115 @@ class SliverChildBuilderSeparatedDelegate extends SliverChildBuilderDelegate {
         }
         return null;
       };*/
+}
+
+class _HomeFab extends StatefulWidget {
+  const _HomeFab({
+    Key key,
+    @required this.basketCount,
+    @required this.scrollController,
+    @required this.showOnOffset,
+  }) : super(key: key);
+  final int basketCount;
+  final double showOnOffset;
+  final ScrollController scrollController;
+
+  @override
+  __HomeFabState createState() => __HomeFabState();
+}
+
+class __HomeFabState extends State<_HomeFab> with TickerProviderStateMixin {
+  bool _showUpButton = false;
+
+  AnimationController _arrowController;
+  AnimationController _basketController;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.scrollController.addListener(_checkOffset);
+    _arrowController = AnimationController(duration: kDurationFast, vsync: this);
+    _basketController = AnimationController(duration: kDurationFast, vsync: this);
+    if (widget.basketCount > 0) {
+      _basketController.forward();
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget.scrollController.removeListener(_checkOffset);
+    _arrowController.dispose();
+    _basketController.dispose();
+  }
+
+  void _checkOffset() {
+    if (!_showUpButton && widget.scrollController.offset > widget.showOnOffset) {
+      _showUpButton = true;
+      _arrowController.forward();
+    }
+
+    if (_showUpButton && widget.scrollController.offset <= widget.showOnOffset) {
+      _arrowController.reverse();
+      _showUpButton = false;
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant _HomeFab oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.basketCount != widget.basketCount && oldWidget.basketCount == 0 || widget.basketCount == 0) {
+      if (widget.basketCount > 0) {
+        _basketController.forward();
+      } else {
+        _basketController.reverse();
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        RotationTransition(
+          turns: _arrowController,
+          child: ScaleTransition(
+            scale: _arrowController,
+            child: CircularButton(
+              onPressed: () {
+                widget.scrollController.animateTo(
+                  widget.scrollController.initialScrollOffset,
+                  curve: Curves.easeInOutCirc,
+                  duration: kDurationMedium,
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                primary: theme.colorScheme.primaryVariant,
+                onPrimary: theme.colorScheme.onPrimary,
+                elevation: 4,
+              ),
+              child: Icon(Icons.keyboard_arrow_up),
+            ),
+          ),
+        ),
+        RotationTransition(
+          turns: _basketController,
+          child: ScaleTransition(
+            scale: _basketController,
+            child: BadgeCounter(
+              count: widget.basketCount,
+              child: FloatingActionButton(
+                child: const Icon(Icons.shopping_cart),
+                onPressed: () {
+                  Navigator.of(context).pushNamed(Routes.basketScreen);
+                },
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 }

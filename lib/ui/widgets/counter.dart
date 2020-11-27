@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pzz/utils/extensions/widget_extension.dart';
 
 class Counter extends StatelessWidget {
   const Counter({
@@ -19,24 +20,15 @@ class Counter extends StatelessWidget {
       children: [
         CircularButton(
           onPressed: onRemoveClick,
-          child: Text(
-            '-',
-            style: Theme.of(context).accentTextTheme.headline6.copyWith(fontWeight: FontWeight.bold),
-          ),
+          child: Text('-'),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Text(
-            '$count',
-            style: Theme.of(context).textTheme.headline6,
-          ),
+        Text(
+          '$count',
+          style: Theme.of(context).textTheme.headline6,
         ),
         CircularButton(
           onPressed: onAddClick,
-          child: Text(
-            '+',
-            style: Theme.of(context).accentTextTheme.headline6.copyWith(fontWeight: FontWeight.bold),
-          ),
+          child: Text('+'),
         ),
       ],
     );
@@ -48,28 +40,30 @@ class CircularButton extends StatelessWidget {
     Key key,
     @required this.onPressed,
     this.child,
+    this.style,
   }) : super(key: key);
 
   final VoidCallback onPressed;
   final Widget child;
+  final ButtonStyle style;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 36,
-      height: 36,
-      child: RaisedButton(
-        padding: EdgeInsets.zero,
-        shape: CircleBorder(),
-        textColor: Theme.of(context).colorScheme.onSecondary,
-        color: Theme.of(context).colorScheme.secondary,
-        elevation: 0,
-        highlightElevation: 0,
-        focusElevation: 0,
-        hoverElevation: 0,
-        onPressed: onPressed,
-        child: child,
-      ),
+    final theme = Theme.of(context);
+    final cycleButtonStyle = ElevatedButton.styleFrom(
+      primary: theme.colorScheme.secondary,
+      onPrimary: theme.colorScheme.onSecondary,
+      minimumSize: Size(34, 34),
+      shape: CircleBorder(),
+      padding: EdgeInsets.zero,
+      elevation: 0,
+    );
+    // style from construction has higher priority
+    final effectiveStyle = cycleButtonStyle.fill(style);
+    return ElevatedButton(
+      style: effectiveStyle,
+      onPressed: onPressed,
+      child: DefaultTextStyle.merge(child: child, style: TextStyle(fontSize: 20)),
     );
   }
 }

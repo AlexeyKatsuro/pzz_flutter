@@ -20,3 +20,15 @@ extension ListWidgetExt on List<Widget> {
     return listBuilder;
   }
 }
+
+extension ButtonStyleExt on ButtonStyle {
+  /// Returns a copy of ButtonStyle where the null fields in [other]
+  /// have replaced the corresponding non-null fields in this ButtonStyle.
+  ///
+  /// In other words, this ButtonStyle is used to fill in unspecified (null) fields
+  /// in [other].
+  ButtonStyle fill(ButtonStyle other) {
+    if (other == null) return this;
+    return other.merge(this);
+  }
+}
