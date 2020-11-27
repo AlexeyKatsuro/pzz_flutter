@@ -21,7 +21,8 @@ class PzzApp extends StatelessWidget {
       store: store,
       child: MaterialApp(
         title: 'Flutter Demo',
-        theme: pzzTheme,
+        theme: PzzAppTheme.pzzLightTheme,
+        darkTheme: PzzAppTheme.pzzDarkTheme,
         initialRoute: Routes.homeScreen,
         routes: {
           Routes.homeScreen: (context) => HomePage(

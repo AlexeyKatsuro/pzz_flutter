@@ -32,6 +32,7 @@ class _PaymentWayContainerState extends State<PaymentWayContainer> {
     textRentingController.setTextIfNew(viewModel.renting);
     final theme = Theme.of(context);
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         PaymentWayView(
           initialValue: viewModel.paymentWay,

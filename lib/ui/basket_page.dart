@@ -150,6 +150,7 @@ class DividedCenterTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
     return Row(
       children: [
         Expanded(child: Divider()),
@@ -157,7 +158,7 @@ class DividedCenterTitle extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 16),
           child: Text(
             title,
-            style: Theme.of(context).textTheme.headline6.copyWith(color: Colors.black54),
+            style: theme.textTheme.headline6,
           ),
         ),
         Expanded(child: Divider()),

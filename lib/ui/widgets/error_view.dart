@@ -15,7 +15,11 @@ class ErrorView extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(errorMessage, style: Theme.of(context).textTheme.subtitle1),
+            Text(
+              errorMessage,
+              style: Theme.of(context).textTheme.subtitle1,
+              textAlign: TextAlign.center,
+            ),
             SizedBox(height: 8),
             ElevatedButton.icon(
               icon: Icon(Icons.replay_rounded),

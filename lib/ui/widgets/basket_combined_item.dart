@@ -50,16 +50,14 @@ class BasketCombinedItem extends StatelessWidget {
                   ),
                   child: Text(
                     size.localizedString,
-                    style: Theme.of(context).textTheme.bodyText1,
+                    style: Theme.of(context).textTheme.bodyText2,
                   ),
                 ),
               Expanded(
                 child: Text(
                   '${(combinedProduct.priceOfProductsBy(size)).toStringAsFixed(2)} р.',
                   textAlign: TextAlign.right,
-                  style: Theme.of(context).textTheme.headline6.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
-                      ),
+                  style: Theme.of(context).textTheme.headline6,
                 ),
               )
             ],
