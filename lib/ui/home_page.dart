@@ -228,17 +228,24 @@ class __HomeFabState extends State<_HomeFab> with TickerProviderStateMixin {
   bool _showUpButton = false;
 
   AnimationController _arrowController;
+  Animation<double> _arrowAnimation;
   AnimationController _basketController;
+  Animation<double> _basketAnimation;
+  Animation<Size> _sizeAnimation;
+  final double _fabSize = 56;
 
   @override
   void initState() {
     super.initState();
     widget.scrollController.addListener(_checkOffset);
     _arrowController = AnimationController(duration: kDurationFast, vsync: this);
+    _arrowAnimation = CurvedAnimation(parent: _arrowController, curve: Curves.easeIn);
     _basketController = AnimationController(duration: kDurationFast, vsync: this);
+    _basketAnimation = CurvedAnimation(parent: _basketController, curve: Curves.easeIn);
     if (widget.basketCount > 0) {
       _basketController.forward();
     }
+    _sizeAnimation = SizeTween(begin: Size(0, 0), end: Size(_fabSize, _fabSize)).animate(_basketAnimation);
   }
 
   @override
@@ -279,12 +286,14 @@ class __HomeFabState extends State<_HomeFab> with TickerProviderStateMixin {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        RotationTransition(
-          turns: _arrowController,
+        // fixed width need to center arrow button relative to fab (visible and invisible ) horizontally
+        SizedBox(
+          width: _fabSize,
           child: ScaleTransition(
-            scale: _arrowController,
+            scale: _arrowAnimation,
             child: CircularButton(
               onPressed: () {
+                // scroll to top
                 widget.scrollController.animateTo(
                   widget.scrollController.initialScrollOffset,
                   curve: Curves.easeInOutCirc,
@@ -300,17 +309,30 @@ class __HomeFabState extends State<_HomeFab> with TickerProviderStateMixin {
             ),
           ),
         ),
-        RotationTransition(
-          turns: _basketController,
-          child: ScaleTransition(
-            scale: _basketController,
-            child: BadgeCounter(
-              count: widget.basketCount,
-              child: FloatingActionButton(
-                child: const Icon(Icons.shopping_cart),
-                onPressed: () {
-                  Navigator.of(context).pushNamed(Routes.basketScreen);
-                },
+        // TODO: CRUTCH with animation of width form 0 to fixed fab width, to make the parent resize, that get an animation of the arrow shift when fab appears/disappears
+        AnimatedBuilder(
+          animation: _sizeAnimation,
+          builder: (context, child) {
+            print(_sizeAnimation.value);
+            return SizedBox.fromSize(
+              child: child,
+              size: _sizeAnimation.value,
+            );
+          },
+          child: Center(
+            child: RotationTransition(
+              turns: _basketAnimation,
+              child: ScaleTransition(
+                scale: _basketAnimation,
+                child: BadgeCounter(
+                  count: widget.basketCount,
+                  child: FloatingActionButton(
+                    child: const Icon(Icons.shopping_cart),
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(Routes.basketScreen);
+                    },
+                  ),
+                ),
               ),
             ),
           ),

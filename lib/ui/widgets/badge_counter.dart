@@ -8,6 +8,7 @@ class BadgeCounter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Stack(
       alignment: Alignment.topRight,
       fit: StackFit.loose,
@@ -21,13 +22,13 @@ class BadgeCounter extends StatelessWidget {
             height: 24,
             width: 24,
             alignment: Alignment.center,
-            decoration: BoxDecoration(color: Theme.of(context).colorScheme.primary, shape: BoxShape.circle),
+            decoration: BoxDecoration(color: theme.colorScheme.primary, shape: BoxShape.circle),
             child: Text(
               '$count',
               maxLines: 1,
-              style: Theme.of(context).textTheme.bodyText1.copyWith(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                  ),
+              style: theme.textTheme.bodyText1.copyWith(
+                color: theme.colorScheme.onPrimary,
+              ),
             ),
           ),
         )
