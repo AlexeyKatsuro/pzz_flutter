@@ -6,6 +6,7 @@ import 'package:pzz/models/basket.dart';
 import 'package:pzz/models/basket_product.dart';
 import 'package:pzz/models/combined_basket_product.dart';
 import 'package:pzz/models/home_page_state.dart';
+import 'package:pzz/models/navigation_stack.dart';
 import 'package:pzz/models/payment_way.dart';
 import 'package:pzz/models/person_info/house.dart';
 import 'package:pzz/models/person_info/person_info_errors.dart';
@@ -14,6 +15,8 @@ import 'package:pzz/models/person_info/street.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/models/sauce.dart';
 import 'package:reselect/reselect.dart';
+
+NavigationStack navigationStackSelector(AppState state) => state.navigationStack;
 
 Basket basketSelector(AppState state) => state.basket;
 

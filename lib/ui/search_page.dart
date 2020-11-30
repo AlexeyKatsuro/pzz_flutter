@@ -105,7 +105,9 @@ class _ViewModel<T> {
     return _ViewModel<T>(
       items: itemsSelector(store.state),
       onTyping: (query) => store.dispatch(createPerformSearchAction(query)),
-      onItemClick: (item) => store.dispatch(createSelectItemAction(item)),
+      onItemClick: (item) {
+        store.dispatch(createSelectItemAction(item));
+      },
     );
   }
 }

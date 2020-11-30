@@ -1,10 +1,12 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:pzz/domain/error/scoped_error_hub.dart';
 import 'package:pzz/models/basket.dart';
 import 'package:pzz/models/home_page_state.dart';
+import 'package:pzz/models/navigation_stack.dart';
 import 'package:pzz/models/person_info/personal_info_state.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/models/sauce.dart';
+import 'package:pzz/routes.dart';
 
 @immutable
 class AppState {
@@ -16,6 +18,7 @@ class AppState {
   final bool showConfirmOrderDialogEvent;
   final bool isConfirmLoading;
   final ScopedErrorsHub scopedErrors;
+  final NavigationStack navigationStack;
 
   const AppState({
     @required this.homePageState,
@@ -26,6 +29,7 @@ class AppState {
     @required this.showConfirmOrderDialogEvent,
     @required this.isConfirmLoading,
     @required this.scopedErrors,
+    @required this.navigationStack,
   });
 
   const AppState.initial({
@@ -37,8 +41,13 @@ class AppState {
     this.personalInfoState = const PersonalInfoState.initial(),
     this.showConfirmOrderDialogEvent = false,
     this.scopedErrors = const ScopedErrorsHub.initial(),
-  })  : assert(pizzas != null),
-        assert(basket != null),
+    this.navigationStack = const NavigationStack([NavStackEntry(name: Routes.homeScreen)]),
+  })  : assert(homePageState != null),
+        assert(isConfirmLoading != null),
+        assert(pizzas != null),
         assert(sauce != null),
-        assert(personalInfoState != null);
+        assert(basket != null),
+        assert(personalInfoState != null),
+        assert(showConfirmOrderDialogEvent != null),
+        assert(scopedErrors != null);
 }

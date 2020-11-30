@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:pzz/domain/actions/actions.dart';
+import 'package:pzz/domain/actions/navigate_to_action.dart';
 import 'package:pzz/domain/selectors/selector.dart';
 import 'package:pzz/models/app_state.dart';
 import 'package:pzz/models/product.dart';
@@ -38,10 +39,7 @@ class SaucesPage extends StatelessWidget implements Scoped {
                 Icons.check,
                 color: Theme.of(context).colorScheme.secondary,
               ),
-              onPressed: () {
-                // TODO navigation by Redux
-                Navigator.pop(context);
-              })
+              onPressed: viewModel.onDoneClick)
         ],
       ),
       body: ListView(
@@ -57,7 +55,7 @@ class SaucesPage extends StatelessWidget implements Scoped {
                 child: viewModel.hasFreeSauce
                     ? Text(
                         StringRes.chooseFeeSauces(viewModel.freeSauceCounts),
-                        style: Theme.of(context).textTheme.headline6.copyWith(color: Colors.black54),
+                        style: Theme.of(context).textTheme.headline6,
                       )
                     : null,
               ),
@@ -80,17 +78,19 @@ class SaucesPage extends StatelessWidget implements Scoped {
 class _ViewModel {
   const _ViewModel({
     @required this.sauces,
-    @required this.onAddItemClick,
-    @required this.onRemoveItemClick,
     @required this.saucesCountMap,
     @required this.freeSauceCounts,
+    @required this.onAddItemClick,
+    @required this.onRemoveItemClick,
+    @required this.onDoneClick,
   }) : assert(sauces != null);
 
   final int freeSauceCounts;
   final List<Sauce> sauces;
   final Map<int, int> saucesCountMap;
-  final void Function(Product) onAddItemClick;
-  final void Function(Product) onRemoveItemClick;
+  final ValueSetter<Product> onAddItemClick;
+  final ValueSetter<Product> onRemoveItemClick;
+  final VoidCallback onDoneClick;
 
   bool get hasFreeSauce => freeSauceCounts != 0;
 
@@ -99,12 +99,9 @@ class _ViewModel {
       freeSauceCounts: freeSauceCountsSelector(store.state),
       saucesCountMap: saucesCountsMapSelector(store.state),
       sauces: saucesSelector(store.state),
-      onAddItemClick: (item) {
-        store.dispatch(AddProductAction(product: item, scope: scope));
-      },
-      onRemoveItemClick: (item) {
-        store.dispatch(RemoveProductAction(product: item, scope: scope));
-      },
+      onAddItemClick: (item) => store.dispatch(AddProductAction(product: item, scope: scope)),
+      onRemoveItemClick: (item) => store.dispatch(RemoveProductAction(product: item, scope: scope)),
+      onDoneClick: () => store.dispatch(NavigateAction.pop()),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:pzz/domain/actions/actions.dart';
+import 'package:pzz/domain/actions/navigate_to_action.dart';
 import 'package:pzz/domain/selectors/selector.dart';
 import 'package:pzz/models/app_state.dart';
 import 'package:pzz/models/basket.dart';
@@ -32,9 +33,6 @@ class _BasketPageState extends State<BasketPage> {
     return StoreConnector<AppState, _ViewModel>(
       distinct: true,
       onWillChange: (previousViewModel, newViewModel) {
-        if (newViewModel.isBasketEmpty) {
-          Navigator.of(context).pop();
-        }
         if (newViewModel.showConfirmOrderDialogEvent) {
           newViewModel.handleConfirmOrderDialogEvent();
           showModalBottomSheet<void>(
@@ -75,9 +73,7 @@ class _BasketPageState extends State<BasketPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: OutlinedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, Routes.saucesScreen);
-                },
+                onPressed: vm.onChooseSauceClick,
                 child: Row(
                   children: [
                     Expanded(
@@ -169,11 +165,12 @@ class DividedCenterTitle extends StatelessWidget {
 
 class _ViewModel {
   final int basketCount;
-  final void Function(Product) onAddItemClick;
-  final void Function(Product) onRemoveItemClick;
+  final Map<ProductType, List<CombinedBasketProduct>> itemsMap;
+  final ValueSetter<Product> onAddItemClick;
+  final ValueSetter<Product> onRemoveItemClick;
   final VoidCallback onPlaceOrderClick;
   final VoidCallback handleConfirmOrderDialogEvent;
-  final Map<ProductType, List<CombinedBasketProduct>> itemsMap;
+  final VoidCallback onChooseSauceClick;
 
   final Basket basket;
 
@@ -194,6 +191,7 @@ class _ViewModel {
     @required this.onRemoveItemClick,
     @required this.onPlaceOrderClick,
     @required this.handleConfirmOrderDialogEvent,
+    @required this.onChooseSauceClick,
   })  : assert(itemsMap != null),
         assert(basketCount != null),
         assert(onAddItemClick != null);
@@ -205,9 +203,8 @@ class _ViewModel {
         itemsMap: combinedBasketProductsTypedMap(store.state),
         basketCount: basketCountSelector(store.state),
         freeSauceCounts: freeSauceCountsSelector(store.state),
-        onAddItemClick: (item) {
-          store.dispatch(AddProductAction(product: item, scope: scope));
-        },
+        onChooseSauceClick: () => store.dispatch(NavigateAction.push(Routes.saucesScreen)),
+        onAddItemClick: (item) => store.dispatch(AddProductAction(product: item, scope: scope)),
         handleConfirmOrderDialogEvent: () => store.dispatch(HandleConfirmOrderDialogAction()),
         onRemoveItemClick: (item) => store.dispatch(RemoveProductAction(product: item, scope: scope)),
         onPlaceOrderClick: () => store.dispatch(TryPlaceOrderAction()));
