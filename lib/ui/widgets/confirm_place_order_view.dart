@@ -51,30 +51,18 @@ class _ConfirmPlaceOrderViewState extends State<ConfirmPlaceOrderView> {
           SizedBox(
             height: 20,
           ),
-          Row(
-            children: [
-              Icon(
-                Icons.phone,
-                size: 12,
-              ),
-              SizedBox(width: 4),
-              Text(StringRes.to_confirm_phone),
-              Spacer(),
-              Text(widget.address.phone, style: theme.textTheme.bodyText1),
-            ],
+          _buildPersonInfo(
+            context: context,
+            icon: Icons.phone,
+            name: StringRes.to_confirm_phone,
+            value: widget.address.phone,
           ),
           Divider(),
-          Row(
-            children: [
-              Icon(
-                Icons.room_outlined,
-                size: 12,
-              ),
-              SizedBox(width: 4),
-              Text(StringRes.to_confirm_address),
-              Spacer(),
-              Text(widget.address.makeFullAddress, style: theme.textTheme.bodyText1),
-            ],
+          _buildPersonInfo(
+            context: context,
+            icon: Icons.room_outlined,
+            name: StringRes.to_confirm_address,
+            value: widget.address.makeFullAddress,
           ),
           SizedBox(
             height: 20,
@@ -85,10 +73,13 @@ class _ConfirmPlaceOrderViewState extends State<ConfirmPlaceOrderView> {
                 StringRes.to_confirm_total_price,
                 style: theme.textTheme.subtitle1.copyWith(fontFamily: 'Malina'),
               ),
-              Spacer(),
-              Text(
-                widget.totalPriceText,
-                style: theme.textTheme.headline6.copyWith(fontFamily: 'Malina'),
+              SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  widget.totalPriceText,
+                  style: theme.textTheme.headline6.copyWith(fontFamily: 'Malina'),
+                  textAlign: TextAlign.right,
+                ),
               ),
             ],
           ),
@@ -124,6 +115,33 @@ class _ConfirmPlaceOrderViewState extends State<ConfirmPlaceOrderView> {
     );
   }
 
+  Widget _buildPersonInfo({
+    BuildContext context,
+    IconData icon,
+    String name,
+    String value,
+  }) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(
+          icon,
+          size: 12,
+        ),
+        SizedBox(width: 4),
+        Text(name),
+        SizedBox(width: 12),
+        Expanded(
+          child: Text(
+            value,
+            style: Theme.of(context).textTheme.bodyText1,
+            textAlign: TextAlign.right,
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildProductRow(BuildContext context, BasketProduct product) {
     final theme = Theme.of(context);
     String title = product.title;
@@ -131,13 +149,16 @@ class _ConfirmPlaceOrderViewState extends State<ConfirmPlaceOrderView> {
       title += '(${product.size.localizedString})';
     }
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(child: Text(title)),
+        Text(title),
         SizedBox(width: 12),
-        Text(
-          product.priceText,
-          style: theme.textTheme.bodyText1,
+        Expanded(
+          child: Text(
+            product.priceText,
+            style: theme.textTheme.bodyText1,
+            textAlign: TextAlign.right,
+          ),
         ),
       ],
     );

@@ -42,17 +42,19 @@ class SearchStreetPage<T> extends StatelessWidget {
   }
 
   Widget _build(BuildContext context, _ViewModel vm) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: CupertinoTextField(
+          autofocus: true,
           controller: queryTextController,
           placeholder: StringRes.search,
+          style: TextStyle(
+            color: theme.colorScheme.onSurface,
+          ),
           prefix: Padding(
             padding: const EdgeInsets.all(4.0),
-            child: Icon(
-              Icons.search,
-              color: Colors.black45,
-            ),
+            child: Icon(Icons.search),
           ),
           onChanged: vm.onTyping,
           clearButtonMode: OverlayVisibilityMode.editing,
@@ -73,7 +75,7 @@ class SearchStreetPage<T> extends StatelessWidget {
       child: InkWell(
         onTap: () {
           vm.onItemClick(item);
-          Navigator.pop(context); // TODO, do navigation by Redux.
+          Navigator.pop(context);
         },
         child: Padding(
           padding: const EdgeInsets.fromLTRB(16, 12, 12, 16),

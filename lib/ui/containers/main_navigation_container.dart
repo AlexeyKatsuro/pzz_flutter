@@ -10,6 +10,7 @@ import 'package:pzz/ui/home_page.dart';
 import 'package:pzz/ui/not_found_page.dart';
 import 'package:pzz/ui/person_info_page.dart';
 import 'package:pzz/ui/sauces_page.dart';
+import 'package:pzz/utils/widgets/status_bar_brightness.dart';
 import 'package:redux/redux.dart';
 
 typedef PageBuilder = Widget Function(Object args);
@@ -55,7 +56,9 @@ class MainNavigationContainer extends StatelessWidget {
     final pageBuilder = routes[page.name] ?? (_) => NotFoundPage();
     return MaterialPage(
       key: Key(page.name),
-      child: pageBuilder(page.args),
+      child: StatusBarBrightness(
+        child: pageBuilder(page.args),
+      ),
     );
   }
 }

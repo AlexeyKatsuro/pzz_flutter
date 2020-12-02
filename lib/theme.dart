@@ -22,41 +22,49 @@ class PzzAppTheme {
 
     final buttonsShapeStateProp = MaterialStateProperty.all(kRoundedShapeBorder);
     return ThemeData(
-      textTheme: textTheme,
-      primaryTextTheme: textTheme,
-      accentTextTheme: textTheme,
-      iconTheme: iconTheme,
-      brightness: colorScheme.brightness,
-      colorScheme: colorScheme,
-      primaryColor: colorScheme.primary,
-      primaryColorLight: colorScheme.primaryVariant,
-      primaryColorDark: colorScheme.primaryVariant,
-      errorColor: colorScheme.error,
-      toggleableActiveColor: colorScheme.primary,
-      accentColor: colorScheme.secondary,
-      cardColor: colorScheme.surface,
-      applyElevationOverlayColor: true,
-      dividerColor: dividerColor,
-      backgroundColor: colorScheme.background,
-      dialogBackgroundColor: colorScheme.surface,
-      scaffoldBackgroundColor: colorScheme.background,
-      cardTheme: _buildCardTheme(dividerColor, colorScheme),
-      appBarTheme: _buildAppBarTheme(textTheme, iconTheme, colorScheme),
-      inputDecorationTheme: _buildInputDecorationTheme(),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ButtonStyle(
-          elevation: MaterialStateProperty.all(0),
-          shape: buttonsShapeStateProp,
+        textTheme: textTheme,
+        primaryTextTheme: textTheme,
+        accentTextTheme: textTheme,
+        iconTheme: iconTheme,
+        brightness: colorScheme.brightness,
+        colorScheme: colorScheme,
+        primaryColor: colorScheme.primary,
+        primaryColorLight: colorScheme.primaryVariant,
+        primaryColorDark: colorScheme.primaryVariant,
+        errorColor: colorScheme.error,
+        toggleableActiveColor: colorScheme.primary,
+        accentColor: colorScheme.secondary,
+        cardColor: colorScheme.surface,
+        applyElevationOverlayColor: true,
+        dividerColor: dividerColor,
+        backgroundColor: colorScheme.background,
+        dialogBackgroundColor: colorScheme.surface,
+        scaffoldBackgroundColor: colorScheme.background,
+        cardTheme: _buildCardTheme(dividerColor, colorScheme),
+        appBarTheme: _buildAppBarTheme(textTheme, iconTheme, colorScheme),
+        inputDecorationTheme: _buildInputDecorationTheme(),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ButtonStyle(
+            elevation: MaterialStateProperty.all(0),
+            shape: buttonsShapeStateProp,
+          ),
         ),
-      ),
-      outlinedButtonTheme: OutlinedButtonThemeData(
-        style: ButtonStyle(shape: buttonsShapeStateProp),
-      ),
-      buttonTheme: ButtonThemeData(
+        outlinedButtonTheme: OutlinedButtonThemeData(
+          style: ButtonStyle(shape: buttonsShapeStateProp),
+        ),
+        buttonTheme: ButtonThemeData(
+            shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(6),
+        )),
+        bottomSheetTheme: BottomSheetThemeData(
+          elevation: 16,
+          backgroundColor: colorScheme.surface,
           shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(6),
-      )),
-    );
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(10),
+            ),
+          ),
+        ));
   }
 
   static InputDecorationTheme _buildInputDecorationTheme() {
@@ -105,7 +113,7 @@ class PzzAppTheme {
 
   static const ColorScheme _pzzDarkColorScheme = ColorScheme.dark(
     primary: _brand_orange_variant,
-    primaryVariant: _brand_orange,
+    primaryVariant: _brand_orange_variant,
     secondary: _brand_blue_variant,
     secondaryVariant: _brand_blue,
     surface: _dark_sheet,

@@ -34,19 +34,16 @@ class _BasketPageState extends State<BasketPage> {
       distinct: true,
       onWillChange: (previousViewModel, newViewModel) {
         if (newViewModel.showConfirmOrderDialogEvent) {
-          newViewModel.handleConfirmOrderDialogEvent();
           showModalBottomSheet<void>(
-            backgroundColor: Theme.of(context).colorScheme.background,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(10),
-              ),
-            ),
             context: context,
+            isScrollControlled: true,
             builder: (BuildContext context) {
-              return ConfirmPlaceOrderContainer();
+              return SingleChildScrollView(
+                child: ConfirmPlaceOrderContainer(),
+              );
             },
           );
+          newViewModel.handleConfirmOrderDialogEvent();
         }
       },
       converter: (store) {
@@ -166,25 +163,24 @@ class DividedCenterTitle extends StatelessWidget {
 class _ViewModel {
   final int basketCount;
   final Map<ProductType, List<CombinedBasketProduct>> itemsMap;
+  final Basket basket;
+  final int freeSauceCounts;
+  final bool showConfirmOrderDialogEvent;
+  // Callbacks
   final ValueSetter<Product> onAddItemClick;
   final ValueSetter<Product> onRemoveItemClick;
   final VoidCallback onPlaceOrderClick;
   final VoidCallback handleConfirmOrderDialogEvent;
   final VoidCallback onChooseSauceClick;
 
-  final Basket basket;
-
-  final int freeSauceCounts;
-  final bool showConfirmOrderDialogEvent;
-
   bool get isBasketEmpty => basketCount == 0;
 
   num get totalAmount => basket.totalAmount;
 
   _ViewModel({
+    @required this.basketCount,
     @required this.itemsMap,
     @required this.basket,
-    @required this.basketCount,
     @required this.freeSauceCounts,
     @required this.showConfirmOrderDialogEvent,
     @required this.onAddItemClick,
