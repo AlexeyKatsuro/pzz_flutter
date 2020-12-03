@@ -1,10 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:pzz/models/combined_basket_product.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/res/constants.dart';
 import 'package:pzz/ui/widgets/pizza_variant.dart';
 import 'package:pzz/utils/extensions/widget_extension.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class PizzaWidget extends StatelessWidget {
   final Pizza pizza;
@@ -27,13 +27,15 @@ class PizzaWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          FadeInImage.memoryNetwork(
-            fadeInDuration: kDurationFast,
-            placeholder: kTransparentImage,
-            image: pizza.photo,
+          CachedNetworkImage(
             height: 150,
             width: double.infinity,
             fit: BoxFit.cover,
+            fadeInDuration: kDurationFast,
+            imageUrl: pizza.photo,
+            progressIndicatorBuilder: (context, url, downloadProgress) =>
+                Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+            errorWidget: (context, url, error) => Icon(Icons.error_outline),
           ),
           Divider(
             height: 1,
