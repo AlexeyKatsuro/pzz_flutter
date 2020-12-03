@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:pzz/domain/error/error_message_extractor.dart';
 import 'package:pzz/domain/error/standard_pzz_error.dart';
@@ -165,8 +167,8 @@ extension on Future<http.Response> {
         throw PzzServerError.fromJson(body);
       }
     }).catchError((ex, StackTrace stackTrace) {
-      print(ex);
-      print(stackTrace);
+      debugPrint(ex.toString());
+      debugPrintStack(stackTrace: stackTrace);
       throw errorMessageExtractor(ex);
     });
   }

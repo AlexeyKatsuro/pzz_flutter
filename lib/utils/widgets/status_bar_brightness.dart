@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:pzz/utils/extensions/widget_extension.dart';
 
 /// This is a widget that controls the color of the status and navigation bar, depending on the theme colors.
 class StatusBarBrightness extends StatelessWidget {
@@ -18,6 +19,8 @@ class StatusBarBrightness extends StatelessWidget {
         SystemUiOverlayStyle(
           systemNavigationBarColor: theme.colorScheme.background,
           statusBarColor: theme.colorScheme.surface.withOpacity(0.5),
+          statusBarBrightness: theme.colorScheme.brightness,
+          statusBarIconBrightness: theme.colorScheme.brightness.opposite,
         ),
       );
     });

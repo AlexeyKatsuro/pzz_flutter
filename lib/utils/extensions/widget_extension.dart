@@ -32,3 +32,7 @@ extension ButtonStyleExt on ButtonStyle {
     return other.merge(this);
   }
 }
+
+extension BrightnessExt on Brightness {
+  Brightness get opposite => this == Brightness.dark ? Brightness.light : Brightness.dark;
+}
