@@ -19,6 +19,7 @@ import 'package:pzz/models/person_info/street.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/models/product.dart';
 import 'package:pzz/models/sauce.dart';
+import 'package:pzz/utils/house_comparator.dart';
 
 class PzzNetService {
   final baseUrl = 'https://pzz.by/api/v1/';
@@ -100,7 +101,8 @@ class PzzNetService {
         id: item['id'],
         title: item['title'],
       );
-    }).toList(growable: false);
+    }).toList(growable: false)
+      ..sort(compareHouse);
   }
 
   List<Sauce> _sauceResponseMapper(dynamic data) {
