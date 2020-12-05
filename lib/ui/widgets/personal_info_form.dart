@@ -190,11 +190,9 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) {
-                  return SearchStreetPage<Street>(
-                    createPerformSearchAction: (query) => PerformStreetSearchAction(query),
-                    createSelectItemAction: (item) => SelectStreetAction(item),
-                    itemsSelector: suggestedStreetsSelector,
-                    itemToString: (item) => item.title,
+                  return SearchStreetPage(
+                    fromStore: StreetsSearchViewModel.fromStore,
+                    stringify: (Street item) => item.title,
                     prefill: widget.personalInfo.street,
                   );
                 },
@@ -225,11 +223,9 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) {
-                  return SearchStreetPage<House>(
-                    createPerformSearchAction: (query) => PerformHouseSearchAction(query),
-                    createSelectItemAction: (item) => SelectHouseAction(item),
-                    itemsSelector: suggestedHousesSelector,
-                    itemToString: (item) => item.title,
+                  return SearchStreetPage(
+                    fromStore: HousesSearchViewModel.fromStore,
+                    stringify: (House item) => item.title,
                     prefill: widget.personalInfo.house,
                   );
                 },

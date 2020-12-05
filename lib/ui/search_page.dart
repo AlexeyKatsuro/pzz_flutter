@@ -1,47 +1,54 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:pzz/domain/person_info_form/actions/person_info_form_actions.dart';
+import 'package:pzz/domain/selectors/selector.dart';
 import 'package:pzz/models/app_state.dart';
+import 'package:pzz/models/person_info/house.dart';
+import 'package:pzz/models/person_info/street.dart';
 import 'package:pzz/res/strings.dart';
 import 'package:redux/redux.dart';
 
-class SearchStreetPage<T> extends StatelessWidget {
-  final queryTextController = TextEditingController();
-  final dynamic Function(String query) createPerformSearchAction;
-  final dynamic Function(T item) createSelectItemAction;
-  final String Function(T item) itemToString;
-  final List<T> Function(AppState state) itemsSelector;
+class SearchStreetPage<T, VM extends SearchViewModel<T>> extends StatefulWidget {
+  final VM Function(Store<AppState> store) fromStore;
   final String prefill;
+  final String Function(T item) stringify;
 
   SearchStreetPage({
-    @required this.createPerformSearchAction,
-    @required this.createSelectItemAction,
-    @required this.itemsSelector,
-    @required this.itemToString,
+    @required this.fromStore,
     @required this.prefill,
+    @required this.stringify,
   });
 
   @override
+  _SearchStreetPageState<T, VM> createState() => _SearchStreetPageState<T, VM>();
+}
+
+class _SearchStreetPageState<T, VM extends SearchViewModel<T>> extends State<SearchStreetPage<T, VM>> {
+  final queryTextController = TextEditingController();
+
+  @override
+  void dispose() {
+    queryTextController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, _ViewModel<T>>(
-      onInit: (store) {
-        queryTextController.text = prefill;
-        store.dispatch(createPerformSearchAction(prefill));
+    return StoreConnector<AppState, VM>(
+      onInitialBuild: (viewModel) {
+        queryTextController.text = widget.prefill;
+        viewModel.onTyping(widget.prefill);
+        viewModel.onInitialBuild?.call();
       },
-      converter: (store) {
-        return _ViewModel.fromStore(
-            store: store,
-            createPerformSearchAction: createPerformSearchAction,
-            createSelectItemAction: createSelectItemAction,
-            itemsSelector: itemsSelector);
-      },
+      converter: widget.fromStore,
       builder: (context, vm) {
         return _build(context, vm);
       },
     );
   }
 
-  Widget _build(BuildContext context, _ViewModel vm) {
+  Widget _build(BuildContext context, VM vm) {
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
@@ -69,7 +76,7 @@ class SearchStreetPage<T> extends StatelessWidget {
     );
   }
 
-  Widget _buildItems(BuildContext context, int index, _ViewModel<T> vm) {
+  Widget _buildItems(BuildContext context, int index, SearchViewModel<T> vm) {
     final item = vm.items[index];
     return Card(
       child: InkWell(
@@ -78,9 +85,9 @@ class SearchStreetPage<T> extends StatelessWidget {
           Navigator.pop(context);
         },
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 12, 12, 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Text(
-            itemToString(item),
+            widget.stringify(item),
           ),
         ),
       ),
@@ -88,28 +95,57 @@ class SearchStreetPage<T> extends StatelessWidget {
   }
 }
 
-class _ViewModel<T> {
-  final List<T> items;
-  final void Function(String query) onTyping;
-  final void Function(T item) onItemClick;
-
-  _ViewModel({
+class SearchViewModel<T> {
+  SearchViewModel({
     @required this.items,
     @required this.onTyping,
     @required this.onItemClick,
+    this.onInitialBuild,
   });
 
-  static _ViewModel<T> fromStore<T>(
-      {@required Store<AppState> store,
-      @required List<T> itemsSelector(AppState state),
-      @required dynamic createPerformSearchAction(String query),
-      @required dynamic createSelectItemAction(T item)}) {
-    return _ViewModel<T>(
-      items: itemsSelector(store.state),
-      onTyping: (query) => store.dispatch(createPerformSearchAction(query)),
-      onItemClick: (item) {
-        store.dispatch(createSelectItemAction(item));
-      },
+  final List<T> items;
+  final void Function(String query) onTyping;
+  final void Function(T item) onItemClick;
+  final VoidCallback onInitialBuild;
+}
+
+class StreetsSearchViewModel extends SearchViewModel<Street> {
+  StreetsSearchViewModel({
+    @required List<Street> items,
+    @required void Function(String query) onTyping,
+    @required void Function(Street item) onItemClick,
+  }) : super(items: items, onItemClick: onItemClick, onTyping: onTyping);
+
+  static StreetsSearchViewModel fromStore(Store<AppState> store) {
+    return StreetsSearchViewModel(
+      onItemClick: (item) => store.dispatch(SelectStreetAction(item)),
+      onTyping: (query) => store.dispatch(PerformStreetSearchAction(query)),
+      items: suggestedStreetsSelector(store.state),
+    );
+  }
+}
+
+class HousesSearchViewModel extends SearchViewModel<House> {
+  HousesSearchViewModel({
+    @required List<House> items,
+    @required void Function(String query) onTyping,
+    @required void Function(House item) onItemClick,
+    @required VoidCallback onInitialBuild,
+  }) : super(
+          items: items,
+          onItemClick: onItemClick,
+          onTyping: onTyping,
+          onInitialBuild: onInitialBuild,
+        );
+
+  static HousesSearchViewModel fromStore(Store<AppState> store) {
+    final street = personalInfoStreetSelector(store.state);
+    final totalHouses = totalHousesSelector(store.state);
+    return HousesSearchViewModel(
+      onInitialBuild: totalHouses.isEmpty ? () => store.dispatch(LoadHousesAction(street.id)) : null,
+      onItemClick: (item) => store.dispatch(SelectHouseAction(item)),
+      onTyping: (query) => store.dispatch(PerformHouseSearchAction(query)),
+      items: suggestedHousesSelector(store.state),
     );
   }
 }

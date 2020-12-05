@@ -34,11 +34,13 @@ PersonalInfo personalInfoSelector(AppState state) => state.personalInfoState.for
 
 PersonalInfoErrors personalInfoErrorsSelector(AppState state) => state.personalInfoState.formInfoErrors;
 
-bool isHomeSelectionAllowSelector(AppState state) => state.personalInfoState.totalHouses.isNotEmpty;
+bool isHomeSelectionAllowSelector(AppState state) => state.personalInfoState.formInfo.streetId != 0;
 
 List<Street> suggestedStreetsSelector(AppState state) => state.personalInfoState.suggestedStreets;
 
 List<House> suggestedHousesSelector(AppState state) => state.personalInfoState.suggestedHouses;
+
+List<House> totalHousesSelector(AppState state) => state.personalInfoState.totalHouses;
 
 bool showConfirmOrderDialogEventSelector(AppState state) => state.showConfirmOrderDialogEvent;
 

@@ -35,6 +35,12 @@ class SelectStreetAction {
   SelectStreetAction(this.street);
 }
 
+class LoadHousesAction {
+  final int streetId;
+
+  LoadHousesAction(this.streetId);
+}
+
 class LoadedHouseAction {
   final List<House> houses;
 

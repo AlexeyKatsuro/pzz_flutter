@@ -24,7 +24,7 @@ List<Middleware<AppState>> createPzzMiddleware(
     TypedMiddleware<AppState, AddProductAction>(_createAddPizzaItem(pzzRepository)),
     TypedMiddleware<AppState, RemoveProductAction>(_createRemovePizzaItem(pzzRepository)),
     TypedMiddleware<AppState, SavePersonalInfoAction>(_createSavePersonalInfo(preferenceRepository)),
-    TypedMiddleware<AppState, SelectStreetAction>(_createSelectStreet(pzzRepository, preferenceRepository)),
+    TypedMiddleware<AppState, LoadHousesAction>(_createLoadHouses(pzzRepository, preferenceRepository)),
     TypedMiddleware<AppState, SelectHouseAction>(_createSelectHouse(preferenceRepository)),
     TypedMiddleware<AppState, TryPlaceOrderAction>(_createUpdateAddress(pzzRepository)),
     TypedMiddleware<AppState, ConfirmPlaceOrderAction>(_createConfirmPlaceOrder(pzzRepository)),
@@ -108,12 +108,12 @@ MiddlewareTyped<AppState, SavePersonalInfoAction> _createSavePersonalInfo(Prefer
   };
 }
 
-MiddlewareTyped<AppState, SelectStreetAction> _createSelectStreet(
+MiddlewareTyped<AppState, LoadHousesAction> _createLoadHouses(
     PzzRepository pzzRepository, PreferenceRepository repository) {
-  return (Store<AppState> store, SelectStreetAction action, NextDispatcher next) async {
+  return (Store<AppState> store, LoadHousesAction action, NextDispatcher next) async {
     next(action);
     //repository.savePersonalInfo(personalInfoSelector(store.state));
-    final houses = await pzzRepository.loadHousesByStreet(action.street.id);
+    final houses = await pzzRepository.loadHousesByStreet(action.streetId);
     next(LoadedHouseAction(houses));
   };
 }

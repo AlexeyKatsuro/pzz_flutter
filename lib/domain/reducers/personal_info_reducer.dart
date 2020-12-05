@@ -8,6 +8,7 @@ import 'package:redux/redux.dart';
 
 final personalInfoStateReducer = combineReducers<PersonalInfoState>([
   TypedReducer<PersonalInfoState, SearchStreetResultAction>(_setSuggestedStreets),
+  TypedReducer<PersonalInfoState, SelectStreetAction>(_clearTotalHouses),
   TypedReducer<PersonalInfoState, LoadedHouseAction>(_setTotalHouses),
   TypedReducer<PersonalInfoState, PerformHouseSearchAction>(_setSuggestedHouses),
   TypedReducer<PersonalInfoState, SavePersonalInfoAction>(_setPersonalInfo),
@@ -33,7 +34,11 @@ PersonalInfoState _setSuggestedStreets(PersonalInfoState state, SearchStreetResu
 }
 
 PersonalInfoState _setTotalHouses(PersonalInfoState state, LoadedHouseAction action) {
-  return state.copyWith(totalHouses: action.houses);
+  return state.copyWith(totalHouses: action.houses, suggestedHouses: action.houses);
+}
+
+PersonalInfoState _clearTotalHouses(PersonalInfoState state, SelectStreetAction action) {
+  return state.copyWith(totalHouses: [], suggestedHouses: []);
 }
 
 PersonalInfoState _setSuggestedHouses(PersonalInfoState state, PerformHouseSearchAction action) {
