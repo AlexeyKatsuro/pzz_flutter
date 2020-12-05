@@ -203,6 +203,6 @@ class _ViewModel {
         onAddItemClick: (item) => store.dispatch(AddProductAction(product: item, scope: scope)),
         handleConfirmOrderDialogEvent: () => store.dispatch(HandleConfirmOrderDialogAction()),
         onRemoveItemClick: (item) => store.dispatch(RemoveProductAction(product: item, scope: scope)),
-        onPlaceOrderClick: () => store.dispatch(TryPlaceOrderAction()));
+        onPlaceOrderClick: () => store.dispatch(TryPlaceOrderAction(scope: scope)));
   }
 }

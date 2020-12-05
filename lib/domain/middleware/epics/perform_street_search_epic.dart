@@ -1,3 +1,4 @@
+import 'package:pzz/domain/error/scoped_error_actions.dart';
 import 'package:pzz/domain/person_info_form/actions/person_info_form_actions.dart';
 import 'package:pzz/domain/repository/pzz_repository.dart';
 import 'package:pzz/models/app_state.dart';
@@ -13,10 +14,11 @@ class PerformStreetSearchEpic implements EpicClass<AppState> {
   Stream<dynamic> call(Stream<dynamic> actions, EpicStore<AppState> store) {
     return actions.whereType<PerformStreetSearchAction>().debounceTime(Duration(milliseconds: 300)).switchMap((action) {
       if (action.query.length >= 2) {
-        return Stream.fromFuture(repository
-                .searchStreet(action.query)
-                .then((streets) => SearchStreetResultAction(streets))
-                .catchError((error) => SearchStreetErrorAction(error)))
+        return repository
+            .searchStreet(action.query)
+            .asStream()
+            .map<dynamic>((streets) => SearchStreetResultAction(streets))
+            .onErrorResume((error) => Stream.value(SetScopedErrorAction(error: error.toString(), scope: action.scope)))
             .takeUntil(actions.whereType<CancelStreetSearchAction>());
       } else {
         return Stream.value(SearchStreetResultAction([]));

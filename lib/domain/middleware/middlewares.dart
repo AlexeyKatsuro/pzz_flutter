@@ -65,12 +65,13 @@ Middleware<AppState> _createLoadPizzas(PzzRepository repository) {
   };
 }
 
-Middleware<AppState> _createLoadBasket(PzzRepository repository) {
-  return (Store<AppState> store, dynamic action, NextDispatcher next) {
+MiddlewareTyped<AppState, LoadBasketAction> _createLoadBasket(PzzRepository repository) {
+  return (Store<AppState> store, LoadBasketAction action, NextDispatcher next) {
     repository.loadBasket().then((basket) {
       next(BasketLoadedAction(basket));
     }).catchError((ex) {
       print(ex);
+      next(SetScopedErrorAction(error: ex.toString(), scope: action.scope));
     });
 
     next(action);
@@ -111,10 +112,14 @@ MiddlewareTyped<AppState, SavePersonalInfoAction> _createSavePersonalInfo(Prefer
 MiddlewareTyped<AppState, LoadHousesAction> _createLoadHouses(
     PzzRepository pzzRepository, PreferenceRepository repository) {
   return (Store<AppState> store, LoadHousesAction action, NextDispatcher next) async {
-    next(action);
     //repository.savePersonalInfo(personalInfoSelector(store.state));
-    final houses = await pzzRepository.loadHousesByStreet(action.streetId);
-    next(LoadedHouseAction(houses));
+    pzzRepository.loadHousesByStreet(action.streetId).then((houses) {
+      next(LoadedHouseAction(houses));
+    }).catchError((ex) {
+      print(ex);
+      next(SetScopedErrorAction(error: ex.toString(), scope: action.scope));
+    });
+    next(action);
   };
 }
 
@@ -134,6 +139,7 @@ MiddlewareTyped<AppState, TryPlaceOrderAction> _createUpdateAddress(PzzRepositor
         next(ShowConfirmOrderDialogAction());
       }).catchError((ex) {
         print(ex);
+        next(SetScopedErrorAction(error: ex.toString(), scope: action.scope));
       });
     }
   };
@@ -147,6 +153,7 @@ MiddlewareTyped<AppState, ConfirmPlaceOrderAction> _createConfirmPlaceOrder(PzzR
       next(BasketLoadedAction(basket));
     }).catchError((ex) {
       print(ex);
+      next(SetScopedErrorAction(error: ex.toString(), scope: action.scope));
     }).whenComplete(() {
       next(ConfirmLoadingAction(isLoading: false));
     });

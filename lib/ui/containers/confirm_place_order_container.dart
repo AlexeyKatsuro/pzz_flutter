@@ -5,15 +5,17 @@ import 'package:pzz/domain/selectors/selector.dart';
 import 'package:pzz/models/app_state.dart';
 import 'package:pzz/models/basket_address.dart';
 import 'package:pzz/models/basket_product.dart';
+import 'package:pzz/routes.dart';
 import 'package:pzz/ui/widgets/confirm_place_order_view.dart';
+import 'package:pzz/utils/scoped.dart';
 import 'package:redux/redux.dart';
 
-class ConfirmPlaceOrderContainer extends StatelessWidget {
+class ConfirmPlaceOrderContainer extends StatelessWidget implements Scoped {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, _ViewModel>(
       distinct: true,
-      converter: (Store<AppState> store) => _ViewModel.fromStore(store),
+      converter: (Store<AppState> store) => _ViewModel.fromStore(store, scope),
       builder: (_, _ViewModel viewModel) {
         return _build(context, viewModel);
       },
@@ -29,6 +31,9 @@ class ConfirmPlaceOrderContainer extends StatelessWidget {
       onConfirm: viewModel.onConfirm,
     );
   }
+
+  @override
+  String get scope => Routes.confirmPlaceOrderScreen;
 }
 
 class _ViewModel {
@@ -46,14 +51,14 @@ class _ViewModel {
   final List<BasketProduct> products;
   final VoidCallback onConfirm;
 
-  factory _ViewModel.fromStore(Store<AppState> store) {
+  factory _ViewModel.fromStore(Store<AppState> store, String scope) {
     return _ViewModel(
       totalPriceText: store.state.basket.totalAmountText,
       address: store.state.basket.address,
       products: store.state.basket.items,
       isLoading: isConfirmLoadingSelector(store.state),
       onConfirm: () {
-        store.dispatch(ConfirmPlaceOrderAction());
+        store.dispatch(ConfirmPlaceOrderAction(scope: scope));
       },
     );
   }

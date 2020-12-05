@@ -8,6 +8,7 @@ import 'package:pzz/models/person_info/person_info_errors.dart';
 import 'package:pzz/models/person_info/personal_info.dart';
 import 'package:pzz/models/person_info/street.dart';
 import 'package:pzz/res/strings.dart';
+import 'package:pzz/routes.dart';
 import 'package:pzz/ui/search_page.dart';
 import 'package:pzz/utils/extensions/text_form_field_ext.dart';
 import 'package:redux/redux.dart';
@@ -190,7 +191,8 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) {
-                  return SearchStreetPage(
+                  return SearchPage(
+                    scope: Routes.searchStreetScreen,
                     fromStore: StreetsSearchViewModel.fromStore,
                     stringify: (Street item) => item.title,
                     prefill: widget.personalInfo.street,
@@ -223,7 +225,8 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) {
-                  return SearchStreetPage(
+                  return SearchPage(
+                    scope: Routes.searchHouseScreen,
                     fromStore: HousesSearchViewModel.fromStore,
                     stringify: (House item) => item.title,
                     prefill: widget.personalInfo.house,

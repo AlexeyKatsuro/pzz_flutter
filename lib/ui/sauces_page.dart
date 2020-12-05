@@ -12,6 +12,7 @@ import 'package:pzz/routes.dart';
 import 'package:pzz/ui/widgets/sauce.dart';
 import 'package:pzz/utils/extensions/to_product_ext.dart';
 import 'package:pzz/utils/scoped.dart';
+import 'package:pzz/utils/widgets/error_scoped_notifier.dart';
 import 'package:redux/redux.dart';
 
 class SaucesPage extends StatelessWidget implements Scoped {
@@ -42,34 +43,37 @@ class SaucesPage extends StatelessWidget implements Scoped {
               onPressed: viewModel.onDoneClick)
         ],
       ),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-        children: [
-          AnimatedContainer(
-            height: viewModel.hasFreeSauce ? 50 : 0, // TODO CRUTCH
-            duration: kDurationFast,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 12, 0, 8),
-              child: AnimatedSwitcher(
-                duration: kDurationFast,
-                child: viewModel.hasFreeSauce
-                    ? Text(
-                        StringRes.chooseFeeSauces(viewModel.freeSauceCounts),
-                        style: Theme.of(context).textTheme.headline6,
-                      )
-                    : null,
+      body: ErrorScopedNotifier(
+        scope,
+        child: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+          children: [
+            AnimatedContainer(
+              height: viewModel.hasFreeSauce ? 50 : 0, // TODO CRUTCH
+              duration: kDurationFast,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 12, 0, 8),
+                child: AnimatedSwitcher(
+                  duration: kDurationFast,
+                  child: viewModel.hasFreeSauce
+                      ? Text(
+                          StringRes.chooseFeeSauces(viewModel.freeSauceCounts),
+                          style: Theme.of(context).textTheme.headline6,
+                        )
+                      : null,
+                ),
               ),
             ),
-          ),
-          for (int index = 0; index < viewModel.sauces.length; index++)
-            SauceWidget(
-              count: viewModel.saucesCountMap[viewModel.sauces[index].id],
-              isFree: viewModel.hasFreeSauce,
-              item: viewModel.sauces[index],
-              onAddClick: () => viewModel.onAddItemClick(viewModel.sauces[index].toProduct()),
-              onRemoveClick: () => viewModel.onRemoveItemClick(viewModel.sauces[index].toProduct()),
-            ),
-        ],
+            for (int index = 0; index < viewModel.sauces.length; index++)
+              SauceWidget(
+                count: viewModel.saucesCountMap[viewModel.sauces[index].id],
+                isFree: viewModel.hasFreeSauce,
+                item: viewModel.sauces[index],
+                onAddClick: () => viewModel.onAddItemClick(viewModel.sauces[index].toProduct()),
+                onRemoveClick: () => viewModel.onRemoveItemClick(viewModel.sauces[index].toProduct()),
+              ),
+          ],
+        ),
       ),
     );
   }

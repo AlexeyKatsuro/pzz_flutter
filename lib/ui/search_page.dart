@@ -7,24 +7,28 @@ import 'package:pzz/models/app_state.dart';
 import 'package:pzz/models/person_info/house.dart';
 import 'package:pzz/models/person_info/street.dart';
 import 'package:pzz/res/strings.dart';
+import 'package:pzz/utils/scoped.dart';
+import 'package:pzz/utils/widgets/error_scoped_notifier.dart';
 import 'package:redux/redux.dart';
 
-class SearchStreetPage<T, VM extends SearchViewModel<T>> extends StatefulWidget {
-  final VM Function(Store<AppState> store) fromStore;
+class SearchPage<T, VM extends SearchViewModel<T>> extends StatefulWidget implements Scoped {
+  final VM Function(Store<AppState> store, String scope) fromStore;
   final String prefill;
   final String Function(T item) stringify;
+  final String scope;
 
-  SearchStreetPage({
+  SearchPage({
     @required this.fromStore,
     @required this.prefill,
     @required this.stringify,
+    @required this.scope,
   });
 
   @override
-  _SearchStreetPageState<T, VM> createState() => _SearchStreetPageState<T, VM>();
+  _SearchPageState<T, VM> createState() => _SearchPageState<T, VM>();
 }
 
-class _SearchStreetPageState<T, VM extends SearchViewModel<T>> extends State<SearchStreetPage<T, VM>> {
+class _SearchPageState<T, VM extends SearchViewModel<T>> extends State<SearchPage<T, VM>> {
   final queryTextController = TextEditingController();
 
   @override
@@ -41,7 +45,7 @@ class _SearchStreetPageState<T, VM extends SearchViewModel<T>> extends State<Sea
         viewModel.onTyping(widget.prefill);
         viewModel.onInitialBuild?.call();
       },
-      converter: widget.fromStore,
+      converter: (store) => widget.fromStore(store, widget.scope),
       builder: (context, vm) {
         return _build(context, vm);
       },
@@ -67,11 +71,14 @@ class _SearchStreetPageState<T, VM extends SearchViewModel<T>> extends State<Sea
           clearButtonMode: OverlayVisibilityMode.editing,
         ),
       ),
-      body: ListView.separated(
-        padding: EdgeInsets.all(8),
-        itemBuilder: (context, index) => _buildItems(context, index, vm),
-        separatorBuilder: (context, index) => SizedBox(height: 4),
-        itemCount: vm.items.length,
+      body: ErrorScopedNotifier(
+        widget.scope,
+        child: ListView.separated(
+          padding: EdgeInsets.all(8),
+          itemBuilder: (context, index) => _buildItems(context, index, vm),
+          separatorBuilder: (context, index) => SizedBox(height: 4),
+          itemCount: vm.items.length,
+        ),
       ),
     );
   }
@@ -95,7 +102,7 @@ class _SearchStreetPageState<T, VM extends SearchViewModel<T>> extends State<Sea
   }
 }
 
-class SearchViewModel<T> {
+abstract class SearchViewModel<T> {
   SearchViewModel({
     @required this.items,
     @required this.onTyping,
@@ -116,10 +123,13 @@ class StreetsSearchViewModel extends SearchViewModel<Street> {
     @required void Function(Street item) onItemClick,
   }) : super(items: items, onItemClick: onItemClick, onTyping: onTyping);
 
-  static StreetsSearchViewModel fromStore(Store<AppState> store) {
+  static StreetsSearchViewModel fromStore(Store<AppState> store, String scope) {
     return StreetsSearchViewModel(
       onItemClick: (item) => store.dispatch(SelectStreetAction(item)),
-      onTyping: (query) => store.dispatch(PerformStreetSearchAction(query)),
+      onTyping: (query) => store.dispatch(PerformStreetSearchAction(
+        query: query,
+        scope: scope,
+      )),
       items: suggestedStreetsSelector(store.state),
     );
   }
@@ -138,11 +148,19 @@ class HousesSearchViewModel extends SearchViewModel<House> {
           onInitialBuild: onInitialBuild,
         );
 
-  static HousesSearchViewModel fromStore(Store<AppState> store) {
+  static HousesSearchViewModel fromStore(
+    Store<AppState> store,
+    String scope,
+  ) {
     final street = personalInfoStreetSelector(store.state);
     final totalHouses = totalHousesSelector(store.state);
     return HousesSearchViewModel(
-      onInitialBuild: totalHouses.isEmpty ? () => store.dispatch(LoadHousesAction(street.id)) : null,
+      onInitialBuild: totalHouses.isEmpty
+          ? () => store.dispatch(LoadHousesAction(
+                streetId: street.id,
+                scope: scope,
+              ))
+          : null,
       onItemClick: (item) => store.dispatch(SelectHouseAction(item)),
       onTyping: (query) => store.dispatch(PerformHouseSearchAction(query)),
       items: suggestedHousesSelector(store.state),

@@ -8,12 +8,18 @@ import 'package:pzz/utils/scoped.dart';
 class InitialAction implements Scoped {
   final String scope;
 
+  @override
   InitialAction({@required this.scope});
 }
 
 class LoadPizzasAction {}
 
-class LoadBasketAction {}
+class LoadBasketAction implements Scoped {
+  LoadBasketAction({@required this.scope});
+
+  @override
+  final String scope;
+}
 
 class PizzasLoadedAction {
   final List<Pizza> pizzas;
@@ -59,9 +65,19 @@ class HomeErrorAction {
   HomeErrorAction(this.errorMessage);
 }
 
-class TryPlaceOrderAction {}
+class TryPlaceOrderAction implements Scoped {
+  TryPlaceOrderAction({@required this.scope});
 
-class ConfirmPlaceOrderAction {}
+  @override
+  final String scope;
+}
+
+class ConfirmPlaceOrderAction implements Scoped {
+  ConfirmPlaceOrderAction({@required this.scope});
+
+  @override
+  final String scope;
+}
 
 class ConfirmLoadingAction {
   ConfirmLoadingAction({this.isLoading});

@@ -1,24 +1,21 @@
+import 'package:flutter/foundation.dart';
 import 'package:pzz/models/payment_way.dart';
 import 'package:pzz/models/person_info/house.dart';
 import 'package:pzz/models/person_info/personal_info.dart';
 import 'package:pzz/models/person_info/street.dart';
+import 'package:pzz/utils/scoped.dart';
 
-class PerformStreetSearchAction {
+class PerformStreetSearchAction implements Scoped {
   final String query;
+  final String scope;
 
-  PerformStreetSearchAction(this.query);
+  PerformStreetSearchAction({@required this.query, @required this.scope});
 }
 
 class PerformHouseSearchAction {
   final String query;
 
   PerformHouseSearchAction(this.query);
-}
-
-class SearchStreetErrorAction {
-  final dynamic error;
-
-  SearchStreetErrorAction(this.error);
 }
 
 class SearchStreetResultAction {
@@ -35,10 +32,11 @@ class SelectStreetAction {
   SelectStreetAction(this.street);
 }
 
-class LoadHousesAction {
+class LoadHousesAction implements Scoped {
   final int streetId;
+  final String scope;
 
-  LoadHousesAction(this.streetId);
+  LoadHousesAction({@required this.streetId, @required this.scope});
 }
 
 class LoadedHouseAction {
