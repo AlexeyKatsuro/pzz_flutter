@@ -101,11 +101,11 @@ class _HomePageState extends State<HomePage> {
           title: const Text(StringRes.appName),
           floating: true,
           forceElevated: true,
-          /*  actions: [
+/*          actions: [
             IconButton(
               icon: Icon(Icons.person_outline),
               onPressed: () {
-                Navigator.of(context).pushNamed(Routes.personalInfoScreen);
+                StoreProvider.of<AppState>(context).dispatch(NavigateAction.push(Routes.successOrderPlacedDialog));
               },
             ),
           ],*/

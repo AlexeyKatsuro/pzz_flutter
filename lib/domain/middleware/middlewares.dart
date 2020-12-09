@@ -1,10 +1,12 @@
 import 'package:pzz/domain/actions/actions.dart';
+import 'package:pzz/domain/actions/navigate_to_action.dart';
 import 'package:pzz/domain/error/scoped_error_actions.dart';
 import 'package:pzz/domain/person_info_form/actions/person_info_form_actions.dart';
 import 'package:pzz/domain/repository/preference_repository.dart';
 import 'package:pzz/domain/repository/pzz_repository.dart';
 import 'package:pzz/domain/selectors/selector.dart';
 import 'package:pzz/models/app_state.dart';
+import 'package:pzz/routes.dart';
 import 'package:redux/redux.dart';
 
 typedef MiddlewareTyped<State, Action> = dynamic Function(
@@ -150,6 +152,7 @@ MiddlewareTyped<AppState, ConfirmPlaceOrderAction> _createConfirmPlaceOrder(PzzR
     next(action);
     next(ConfirmLoadingAction(isLoading: true));
     repository.placeOrder().then((basket) {
+      next(NavigateAction.push(Routes.successOrderPlacedDialog));
       next(BasketLoadedAction(basket));
     }).catchError((ex) {
       print(ex);

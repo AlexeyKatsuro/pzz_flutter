@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 
 @immutable
 class NavigationStack {
-  final List<NavStackEntry<Object>> backStack;
+  final List<NavStackEntry> backStack;
 
   const NavigationStack(this.backStack);
 
@@ -13,9 +13,9 @@ class NavigationStack {
   }
 }
 
-class NavStackEntry<T> {
+class NavStackEntry {
   final String name;
-  final T args;
+  final Object args;
 
   const NavStackEntry({this.name, this.args});
 }

@@ -85,6 +85,8 @@ class ConfirmLoadingAction {
   final bool isLoading;
 }
 
+class OrderPlacedAction {}
+
 class ShowConfirmOrderDialogAction {}
 
 class HandleConfirmOrderDialogAction {}
