@@ -10,7 +10,6 @@ import 'package:pzz/models/pizza.dart';
 import 'package:pzz/models/product.dart';
 import 'package:pzz/res/strings.dart';
 import 'package:pzz/routes.dart';
-import 'package:pzz/ui/containers/confirm_place_order_container.dart';
 import 'package:pzz/ui/containers/payment_way_container.dart';
 import 'package:pzz/ui/widgets/basket_combined_item.dart';
 import 'package:pzz/ui/widgets/personal_info_form.dart';
@@ -18,6 +17,7 @@ import 'package:pzz/utils/extensions/enum_localization_ext.dart';
 import 'package:pzz/utils/extensions/to_product_ext.dart';
 import 'package:pzz/utils/scoped.dart';
 import 'package:pzz/utils/widgets/error_scoped_notifier.dart';
+import 'package:pzz/utils/widgets/loading_switcher.dart';
 import 'package:redux/redux.dart';
 
 class BasketPage extends StatefulWidget implements Scoped {
@@ -32,20 +32,6 @@ class _BasketPageState extends State<BasketPage> {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, _ViewModel>(
       distinct: true,
-      onWillChange: (previousViewModel, newViewModel) {
-        if (newViewModel.showConfirmOrderDialogEvent) {
-          showModalBottomSheet<void>(
-            context: context,
-            isScrollControlled: true,
-            builder: (BuildContext context) {
-              return SingleChildScrollView(
-                child: ConfirmPlaceOrderContainer(),
-              );
-            },
-          );
-          newViewModel.handleConfirmOrderDialogEvent();
-        }
-      },
       converter: (store) {
         return _ViewModel.formStore(store, widget.scope);
       },
@@ -99,9 +85,15 @@ class _BasketPageState extends State<BasketPage> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: ElevatedButton(
-                onPressed: vm.onPlaceOrderClick,
-                child: Text(StringRes.place_order),
+              child: AbsorbPointer(
+                absorbing: vm.isLoading,
+                child: ElevatedButton(
+                  child: LoadingSwitcher(
+                    isLoading: vm.isLoading,
+                    child: const Text(StringRes.place_order),
+                  ),
+                  onPressed: vm.onPlaceOrderClick,
+                ),
               ),
             )
           ],
@@ -165,12 +157,12 @@ class _ViewModel {
   final Map<ProductType, List<CombinedBasketProduct>> itemsMap;
   final Basket basket;
   final int freeSauceCounts;
-  final bool showConfirmOrderDialogEvent;
+  final bool isLoading;
+
   // Callbacks
   final ValueSetter<Product> onAddItemClick;
   final ValueSetter<Product> onRemoveItemClick;
   final VoidCallback onPlaceOrderClick;
-  final VoidCallback handleConfirmOrderDialogEvent;
   final VoidCallback onChooseSauceClick;
 
   bool get isBasketEmpty => basketCount == 0;
@@ -182,11 +174,10 @@ class _ViewModel {
     @required this.itemsMap,
     @required this.basket,
     @required this.freeSauceCounts,
-    @required this.showConfirmOrderDialogEvent,
+    @required this.isLoading,
     @required this.onAddItemClick,
     @required this.onRemoveItemClick,
     @required this.onPlaceOrderClick,
-    @required this.handleConfirmOrderDialogEvent,
     @required this.onChooseSauceClick,
   })  : assert(itemsMap != null),
         assert(basketCount != null),
@@ -194,14 +185,13 @@ class _ViewModel {
 
   static _ViewModel formStore(Store<AppState> store, String scope) {
     return _ViewModel(
-        showConfirmOrderDialogEvent: showConfirmOrderDialogEventSelector(store.state),
+        isLoading: isConfirmLoadingSelector(store.state),
         basket: basketSelector(store.state),
         itemsMap: combinedBasketProductsTypedMap(store.state),
         basketCount: basketCountSelector(store.state),
         freeSauceCounts: freeSauceCountsSelector(store.state),
         onChooseSauceClick: () => store.dispatch(NavigateAction.push(Routes.saucesScreen)),
         onAddItemClick: (item) => store.dispatch(AddProductAction(product: item, scope: scope)),
-        handleConfirmOrderDialogEvent: () => store.dispatch(HandleConfirmOrderDialogAction()),
         onRemoveItemClick: (item) => store.dispatch(RemoveProductAction(product: item, scope: scope)),
         onPlaceOrderClick: () => store.dispatch(TryPlaceOrderAction(scope: scope)));
   }

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pzz/models/basket_address.dart';
 import 'package:pzz/models/basket_product.dart';
-import 'package:pzz/res/constants.dart';
 import 'package:pzz/res/strings.dart';
 import 'package:pzz/utils/extensions/enum_localization_ext.dart';
 import 'package:pzz/utils/extensions/widget_extension.dart';
+import 'package:pzz/utils/widgets/loading_switcher.dart';
 
 class ConfirmPlaceOrderView extends StatefulWidget {
   ConfirmPlaceOrderView({
@@ -33,15 +33,18 @@ class _ConfirmPlaceOrderViewState extends State<ConfirmPlaceOrderView> {
       padding: EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              width: 32,
-              height: 6,
-              decoration: BoxDecoration(
-                color: Theme.of(context).dividerColor,
-                borderRadius: BorderRadius.circular(4),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                width: 32,
+                height: 6,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).dividerColor,
+                  borderRadius: BorderRadius.circular(4),
+                ),
               ),
             ),
           ),
@@ -86,25 +89,14 @@ class _ConfirmPlaceOrderViewState extends State<ConfirmPlaceOrderView> {
           SizedBox(
             height: 12,
           ),
-          SizedBox(
-            width: double.infinity,
-            child: AbsorbPointer(
-              absorbing: widget.isLoading,
-              child: ElevatedButton(
-                child: AnimatedSwitcher(
-                  child: widget.isLoading
-                      ? SizedBox(
-                          width: 24,
-                          height: 24,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation(Theme.of(context).colorScheme.onPrimary),
-                          ))
-                      : const Text(StringRes.to_confirm_button),
-                  duration: kDurationFast,
-                ),
-                onPressed: widget.onConfirm,
+          AbsorbPointer(
+            absorbing: widget.isLoading,
+            child: ElevatedButton(
+              child: LoadingSwitcher(
+                isLoading: widget.isLoading,
+                child: const Text(StringRes.to_confirm_button),
               ),
+              onPressed: widget.onConfirm,
             ),
           ),
           SizedBox(

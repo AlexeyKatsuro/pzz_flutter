@@ -42,8 +42,6 @@ List<House> suggestedHousesSelector(AppState state) => state.personalInfoState.s
 
 List<House> totalHousesSelector(AppState state) => state.personalInfoState.totalHouses;
 
-bool showConfirmOrderDialogEventSelector(AppState state) => state.showConfirmOrderDialogEvent;
-
 Selector<AppState, Street> personalInfoStreetSelector = createSelector1(personalInfoSelector, (PersonalInfo info) {
   return Street(id: info.streetId, title: info.street);
 });

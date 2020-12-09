@@ -136,12 +136,15 @@ MiddlewareTyped<AppState, TryPlaceOrderAction> _createUpdateAddress(PzzRepositor
   return (Store<AppState> store, TryPlaceOrderAction action, NextDispatcher next) async {
     next(action);
     if (isPersonInfoValid(store.state)) {
+      next(ConfirmLoadingAction(isLoading: true));
       repository.updateAddress(personalInfoSelector(store.state)).then((basket) {
         next(BasketLoadedAction(basket));
-        next(ShowConfirmOrderDialogAction());
+        next(NavigateAction.push(Routes.confirmPlaceOrderDialog));
       }).catchError((ex) {
         print(ex);
         next(SetScopedErrorAction(error: ex.toString(), scope: action.scope));
+      }).whenComplete(() {
+        next(ConfirmLoadingAction(isLoading: false));
       });
     }
   };

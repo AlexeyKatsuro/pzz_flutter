@@ -66,6 +66,7 @@ class PzzNetService {
   }
 
   Future<Basket> updateAddress(PersonalInfo personalInfo) async {
+    await Future.delayed(Duration(seconds: 1));
     final path = 'basket/update-address';
     return client
         .post(

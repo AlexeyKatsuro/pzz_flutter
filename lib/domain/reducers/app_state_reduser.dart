@@ -16,20 +16,9 @@ AppState appReducer(AppState state, dynamic action) {
     sauce: saucesReducer(state.sauce, action),
     basket: basketReducer(state.basket, action),
     personalInfoState: personalInfoStateReducer(state.personalInfoState, action),
-    showConfirmOrderDialogEvent: showConfirmOrderDialogEventReducer(state.showConfirmOrderDialogEvent, action),
     isConfirmLoading: confirmLoadingReducer(state.isConfirmLoading, action),
     navigationStack: navigationStackReducer(state.navigationStack, action),
   );
-}
-
-bool showConfirmOrderDialogEventReducer(bool previousValue, dynamic action) {
-  if (action is ShowConfirmOrderDialogAction) {
-    return true;
-  } else if (action is HandleConfirmOrderDialogAction) {
-    return false;
-  } else {
-    return previousValue;
-  }
 }
 
 bool confirmLoadingReducer(bool previousValue, dynamic action) {

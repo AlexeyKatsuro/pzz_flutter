@@ -41,7 +41,7 @@ abstract class StringRes {
   static const online = 'Онлайн';
   static const halva = 'Халва';
   static const prepare_to_charge = 'С какой суммы подготовить сдачу?';
-  static const place_order = 'Оформить заказ';
+  static const place_order = 'К подтверждению';
 
   static const error_empty_phone = 'Введите номер телефона';
   static const error_empty_street = 'Выберите название улицы';
@@ -55,7 +55,7 @@ abstract class StringRes {
   static const to_confirm_title = 'Подтвердите заказ';
   static const to_confirm_phone = 'Контактный телефон';
   static const to_confirm_address = 'На адрес';
-  static const to_confirm_button = 'Подтвердить';
+  static const to_confirm_button = 'Оформить заказ';
   static const to_confirm_total_price = 'К оплате:';
   static String streetHouse(String street, String house) => 'ул. $street, д. $house';
   static String streetHouseFlat(String street, String house, String flat) => 'ул. $street, д. $house, кв. $flat';

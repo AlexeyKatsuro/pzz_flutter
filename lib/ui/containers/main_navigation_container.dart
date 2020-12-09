@@ -6,10 +6,12 @@ import 'package:pzz/models/app_state.dart';
 import 'package:pzz/models/navigation_stack.dart';
 import 'package:pzz/routes.dart';
 import 'package:pzz/ui/basket_page.dart';
+import 'package:pzz/ui/containers/confirm_place_order_container.dart';
 import 'package:pzz/ui/home_page.dart';
 import 'package:pzz/ui/not_found_page.dart';
 import 'package:pzz/ui/person_info_page.dart';
 import 'package:pzz/ui/sauces_page.dart';
+import 'package:pzz/utils/widgets/bottom_sheet.dart';
 import 'package:pzz/utils/widgets/dialog_route.dart';
 import 'package:pzz/utils/widgets/system_ui.dart';
 import 'package:redux/redux.dart';
@@ -48,6 +50,10 @@ class MainNavigationContainer extends StatelessWidget {
       ),
       builder: buildBaseDialog,
     ),
+    Routes.confirmPlaceOrderDialog: _PageBuilder(
+      widgetBuilder: (_) => ConfirmPlaceOrderDialog(),
+      builder: buildScrollBottomSheetDialog,
+    )
   };
 
   @override
@@ -81,27 +87,42 @@ class MainNavigationContainer extends StatelessWidget {
     return pageBuilder.build(stackEntry);
   }
 
-  static MaterialPage<T> buildBasePage<T>(NavStackEntry page, WidgetArgBuild builder) {
+  static MaterialPage<T> buildBasePage<T>(NavStackEntry stackEntry, WidgetArgBuild builder) {
     return MaterialPage(
-      key: Key(page.name),
+      key: Key(stackEntry.name),
       child: SystemUi(
-        child: builder(page.args),
+        child: builder(stackEntry.args),
       ),
     );
   }
 
-  static MaterialDialogPage<T> buildBaseDialog<T>(NavStackEntry page, WidgetArgBuild builder) {
+  static MaterialDialogPage<T> buildBaseDialog<T>(NavStackEntry stackEntry, WidgetArgBuild builder) {
     return MaterialDialogPage<T>(
-      key: Key(page.name),
-      name: page.name,
-      arguments: page.args,
+      key: Key(stackEntry.name),
+      name: stackEntry.name,
+      arguments: stackEntry.args,
       child: SystemUi(
         statusBarBrightness: Brightness.dark,
         statusBarIconBrightness: Brightness.light,
         systemNavigationBarIconBrightness: Brightness.light,
         systemNavigationBarColor: Colors.black54,
         statusBarColor: Colors.transparent,
-        child: builder(page.args),
+        child: builder(stackEntry.args),
+      ),
+    );
+  }
+
+  static BottomSheetDialog<T> buildScrollBottomSheetDialog<T>(NavStackEntry stackEntry, WidgetArgBuild builder) {
+    return BottomSheetDialog<T>(
+      key: Key(stackEntry.name),
+      name: stackEntry.name,
+      arguments: stackEntry.args,
+      isScrollControlled: true,
+      child: SystemUi(
+        statusBarBrightness: Brightness.dark,
+        statusBarIconBrightness: Brightness.light,
+        statusBarColor: Colors.transparent,
+        child: builder(stackEntry.args),
       ),
     );
   }

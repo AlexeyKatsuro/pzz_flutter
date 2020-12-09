@@ -86,7 +86,3 @@ class ConfirmLoadingAction {
 }
 
 class OrderPlacedAction {}
-
-class ShowConfirmOrderDialogAction {}
-
-class HandleConfirmOrderDialogAction {}

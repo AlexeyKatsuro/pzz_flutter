@@ -15,8 +15,7 @@ class AppState {
   final List<Pizza> pizzas;
   final List<Sauce> sauce;
   final Basket basket;
-  final bool showConfirmOrderDialogEvent;
-  final bool isConfirmLoading;
+  final bool isConfirmLoading; // TODO use local loading flags on App level
   final ScopedErrorsHub scopedErrors;
   final NavigationStack navigationStack;
 
@@ -26,7 +25,6 @@ class AppState {
     @required this.sauce,
     @required this.basket,
     @required this.personalInfoState,
-    @required this.showConfirmOrderDialogEvent,
     @required this.isConfirmLoading,
     @required this.scopedErrors,
     @required this.navigationStack,
@@ -39,7 +37,6 @@ class AppState {
     this.sauce = const [],
     this.basket = const Basket.initial(),
     this.personalInfoState = const PersonalInfoState.initial(),
-    this.showConfirmOrderDialogEvent = false,
     this.scopedErrors = const ScopedErrorsHub.initial(),
     this.navigationStack = const NavigationStack([NavStackEntry(name: Routes.homeScreen)]),
   })  : assert(homePageState != null),
@@ -48,6 +45,5 @@ class AppState {
         assert(sauce != null),
         assert(basket != null),
         assert(personalInfoState != null),
-        assert(showConfirmOrderDialogEvent != null),
         assert(scopedErrors != null);
 }

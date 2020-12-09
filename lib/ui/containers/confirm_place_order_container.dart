@@ -10,6 +10,15 @@ import 'package:pzz/ui/widgets/confirm_place_order_view.dart';
 import 'package:pzz/utils/scoped.dart';
 import 'package:redux/redux.dart';
 
+class ConfirmPlaceOrderDialog extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: ConfirmPlaceOrderContainer(),
+    );
+  }
+}
+
 class ConfirmPlaceOrderContainer extends StatelessWidget implements Scoped {
   @override
   Widget build(BuildContext context) {
@@ -33,7 +42,7 @@ class ConfirmPlaceOrderContainer extends StatelessWidget implements Scoped {
   }
 
   @override
-  String get scope => Routes.confirmPlaceOrderScreen;
+  String get scope => Routes.confirmPlaceOrderDialog;
 }
 
 class _ViewModel {
