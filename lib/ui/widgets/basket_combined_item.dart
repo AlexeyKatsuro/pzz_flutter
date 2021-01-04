@@ -4,6 +4,7 @@ import 'package:pzz/models/combined_basket_product.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/ui/widgets/counter.dart';
 import 'package:pzz/utils/extensions/enum_localization_ext.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BasketCombinedItem extends StatelessWidget {
   final CombinedBasketProduct combinedProduct;
@@ -18,6 +19,7 @@ class BasketCombinedItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
     final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,7 +51,7 @@ class BasketCombinedItem extends StatelessWidget {
                     left: 8.0,
                   ),
                   child: Text(
-                    size.localizedString,
+                    size.localized(localizations),
                     style: Theme.of(context).textTheme.bodyText2,
                   ),
                 ),

@@ -7,13 +7,13 @@ import 'package:pzz/models/app_state.dart';
 import 'package:pzz/models/product.dart';
 import 'package:pzz/models/sauce.dart';
 import 'package:pzz/res/constants.dart';
-import 'package:pzz/res/strings.dart';
 import 'package:pzz/routes.dart';
 import 'package:pzz/ui/widgets/sauce.dart';
 import 'package:pzz/utils/extensions/to_product_ext.dart';
 import 'package:pzz/utils/scoped.dart';
 import 'package:pzz/utils/widgets/error_scoped_notifier.dart';
 import 'package:redux/redux.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SaucesPage extends StatelessWidget implements Scoped {
   @override
@@ -31,9 +31,10 @@ class SaucesPage extends StatelessWidget implements Scoped {
   }
 
   Widget _build(BuildContext context, _ViewModel viewModel) {
+    final localizations = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(StringRes.sauces),
+        title: Text(localizations.sauces),
         actions: [
           IconButton(
               icon: Icon(
@@ -57,7 +58,7 @@ class SaucesPage extends StatelessWidget implements Scoped {
                   duration: kDurationFast,
                   child: viewModel.hasFreeSauce
                       ? Text(
-                          StringRes.chooseFeeSauces(viewModel.freeSauceCounts),
+                          localizations.chooseFeeSauces(viewModel.freeSauceCounts),
                           style: Theme.of(context).textTheme.headline6,
                         )
                       : null,

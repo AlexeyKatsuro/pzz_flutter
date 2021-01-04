@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pzz/models/basket_address.dart';
 import 'package:pzz/models/basket_product.dart';
-import 'package:pzz/res/strings.dart';
 import 'package:pzz/utils/extensions/enum_localization_ext.dart';
 import 'package:pzz/utils/extensions/widget_extension.dart';
 import 'package:pzz/utils/widgets/loading_switcher.dart';
@@ -28,6 +28,7 @@ class ConfirmPlaceOrderView extends StatefulWidget {
 class _ConfirmPlaceOrderViewState extends State<ConfirmPlaceOrderView> {
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
     final theme = Theme.of(context);
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16),
@@ -49,7 +50,7 @@ class _ConfirmPlaceOrderViewState extends State<ConfirmPlaceOrderView> {
             ),
           ),
           ...[
-            for (final product in widget.products) _buildProductRow(context, product),
+            for (final product in widget.products) _buildProductRow(theme, localizations, product),
           ].divideChildren(divider: Divider()),
           SizedBox(
             height: 20,
@@ -57,15 +58,15 @@ class _ConfirmPlaceOrderViewState extends State<ConfirmPlaceOrderView> {
           _buildPersonInfo(
             context: context,
             icon: Icons.phone,
-            name: StringRes.to_confirm_phone,
+            name: localizations.toConfirmPhone,
             value: widget.address.phone,
           ),
           Divider(),
           _buildPersonInfo(
             context: context,
             icon: Icons.room_outlined,
-            name: StringRes.to_confirm_address,
-            value: widget.address.makeFullAddress,
+            name: localizations.toConfirmAddress,
+            value: widget.address.makeFullAddress(localizations),
           ),
           SizedBox(
             height: 20,
@@ -73,7 +74,7 @@ class _ConfirmPlaceOrderViewState extends State<ConfirmPlaceOrderView> {
           Row(
             children: [
               Text(
-                StringRes.to_confirm_total_price,
+                localizations.toConfirmTotalPrice,
                 style: theme.textTheme.subtitle1.copyWith(fontFamily: 'Malina'),
               ),
               SizedBox(width: 12),
@@ -94,7 +95,7 @@ class _ConfirmPlaceOrderViewState extends State<ConfirmPlaceOrderView> {
             child: ElevatedButton(
               child: LoadingSwitcher(
                 isLoading: widget.isLoading,
-                child: const Text(StringRes.to_confirm_button),
+                child: Text(localizations.toConfirmButton),
               ),
               onPressed: widget.onConfirm,
             ),
@@ -134,11 +135,10 @@ class _ConfirmPlaceOrderViewState extends State<ConfirmPlaceOrderView> {
     );
   }
 
-  Widget _buildProductRow(BuildContext context, BasketProduct product) {
-    final theme = Theme.of(context);
+  Widget _buildProductRow(ThemeData theme, AppLocalizations localizations, BasketProduct product) {
     String title = product.title;
     if (product.size != null) {
-      title += '(${product.size.localizedString})';
+      title += '(${product.size.localized(localizations)})';
     }
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,

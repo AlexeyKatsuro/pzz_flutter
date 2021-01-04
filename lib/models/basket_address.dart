@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:pzz/res/strings.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 @immutable
 class BasketAddress {
@@ -51,11 +51,11 @@ class BasketAddress {
 }
 
 extension BasketAddressExt on BasketAddress {
-  String get makeFullAddress {
+  String makeFullAddress(AppLocalizations localizations) {
     if (flat != null && flat.isNotEmpty) {
-      return StringRes.streetHouseFlat(street, house, flat);
+      return localizations.streetHouseFlat(street, house, flat);
     } else {
-      return StringRes.streetHouse(street, house);
+      return localizations.streetHouse(street, house);
     }
   }
 }

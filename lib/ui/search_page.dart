@@ -6,10 +6,10 @@ import 'package:pzz/domain/selectors/selector.dart';
 import 'package:pzz/models/app_state.dart';
 import 'package:pzz/models/person_info/house.dart';
 import 'package:pzz/models/person_info/street.dart';
-import 'package:pzz/res/strings.dart';
 import 'package:pzz/utils/scoped.dart';
 import 'package:pzz/utils/widgets/error_scoped_notifier.dart';
 import 'package:redux/redux.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SearchPage<T, VM extends SearchViewModel<T>> extends StatefulWidget implements Scoped {
   final VM Function(Store<AppState> store, String scope) fromStore;
@@ -53,13 +53,14 @@ class _SearchPageState<T, VM extends SearchViewModel<T>> extends State<SearchPag
   }
 
   Widget _build(BuildContext context, VM vm) {
+    final localizations = AppLocalizations.of(context);
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: CupertinoTextField(
           autofocus: true,
           controller: queryTextController,
-          placeholder: StringRes.search,
+          placeholder: localizations.search,
           style: TextStyle(
             color: theme.colorScheme.onSurface,
           ),

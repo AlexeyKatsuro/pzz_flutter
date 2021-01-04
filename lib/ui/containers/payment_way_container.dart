@@ -4,10 +4,11 @@ import 'package:pzz/domain/person_info_form/actions/person_info_form_actions.dar
 import 'package:pzz/domain/selectors/selector.dart';
 import 'package:pzz/models/app_state.dart';
 import 'package:pzz/models/payment_way.dart';
-import 'package:pzz/res/strings.dart';
 import 'package:pzz/ui/widgets/payment_way.dart';
+import 'package:pzz/utils/UiMessage.dart';
 import 'package:pzz/utils/extensions/text_form_field_ext.dart';
 import 'package:redux/redux.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PaymentWayContainer extends StatefulWidget {
   @override
@@ -31,6 +32,7 @@ class _PaymentWayContainerState extends State<PaymentWayContainer> {
   Widget _build(BuildContext context, _ViewModel viewModel) {
     textRentingController.setTextIfNew(viewModel.renting);
     final theme = Theme.of(context);
+    final localizations = AppLocalizations.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -40,7 +42,7 @@ class _PaymentWayContainerState extends State<PaymentWayContainer> {
         ),
         if (viewModel.hasError)
           Text(
-            viewModel.paymentWayError,
+            viewModel.paymentWayError.localize(localizations),
             style: theme.textTheme.caption.copyWith(color: theme.colorScheme.error),
           ),
         if (viewModel.isCash)
@@ -50,7 +52,7 @@ class _PaymentWayContainerState extends State<PaymentWayContainer> {
               controller: textRentingController,
               keyboardType: TextInputType.numberWithOptions(decimal: true),
               decoration: InputDecoration(
-                helperText: StringRes.prepare_to_charge,
+                helperText: localizations.prepareToCharge,
                 suffixText: 'руб.',
               ),
               onChanged: viewModel.onRentingChanged,
@@ -63,7 +65,7 @@ class _PaymentWayContainerState extends State<PaymentWayContainer> {
 
 class _ViewModel {
   final PaymentWay paymentWay;
-  final String paymentWayError;
+  final UiMessage paymentWayError;
   final String renting;
   final ValueChanged<PaymentWay> onPaymentWayChanged;
   final ValueChanged<String> onRentingChanged;

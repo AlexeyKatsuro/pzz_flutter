@@ -1,3 +1,4 @@
+import 'package:pzz/domain/error/error_message_extractor.dart';
 import 'package:pzz/domain/error/scoped_error_actions.dart';
 import 'package:pzz/domain/person_info_form/actions/person_info_form_actions.dart';
 import 'package:pzz/domain/repository/pzz_repository.dart';
@@ -18,7 +19,8 @@ class PerformStreetSearchEpic implements EpicClass<AppState> {
             .searchStreet(action.query)
             .asStream()
             .map<dynamic>((streets) => SearchStreetResultAction(streets))
-            .onErrorResume((error) => Stream.value(SetScopedErrorAction(error: error.toString(), scope: action.scope)))
+            .onErrorResume(
+                (error) => Stream.value(SetScopedErrorAction(error: errorMessageExtractor(error), scope: action.scope)))
             .takeUntil(actions.whereType<CancelStreetSearchAction>());
       } else {
         return Stream.value(SearchStreetResultAction([]));

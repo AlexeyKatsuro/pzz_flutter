@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
+import 'package:pzz/utils/UiMessage.dart';
 
 class HomePageState {
   final bool isLoading;
-  final String errorMessage;
+  final UiMessage errorMessage;
 
   HomePageState({
     @required this.isLoading,
@@ -16,7 +17,7 @@ class HomePageState {
 
   HomePageState copyWith({
     bool isLoading,
-    String errorMessage,
+    UiMessage errorMessage,
   }) {
     return HomePageState(
       isLoading: isLoading ?? this.isLoading,
@@ -25,7 +26,7 @@ class HomePageState {
   }
 
   HomePageState copyWithError({
-    String errorMessage,
+    UiMessage errorMessage,
   }) {
     return HomePageState(isLoading: this.isLoading, errorMessage: errorMessage);
   }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pzz/res/strings.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ErrorView extends StatelessWidget {
   final String errorMessage;
@@ -9,6 +9,7 @@ class ErrorView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
     return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 26),
@@ -23,7 +24,7 @@ class ErrorView extends StatelessWidget {
             SizedBox(height: 8),
             ElevatedButton.icon(
               icon: Icon(Icons.replay_rounded),
-              label: Text(StringRes.repeat),
+              label: Text(localizations.repeat),
               onPressed: onRepeatClick,
             )
           ],

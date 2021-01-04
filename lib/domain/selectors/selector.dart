@@ -14,6 +14,7 @@ import 'package:pzz/models/person_info/personal_info.dart';
 import 'package:pzz/models/person_info/street.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/models/sauce.dart';
+import 'package:pzz/utils/UiMessage.dart';
 import 'package:reselect/reselect.dart';
 
 NavigationStack navigationStackSelector(AppState state) => state.navigationStack;
@@ -116,7 +117,7 @@ PaymentWay paymentWaySelector(AppState state) => state.personalInfoState.formInf
 
 PersonalInfoErrors personInfoFormErrorsSelector(AppState state) => state.personalInfoState.formInfoErrors;
 
-String paymentWayErrorSelector(AppState state) => personInfoFormErrorsSelector(state).paymentWay;
+UiMessage paymentWayErrorSelector(AppState state) => personInfoFormErrorsSelector(state).paymentWay;
 
 Selector<AppState, bool> isPersonInfoValid = createSelector1(
   personInfoFormErrorsSelector,

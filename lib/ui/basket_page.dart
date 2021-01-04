@@ -8,7 +8,6 @@ import 'package:pzz/models/basket.dart';
 import 'package:pzz/models/combined_basket_product.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/models/product.dart';
-import 'package:pzz/res/strings.dart';
 import 'package:pzz/routes.dart';
 import 'package:pzz/ui/containers/payment_way_container.dart';
 import 'package:pzz/ui/widgets/basket_combined_item.dart';
@@ -19,6 +18,7 @@ import 'package:pzz/utils/scoped.dart';
 import 'package:pzz/utils/widgets/error_scoped_notifier.dart';
 import 'package:pzz/utils/widgets/loading_switcher.dart';
 import 'package:redux/redux.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BasketPage extends StatefulWidget implements Scoped {
   final String scope = Routes.basketScreen;
@@ -40,9 +40,10 @@ class _BasketPageState extends State<BasketPage> {
   }
 
   Widget _build(BuildContext context, _ViewModel vm) {
+    final localizations = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('${StringRes.total_price}: ${vm.totalAmount.toStringAsFixed(2)} р.'),
+        title: Text(localizations.totalPrice('${vm.totalAmount.toStringAsFixed(2)} р.')),
       ),
       body: ErrorScopedNotifier(
         widget.scope,
@@ -51,8 +52,8 @@ class _BasketPageState extends State<BasketPage> {
             SizedBox(
               height: 12,
             ),
-            ..._buildProducts(context, vm, ProductType.pizza),
-            ..._buildProducts(context, vm, ProductType.sauce),
+            ..._buildProducts(localizations, vm, ProductType.pizza),
+            ..._buildProducts(localizations, vm, ProductType.sauce),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: OutlinedButton(
@@ -61,7 +62,9 @@ class _BasketPageState extends State<BasketPage> {
                   children: [
                     Expanded(
                       child: Text(
-                        vm.freeSauceCounts != 0 ? StringRes.chooseFeeSauces(vm.freeSauceCounts) : StringRes.addSauces,
+                        vm.freeSauceCounts != 0
+                            ? localizations.chooseFeeSauces(vm.freeSauceCounts)
+                            : localizations.addSauces,
                       ),
                     ),
                     Icon(
@@ -72,12 +75,12 @@ class _BasketPageState extends State<BasketPage> {
                 ),
               ),
             ),
-            DividedCenterTitle(StringRes.delivery_address),
+            DividedCenterTitle(localizations.deliveryAddress),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: PersonalInfoFormContainer(),
             ),
-            DividedCenterTitle(StringRes.payment_way),
+            DividedCenterTitle(localizations.payment_way),
             SizedBox(height: 8),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -90,7 +93,7 @@ class _BasketPageState extends State<BasketPage> {
                 child: ElevatedButton(
                   child: LoadingSwitcher(
                     isLoading: vm.isLoading,
-                    child: const Text(StringRes.place_order),
+                    child: Text(localizations.placeOrder),
                   ),
                   onPressed: vm.onPlaceOrderClick,
                 ),
@@ -102,10 +105,10 @@ class _BasketPageState extends State<BasketPage> {
     );
   }
 
-  List<Widget> _buildProducts(BuildContext context, _ViewModel vm, ProductType type) {
+  List<Widget> _buildProducts(AppLocalizations localizations, _ViewModel vm, ProductType type) {
     final items = vm.itemsMap[type] ?? [];
     return [
-      DividedCenterTitle(type.localizedPluralsString),
+      DividedCenterTitle(type.localizedPlurals(localizations)),
       if (items.length != 0) const SizedBox(height: 12),
       for (int index = 0; index < items.length; index++)
         Padding(

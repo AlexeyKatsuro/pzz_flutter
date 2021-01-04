@@ -3,6 +3,7 @@ import 'package:pzz/models/basket.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/models/product.dart';
 import 'package:pzz/models/sauce.dart';
+import 'package:pzz/utils/UiMessage.dart';
 import 'package:pzz/utils/scoped.dart';
 
 class InitialAction implements Scoped {
@@ -60,7 +61,7 @@ class HomeLoadingAction {
 }
 
 class HomeErrorAction {
-  final String errorMessage;
+  final UiMessage errorMessage;
 
   HomeErrorAction(this.errorMessage);
 }

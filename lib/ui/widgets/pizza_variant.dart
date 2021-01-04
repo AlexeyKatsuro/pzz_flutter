@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/models/pizza_variant.dart';
-import 'package:pzz/res/strings.dart';
 import 'package:pzz/ui/widgets/counter.dart';
 import 'package:pzz/utils/extensions/enum_localization_ext.dart';
 
@@ -23,13 +23,14 @@ class PizzaVariantWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
     return Row(
       children: [
         Expanded(
           child: Column(
             children: [
               Text(
-                variant.size.localizedString,
+                variant.size.localized(localizations),
               ),
               Text(
                 '${variant.price.toStringAsFixed(2)} р.',
@@ -42,7 +43,7 @@ class PizzaVariantWidget extends StatelessWidget {
           ),
         ),
         Expanded(
-          child: countInBasket > 0 ? _buildCounter() : _buildToBasketButton(context),
+          child: countInBasket > 0 ? _buildCounter() : _buildToBasketButton(localizations),
         )
       ],
     );
@@ -59,12 +60,12 @@ class PizzaVariantWidget extends StatelessWidget {
         });
   }
 
-  Widget _buildToBasketButton(BuildContext context) {
+  Widget _buildToBasketButton(AppLocalizations localizations) {
     return OutlinedButton(
       onPressed: () {
         onAddPizzaClick(variant.size);
       },
-      child: Text(StringRes.in_basket),
+      child: Text(localizations.inBasket),
     );
   }
 }

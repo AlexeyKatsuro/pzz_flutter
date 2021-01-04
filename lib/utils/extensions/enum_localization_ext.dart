@@ -1,14 +1,8 @@
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pzz/models/payment_way.dart';
 import 'package:pzz/models/pizza.dart';
-import 'package:pzz/res/strings.dart';
 
 extension ProductSizeLocalExt on ProductSize {
-  static Map<ProductSize, String> _localizedMap = {
-    ProductSize.big: StringRes.pizza_size_big,
-    ProductSize.medium: StringRes.pizza_size_medium,
-    ProductSize.thin: StringRes.pizza_size_thin
-  };
-
   static ProductSize fromString(String size) {
     final sizeEnum = fromStringOrNull(size);
     assert(sizeEnum != null);
@@ -20,22 +14,33 @@ extension ProductSizeLocalExt on ProductSize {
     return sizeEnum;
   }
 
-  String get localizedString => ProductSizeLocalExt._localizedMap[this];
+  String localized(AppLocalizations localizations) {
+    switch (this) {
+      case ProductSize.big:
+        return localizations.pizzaSizeBig;
+      case ProductSize.medium:
+        return localizations.pizzaSizeMedium;
+      case ProductSize.thin:
+        return localizations.pizzaSizeThin;
+    }
+    assert(false);
+    return null;
+  }
 }
 
 extension ProductTypeLocalExt on ProductType {
-  String get localizedPluralsString {
+  String localizedPlurals(AppLocalizations localizations) {
     switch (this) {
       case ProductType.pizza:
-        return StringRes.pizzas;
+        return localizations.pizzas;
       case ProductType.sauce:
-        return StringRes.sauces;
+        return localizations.sauces;
       case ProductType.snack:
-        return StringRes.snacks;
+        return localizations.snacks;
       case ProductType.dessert:
-        return StringRes.desserts;
+        return localizations.desserts;
       case ProductType.drink:
-        return StringRes.drinks;
+        return localizations.drinks;
     }
     assert(false);
     return null;
@@ -43,16 +48,16 @@ extension ProductTypeLocalExt on ProductType {
 }
 
 extension PaymentWayLocalExt on PaymentWay {
-  String get localized {
+  String localized(AppLocalizations localizations) {
     switch (this) {
       case PaymentWay.charge:
-        return StringRes.charge;
+        return localizations.charge;
       case PaymentWay.cash:
-        return StringRes.cash;
+        return localizations.cash;
       case PaymentWay.online:
-        return StringRes.online;
+        return localizations.online;
       case PaymentWay.halva:
-        return StringRes.halva;
+        return localizations.halva;
     }
     assert(false);
     return null;

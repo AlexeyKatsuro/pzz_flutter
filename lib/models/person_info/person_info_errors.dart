@@ -1,24 +1,25 @@
 import 'package:flutter/foundation.dart';
+import 'package:pzz/utils/UiMessage.dart';
 
 @immutable
 class PersonalInfoErrors {
-  final String phone;
-  final String street;
-  final String house;
-  final String paymentWay;
+  final UiMessage phone;
+  final UiMessage street;
+  final UiMessage house;
+  final UiMessage paymentWay;
 
   const PersonalInfoErrors({
-    this.phone = '',
-    this.street = '',
-    this.house = '',
-    this.paymentWay = '',
+    this.phone = const UiMessage.empty(),
+    this.street = const UiMessage.empty(),
+    this.house = const UiMessage.empty(),
+    this.paymentWay = const UiMessage.empty(),
   });
 
   PersonalInfoErrors copyWith({
-    String phone,
-    String street,
-    String house,
-    String paymentWay,
+    UiMessage phone,
+    UiMessage street,
+    UiMessage house,
+    UiMessage paymentWay,
   }) {
     return PersonalInfoErrors(
       phone: phone ?? this.phone,

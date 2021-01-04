@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:pzz/domain/actions/actions.dart';
 import 'package:pzz/domain/actions/navigate_to_action.dart';
@@ -7,12 +8,12 @@ import 'package:pzz/models/app_state.dart';
 import 'package:pzz/models/combined_basket_product.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/res/constants.dart';
-import 'package:pzz/res/strings.dart';
 import 'package:pzz/routes.dart';
 import 'package:pzz/ui/widgets/badge_counter.dart';
 import 'package:pzz/ui/widgets/counter.dart';
 import 'package:pzz/ui/widgets/error_view.dart';
 import 'package:pzz/ui/widgets/pizza.dart';
+import 'package:pzz/utils/UiMessage.dart';
 import 'package:pzz/utils/extensions/to_product_ext.dart';
 import 'package:pzz/utils/scoped.dart';
 import 'package:pzz/utils/widgets/error_scoped_notifier.dart';
@@ -49,12 +50,13 @@ class _HomePageState extends State<HomePage> {
       onInit: (store) => store.dispatch(InitialAction(scope: Routes.homeScreen)),
       converter: (store) => _ViewModel.formStore(store, widget.scope),
       builder: (context, vm) {
+        final localizations = AppLocalizations.of(context);
         return Scaffold(
           body: ErrorScopedNotifier(
             widget.scope,
             child: AnimatedSwitcher(
               duration: kDurationFast,
-              child: _buildContent(context, vm),
+              child: _buildContent(localizations, vm),
             ),
           ),
           floatingActionButton: _HomeFab(
@@ -76,19 +78,19 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildContent(BuildContext context, _ViewModel viewModel) {
+  Widget _buildContent(AppLocalizations localizations, _ViewModel viewModel) {
     if (viewModel.loading) {
       return _buildLoader();
     } else if (viewModel.errorMessage == null) {
       return _buildPizzasList(viewModel);
     } else {
-      return _buildError(viewModel);
+      return _buildError(localizations, viewModel);
     }
   }
 
-  Widget _buildError(_ViewModel viewModel) {
+  Widget _buildError(AppLocalizations localizations, _ViewModel viewModel) {
     return ErrorView(
-      errorMessage: viewModel.errorMessage,
+      errorMessage: viewModel.errorMessage.localize(localizations),
       onRepeatClick: viewModel.onRepeat,
     );
   }
@@ -98,7 +100,7 @@ class _HomePageState extends State<HomePage> {
       controller: scrollController,
       slivers: [
         SliverAppBar(
-          title: const Text(StringRes.appName),
+          title: Text(AppLocalizations.of(context).appName),
           floating: true,
           forceElevated: true,
 /*          actions: [
@@ -143,7 +145,7 @@ class _ViewModel {
   final List<Pizza> pizzas;
   final bool loading;
   final int basketCount;
-  final String errorMessage;
+  final UiMessage errorMessage;
   final VoidCallback onRepeat;
   final void Function(Pizza, ProductSize) onAddPizzaClick;
   final void Function(Pizza, ProductSize) onRemovePizzaClick;

@@ -222,7 +222,7 @@ class BasketDto {
     routeSpell = json['route_spell'];
     pizzeriaIsSlowed = json['pizzeria_is_slowed'];
     if (json['doubles'] != null) {
-      doubles = new List();
+      doubles = [];
       json['doubles'].forEach((v) {
         doubles.add(v);
       });
@@ -231,12 +231,12 @@ class BasketDto {
     freeGarnishesCount = json['free_garnishes_count'];
     freeWarmersCount = json['free_warmers_count'];
     if (json['items'] != null) {
-      items = new List<BasketItemDto>();
+      items = [];
       json['items'].forEach((v) {
         items.add(new BasketItemDto.fromJson(v));
       });
     } else {
-      items = new List<BasketItemDto>();
+      items = [];
     }
     address = json['address'] != null ? new AddressDto.fromJson(json['address']) : null;
     publicCommentHtml = json['public_comment_html'];

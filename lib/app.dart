@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:pzz/models/app_state.dart';
-import 'package:pzz/res/strings.dart';
 import 'package:pzz/theme.dart';
 import 'package:pzz/ui/containers/main_navigation_container.dart';
 import 'package:redux/redux.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PzzApp extends StatelessWidget {
   final Store<AppState> store;
@@ -16,7 +16,9 @@ class PzzApp extends StatelessWidget {
     return StoreProvider(
       store: store,
       child: MaterialApp(
-          title: StringRes.appName,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          title: 'Pzz',
           theme: PzzAppTheme.pzzLightTheme,
           darkTheme: PzzAppTheme.pzzDarkTheme,
           home: MainNavigationContainer()),

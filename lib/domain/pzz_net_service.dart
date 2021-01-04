@@ -172,7 +172,7 @@ extension on Future<http.Response> {
     }).catchError((ex, StackTrace stackTrace) {
       debugPrint(ex.toString());
       debugPrintStack(stackTrace: stackTrace);
-      throw errorMessageExtractor(ex);
+      throw PzzServerError(errorMessageExtractor(ex));
     });
   }
 }

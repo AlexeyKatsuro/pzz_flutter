@@ -1,5 +1,6 @@
 import 'package:pzz/domain/actions/actions.dart';
 import 'package:pzz/domain/actions/navigate_to_action.dart';
+import 'package:pzz/domain/error/error_message_extractor.dart';
 import 'package:pzz/domain/error/scoped_error_actions.dart';
 import 'package:pzz/domain/person_info_form/actions/person_info_form_actions.dart';
 import 'package:pzz/domain/repository/preference_repository.dart';
@@ -48,7 +49,7 @@ MiddlewareTyped<AppState, InitialAction> _createInitial(
       next(BasketLoadedAction(basket));
     } catch (ex) {
       print(ex);
-      next(HomeErrorAction(ex.toString()));
+      next(HomeErrorAction(errorMessageExtractor(ex)));
     }
     next(HomeLoadingAction(false));
   };
@@ -60,7 +61,7 @@ Middleware<AppState> _createLoadPizzas(PzzRepository repository) {
       next(PizzasLoadedAction(pizzas));
     }).catchError((ex) {
       print(ex);
-      next(SetScopedErrorAction(error: ex.toString(), scope: action.scope));
+      next(SetScopedErrorAction(error: errorMessageExtractor(ex), scope: action.scope));
     });
 
     next(action);
@@ -73,7 +74,7 @@ MiddlewareTyped<AppState, LoadBasketAction> _createLoadBasket(PzzRepository repo
       next(BasketLoadedAction(basket));
     }).catchError((ex) {
       print(ex);
-      next(SetScopedErrorAction(error: ex.toString(), scope: action.scope));
+      next(SetScopedErrorAction(error: errorMessageExtractor(ex), scope: action.scope));
     });
 
     next(action);
@@ -86,7 +87,7 @@ MiddlewareTyped<AppState, AddProductAction> _createAddPizzaItem(PzzRepository re
       next(BasketLoadedAction(basket));
     }).catchError((ex) {
       print(ex);
-      next(SetScopedErrorAction(error: ex.toString(), scope: action.scope));
+      next(SetScopedErrorAction(error: errorMessageExtractor(ex), scope: action.scope));
     });
     next(action);
   };
@@ -98,7 +99,7 @@ MiddlewareTyped<AppState, RemoveProductAction> _createRemovePizzaItem(PzzReposit
       next(BasketLoadedAction(basket));
     }).catchError((ex) {
       print(ex);
-      next(SetScopedErrorAction(error: ex.toString(), scope: action.scope));
+      next(SetScopedErrorAction(error: errorMessageExtractor(ex), scope: action.scope));
     });
     next(action);
   };
@@ -119,7 +120,7 @@ MiddlewareTyped<AppState, LoadHousesAction> _createLoadHouses(
       next(LoadedHouseAction(houses));
     }).catchError((ex) {
       print(ex);
-      next(SetScopedErrorAction(error: ex.toString(), scope: action.scope));
+      next(SetScopedErrorAction(error: errorMessageExtractor(ex), scope: action.scope));
     });
     next(action);
   };
@@ -142,7 +143,7 @@ MiddlewareTyped<AppState, TryPlaceOrderAction> _createUpdateAddress(PzzRepositor
         next(NavigateAction.push(Routes.confirmPlaceOrderDialog));
       }).catchError((ex) {
         print(ex);
-        next(SetScopedErrorAction(error: ex.toString(), scope: action.scope));
+        next(SetScopedErrorAction(error: errorMessageExtractor(ex), scope: action.scope));
       }).whenComplete(() {
         next(ConfirmLoadingAction(isLoading: false));
       });
@@ -159,7 +160,7 @@ MiddlewareTyped<AppState, ConfirmPlaceOrderAction> _createConfirmPlaceOrder(PzzR
       next(BasketLoadedAction(basket));
     }).catchError((ex) {
       print(ex);
-      next(SetScopedErrorAction(error: ex.toString(), scope: action.scope));
+      next(SetScopedErrorAction(error: errorMessageExtractor(ex), scope: action.scope));
     }).whenComplete(() {
       next(ConfirmLoadingAction(isLoading: false));
     });

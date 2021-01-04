@@ -1,0 +1,95 @@
+{
+  "@@locale": "en",
+  "appName": "Fox's Pizza",
+  "pizzaSizeBig": "Big",
+  "pizzaSizeMedium": "Medium",
+  "pizzaSizeThin": "Thin",
+  "inBasket": "Add to cart",
+  "basket": "Cart",
+  "totalPrice": "Total price: {cost}",
+  "@totalPrice": {
+    "placeholders": {
+      "cost" : {
+        "type": "String",
+        "example": "10 BYN"
+      }
+    }
+  },
+  "deliveryAddress": "Delivery address",
+  "yourName": "Your name",
+  "yourPhoneNumber": "Your phone number",
+  "street": "Street",
+  "house": "House",
+  "flat": "Flat",
+  "entrance": "Entrance",
+  "floor": "Floor",
+  "intercom": "Intercom",
+  "commentsToOrder": "Comments to order",
+  "save": "Save",
+  "search": "Search...",
+  "repeat": "repeat",
+  "addSauces": "Add sauces",
+  "pizzas": "Pizzas",
+  "sauces": "Sauces",
+  "snacks": "Snacks",
+  "desserts": "Desserts",
+  "drinks": "Drinks",
+  "payment_way": "Payment way",
+  "charge": "Charge",
+  "cash": "Cash",
+  "online": "Online",
+  "halva": "Halva",
+  "prepareToCharge": "What amount to prepare the change?",
+  "placeOrder": "To confirm",
+  "errorEmptyPhone": "Enter your phone number",
+  "errorEmptyStreet": "Choose a street name",
+  "errorEmptyHome": "Choose a house number",
+  "errorEmptyPaymentPay": "Choose a payment method",
+  "errorConnection": "Connection error, check your internet connection",
+  "errorUnexpected": "Unexpected error",
+  "error404": "404",
+  "error404Message": "Page not found",
+  "toConfirmTitle": "Confirm",
+  "toConfirmPhone": "Mobile phone",
+  "toConfirmAddress": "Address",
+  "toConfirmButton": "Place the order",
+  "toConfirmTotalPrice": "Cost:",
+  "streetHouse": "st. {street}, {house}",
+  "@streetHouse": {
+    "placeholders": {
+      "street" : {
+        "type": "String",
+        "example": "Pushkina"
+      },
+      "house" : {
+        "type": "String",
+        "example": "8A"
+      }
+    }
+  },
+  "streetHouseFlat": "st. {street}, {house}/{flat}",
+  "@streetHouseFlat": {
+    "placeholders": {
+      "street" : {
+        "type": "String",
+        "example": "Pushkina"
+      },
+      "house" : {
+        "type": "String",
+        "example": "8A"
+      },
+      "flat" : {
+        "type": "String",
+        "example": "61"
+      }
+    }
+  },
+  "chooseFeeSauces": "{count,plural, =1{Choose {count} free sauce} other{Choose {count} free sauces}}",
+  "@chooseFeeSauces": {
+    "description": "A plural message",
+    "placeholders": {
+      "count": {
+      }
+    }
+  }
+}

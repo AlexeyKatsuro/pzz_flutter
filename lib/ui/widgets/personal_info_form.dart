@@ -7,11 +7,12 @@ import 'package:pzz/models/person_info/house.dart';
 import 'package:pzz/models/person_info/person_info_errors.dart';
 import 'package:pzz/models/person_info/personal_info.dart';
 import 'package:pzz/models/person_info/street.dart';
-import 'package:pzz/res/strings.dart';
 import 'package:pzz/routes.dart';
 import 'package:pzz/ui/search_page.dart';
 import 'package:pzz/utils/extensions/text_form_field_ext.dart';
 import 'package:redux/redux.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pzz/utils/UiMessage.dart';
 
 class PersonalInfoFormContainer extends StatelessWidget {
   const PersonalInfoFormContainer({Key key}) : super(key: key);
@@ -155,6 +156,8 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
+
     nameController.setTextIfNew(widget.personalInfo.name);
     phoneController.setTextIfNew(widget.personalInfo.phone);
     streetController.setTextIfNew(widget.personalInfo.street);
@@ -167,15 +170,15 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
     return Column(
       children: [
         TextFormField(
-          decoration: InputDecoration(labelText: StringRes.your_name),
+          decoration: InputDecoration(labelText: localizations.yourName),
           controller: nameController,
           onChanged: widget.onNameChange,
         ),
         const SizedBox(height: 12),
         TextFormField(
           decoration: InputDecoration(
-            labelText: StringRes.your_phone_number,
-            errorText: widget.errors.phone.toNullIfEmpty(),
+            labelText: localizations.yourPhoneNumber,
+            errorText: widget.errors.phone.localizeOrNull(localizations),
           ),
           controller: phoneController,
           keyboardType: TextInputType.phone,
@@ -202,9 +205,9 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
             );
           },
           decoration: InputDecoration(
-            labelText: StringRes.street,
+            labelText: localizations.street,
             suffixIcon: Icon(Icons.search),
-            errorText: widget.errors.street.toNullIfEmpty(),
+            errorText: widget.errors.street.localizeOrNull(localizations),
           ),
           controller: streetController,
         ),
@@ -215,9 +218,9 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
           focusNode: new AlwaysDisabledFocusNode(),
           onChanged: widget.onHouseChange,
           decoration: InputDecoration(
-            labelText: StringRes.house,
+            labelText: localizations.house,
             suffixIcon: Icon(Icons.keyboard_arrow_down),
-            errorText: widget.isHomeSelectionAllow ? widget.errors.house.toNullIfEmpty() : null,
+            errorText: widget.isHomeSelectionAllow ? widget.errors.house.localizeOrNull(localizations) : null,
           ),
           enabled: widget.isHomeSelectionAllow,
           controller: houseController,
@@ -241,7 +244,7 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
           children: [
             Expanded(
               child: TextFormField(
-                decoration: InputDecoration(labelText: StringRes.flat),
+                decoration: InputDecoration(labelText: localizations.flat),
                 controller: flatController,
                 onChanged: widget.onFlatChange,
               ),
@@ -249,7 +252,7 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
             const SizedBox(width: 12),
             Expanded(
               child: TextFormField(
-                decoration: InputDecoration(labelText: StringRes.entrance),
+                decoration: InputDecoration(labelText: localizations.entrance),
                 controller: entranceController,
                 onChanged: widget.onEntranceChange,
               ),
@@ -261,7 +264,7 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
           children: [
             Expanded(
               child: TextFormField(
-                decoration: InputDecoration(labelText: StringRes.floor),
+                decoration: InputDecoration(labelText: localizations.floor),
                 controller: floorController,
                 onChanged: widget.onFloorChange,
               ),
@@ -269,7 +272,7 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
             const SizedBox(width: 12),
             Expanded(
               child: TextFormField(
-                decoration: InputDecoration(labelText: StringRes.intercom),
+                decoration: InputDecoration(labelText: localizations.intercom),
                 controller: intercomController,
                 onChanged: widget.onIntercomChange,
               ),
@@ -280,7 +283,7 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
         TextFormField(
           minLines: 1,
           maxLines: 3,
-          decoration: InputDecoration(labelText: StringRes.comments_to_order),
+          decoration: InputDecoration(labelText: localizations.commentsToOrder),
           controller: commentController,
           onChanged: widget.onCommentChange,
         ),
@@ -292,10 +295,4 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
 class AlwaysDisabledFocusNode extends FocusNode {
   @override
   bool get hasFocus => false;
-}
-
-extension on String {
-  String toNullIfEmpty() {
-    return this.isEmpty ? null : this;
-  }
 }
