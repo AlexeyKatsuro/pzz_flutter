@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:pzz/domain/actions/actions.dart';
 import 'package:pzz/domain/error/scoped_error_hub_reducer.dart';
 import 'package:pzz/domain/reducers/basket_reducer.dart';
@@ -16,15 +18,24 @@ AppState appReducer(AppState state, dynamic action) {
     sauce: saucesReducer(state.sauce, action),
     basket: basketReducer(state.basket, action),
     personalInfoState: personalInfoStateReducer(state.personalInfoState, action),
-    isConfirmLoading: confirmLoadingReducer(state.isConfirmLoading, action),
+    isConfirmLoading: _confirmLoadingReducer(state.isConfirmLoading, action),
     navigationStack: navigationStackReducer(state.navigationStack, action),
+    locale: _localeReducer(state.locale, action),
   );
 }
 
-bool confirmLoadingReducer(bool previousValue, dynamic action) {
+bool _confirmLoadingReducer(bool previousValue, dynamic action) {
   if (action is ConfirmLoadingAction) {
     return action.isLoading;
   } else {
     return previousValue;
+  }
+}
+
+Locale _localeReducer(Locale locale, dynamic action) {
+  if (action is ChangeLocaleAction) {
+    return action.locale;
+  } else {
+    return locale;
   }
 }

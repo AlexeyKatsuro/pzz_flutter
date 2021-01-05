@@ -1,6 +1,7 @@
 {
   "@@locale": "en",
   "appName": "Fox's Pizza",
+  "devTools": "Dev tools",
   "pizzaSizeBig": "Big",
   "pizzaSizeMedium": "Medium",
   "pizzaSizeThin": "Thin",
@@ -91,5 +92,7 @@
       "count": {
       }
     }
-  }
+  },
+  "english": "English",
+  "russian": "Russian"
 }

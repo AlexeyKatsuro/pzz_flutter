@@ -3,6 +3,7 @@ import 'package:pzz/utils/UiMessage.dart';
 
 enum AppLocalizationKeys {
   appName,
+  devTools,
   pizzaSizeBig,
   pizzaSizeMedium,
   pizzaSizeThin,
@@ -58,6 +59,8 @@ extension AppLocalizationKeysExt on AppLocalizationKeys {
     switch (this) {
       case AppLocalizationKeys.appName:
         return localization.appName;
+      case AppLocalizationKeys.devTools:
+        return localization.devTools;
       case AppLocalizationKeys.pizzaSizeBig:
         return localization.pizzaSizeBig;
       case AppLocalizationKeys.pizzaSizeMedium:

@@ -42,6 +42,8 @@ dependencies:
   rxdart: ^0.24.1
   redux_epics: ^0.14.0
   cached_network_image: ^2.4.1
+  # Redux actions logger
+  redux_logging: ^0.4.0
 
 dev_dependencies:
   flutter_test:

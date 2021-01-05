@@ -1,6 +1,7 @@
 {
   "@@locale": "ru",
   "appName": "Пиццы у Лисиццы",
+  "devTools": "Для разработчиков",
   "pizzaSizeBig": "Большая",
   "pizzaSizeMedium": "Стандартная",
   "pizzaSizeThin": "Тонкое тесто",
@@ -48,5 +49,8 @@
   "toConfirmTotalPrice": "К оплате:",
   "streetHouse": "ул. {street}, д. {house}",
   "streetHouseFlat": "ул. {street}, д. {house}",
-  "chooseFeeSauces": "{count,plural, =1{Выберите {count} бесплатный соус} other{Выберите {count} бесплатных соусов}}"
+  "chooseFeeSauces": "{count,plural, =1{Выберите {count} бесплатный соус} other{Выберите {count} бесплатных соусов}}",
+
+  "english": "Английский",
+  "russian": "Русский"
 }

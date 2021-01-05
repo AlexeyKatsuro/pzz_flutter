@@ -7,6 +7,7 @@ import 'package:pzz/models/navigation_stack.dart';
 import 'package:pzz/routes.dart';
 import 'package:pzz/ui/basket_page.dart';
 import 'package:pzz/ui/containers/confirm_place_order_container.dart';
+import 'package:pzz/ui/dev_page.dart';
 import 'package:pzz/ui/home_page.dart';
 import 'package:pzz/ui/not_found_page.dart';
 import 'package:pzz/ui/person_info_page.dart';
@@ -24,19 +25,19 @@ class MainNavigationContainer extends StatelessWidget {
   final Map<String, _PageBuilder> routes = {
     Routes.homeScreen: _PageBuilder(
       widgetBuilder: (_) => HomePage(),
-      builder: buildBasePage,
+      builder: _buildBasePage,
     ),
     Routes.basketScreen: _PageBuilder(
       widgetBuilder: (_) => BasketPage(),
-      builder: buildBasePage,
+      builder: _buildBasePage,
     ),
     Routes.personalInfoScreen: _PageBuilder(
       widgetBuilder: (_) => PersonalInfoPage(),
-      builder: buildBasePage,
+      builder: _buildBasePage,
     ),
     Routes.saucesScreen: _PageBuilder(
       widgetBuilder: (_) => SaucesPage(),
-      builder: buildBasePage,
+      builder: _buildBasePage,
     ),
     Routes.successOrderPlacedDialog: _PageBuilder(
       widgetBuilder: (_) => AlertDialog(
@@ -48,12 +49,13 @@ class MainNavigationContainer extends StatelessWidget {
           )
         ],
       ),
-      builder: buildBaseDialog,
+      builder: _buildBaseDialog,
     ),
     Routes.confirmPlaceOrderDialog: _PageBuilder(
       widgetBuilder: (_) => ConfirmPlaceOrderDialog(),
       builder: buildScrollBottomSheetDialog,
-    )
+    ),
+    Routes.devScreen: _PageBuilder(widgetBuilder: (_) => DevPage(), builder: _buildBasePage)
   };
 
   @override
@@ -87,7 +89,7 @@ class MainNavigationContainer extends StatelessWidget {
     return pageBuilder.build(stackEntry);
   }
 
-  static MaterialPage<T> buildBasePage<T>(NavStackEntry stackEntry, WidgetArgBuild builder) {
+  static MaterialPage<T> _buildBasePage<T>(NavStackEntry stackEntry, WidgetArgBuild builder) {
     return MaterialPage(
       key: Key(stackEntry.name),
       child: SystemUi(
@@ -96,7 +98,7 @@ class MainNavigationContainer extends StatelessWidget {
     );
   }
 
-  static MaterialDialogPage<T> buildBaseDialog<T>(NavStackEntry stackEntry, WidgetArgBuild builder) {
+  static MaterialDialogPage<T> _buildBaseDialog<T>(NavStackEntry stackEntry, WidgetArgBuild builder) {
     return MaterialDialogPage<T>(
       key: Key(stackEntry.name),
       name: stackEntry.name,
@@ -164,7 +166,7 @@ class _PageBuilder<T> {
 
   _PageBuilder.unknown()
       : widgetBuilder = ((_) => NotFoundPage()),
-        builder = MainNavigationContainer.buildBasePage;
+        builder = MainNavigationContainer._buildBasePage;
 
   Page<T> build(NavStackEntry stackEntry) => builder(stackEntry, widgetBuilder);
 }

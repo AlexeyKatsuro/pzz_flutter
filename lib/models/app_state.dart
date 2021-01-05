@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/foundation.dart';
 import 'package:pzz/domain/error/scoped_error_hub.dart';
 import 'package:pzz/models/basket.dart';
@@ -18,6 +20,7 @@ class AppState {
   final bool isConfirmLoading; // TODO use local loading flags on App level
   final ScopedErrorsHub scopedErrors;
   final NavigationStack navigationStack;
+  final Locale locale;
 
   const AppState({
     @required this.homePageState,
@@ -28,6 +31,7 @@ class AppState {
     @required this.isConfirmLoading,
     @required this.scopedErrors,
     @required this.navigationStack,
+    @required this.locale,
   });
 
   const AppState.initial({
@@ -39,6 +43,7 @@ class AppState {
     this.personalInfoState = const PersonalInfoState.initial(),
     this.scopedErrors = const ScopedErrorsHub.initial(),
     this.navigationStack = const NavigationStack([NavStackEntry(name: Routes.homeScreen)]),
+    this.locale,
   })  : assert(homePageState != null),
         assert(isConfirmLoading != null),
         assert(pizzas != null),

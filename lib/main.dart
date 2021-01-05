@@ -11,6 +11,7 @@ import 'package:pzz/models/app_state.dart';
 import 'package:pzz/service_locator.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_epics/redux_epics.dart';
+import 'package:redux_logging/redux_logging.dart';
 
 import 'domain/middleware/epics.dart';
 
@@ -26,7 +27,11 @@ void main() async {
   final preferenceRepository = getIt<PreferenceRepository>();
 
   final epicMiddleware = EpicMiddleware(createAppEpic(pzzRepository, preferenceRepository));
-  final middleware = createPzzMiddleware(pzzRepository, preferenceRepository) + [epicMiddleware];
+  final middleware = <Middleware<AppState>>[
+    ...createPzzMiddleware(pzzRepository, preferenceRepository),
+    epicMiddleware,
+    LoggingMiddleware.printer(),
+  ];
   runApp(
     PzzApp(
       store: Store<AppState>(

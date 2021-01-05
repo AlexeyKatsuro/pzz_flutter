@@ -87,3 +87,9 @@ class ConfirmLoadingAction {
 }
 
 class OrderPlacedAction {}
+
+class ChangeLocaleAction {
+  final Locale locale;
+
+  ChangeLocaleAction(this.locale);
+}

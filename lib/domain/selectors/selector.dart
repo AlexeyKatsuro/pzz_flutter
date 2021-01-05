@@ -1,6 +1,8 @@
 import 'dart:core';
+import 'dart:ui';
 
 import 'package:collection/collection.dart';
+import 'package:pzz/app_option.dart';
 import 'package:pzz/models/app_state.dart';
 import 'package:pzz/models/basket.dart';
 import 'package:pzz/models/basket_product.dart';
@@ -129,3 +131,5 @@ Selector<AppState, bool> isPersonInfoValid = createSelector1(
 String rentingSelector(AppState state) => state.personalInfoState.formInfo.renting;
 
 bool isConfirmLoadingSelector(AppState state) => state.isConfirmLoading;
+
+Locale appLocaleSelector(AppState state) => state.locale ?? deviceLocale;

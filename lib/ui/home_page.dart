@@ -47,7 +47,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     return StoreConnector<AppState, _ViewModel>(
-      onInit: (store) => store.dispatch(InitialAction(scope: Routes.homeScreen)),
       converter: (store) => _ViewModel.formStore(store, widget.scope),
       builder: (context, vm) {
         final localizations = AppLocalizations.of(context);
@@ -235,9 +234,9 @@ class __HomeFabState extends State<_HomeFab> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    super.dispose();
     _arrowController.dispose();
     _basketController.dispose();
+    super.dispose();
   }
 
   void _checkOffset() {
