@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:pzz/domain/actions/actions.dart';
 import 'package:pzz/domain/actions/navigate_to_action.dart';
@@ -13,7 +14,6 @@ import 'package:pzz/utils/extensions/to_product_ext.dart';
 import 'package:pzz/utils/scoped.dart';
 import 'package:pzz/utils/widgets/error_scoped_notifier.dart';
 import 'package:redux/redux.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SaucesPage extends StatelessWidget implements Scoped {
   @override
@@ -49,21 +49,8 @@ class SaucesPage extends StatelessWidget implements Scoped {
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
           children: [
-            AnimatedContainer(
-              height: viewModel.hasFreeSauce ? 50 : 0, // TODO CRUTCH
-              duration: kDurationFast,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 12, 0, 8),
-                child: AnimatedSwitcher(
-                  duration: kDurationFast,
-                  child: viewModel.hasFreeSauce
-                      ? Text(
-                          localizations.chooseFeeSauces(viewModel.freeSauceCounts),
-                          style: Theme.of(context).textTheme.headline6,
-                        )
-                      : null,
-                ),
-              ),
+            _HeaderFreeCountSauces(
+              freeSauceCounts: viewModel.freeSauceCounts,
             ),
             for (int index = 0; index < viewModel.sauces.length; index++)
               SauceWidget(
@@ -76,6 +63,37 @@ class SaucesPage extends StatelessWidget implements Scoped {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _HeaderFreeCountSauces extends StatefulWidget {
+  final int freeSauceCounts;
+
+  const _HeaderFreeCountSauces({Key key, @required this.freeSauceCounts}) : super(key: key);
+
+  @override
+  _HeaderFreeCountSaucesState createState() => _HeaderFreeCountSaucesState();
+}
+
+class _HeaderFreeCountSaucesState extends State<_HeaderFreeCountSauces> with SingleTickerProviderStateMixin {
+  bool get hasFreeSauce => widget.freeSauceCounts != 0;
+
+  @override
+  Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
+    return AnimatedSize(
+      duration: kDurationFast,
+      vsync: this,
+      child: hasFreeSauce
+          ? Container(
+              padding: const EdgeInsets.fromLTRB(0, 12, 0, 8),
+              child: Text(
+                localizations.chooseFeeSauces(widget.freeSauceCounts),
+                style: Theme.of(context).textTheme.headline6,
+              ),
+            )
+          : SizedBox(),
     );
   }
 }
