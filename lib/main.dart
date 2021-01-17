@@ -18,10 +18,10 @@ import 'domain/middleware/epics.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initDependencies();
-  FlutterError.onError = (FlutterErrorDetails details) {
-    FlutterError.dumpErrorToConsole(details);
-    if (kReleaseMode) exit(1);
-  };
+//  FlutterError.onError = (FlutterErrorDetails details) {
+//    FlutterError.dumpErrorToConsole(details);
+//    if (kReleaseMode) exit(1);
+//  };
 
   final pzzRepository = getIt<PzzRepository>();
   final preferenceRepository = getIt<PreferenceRepository>();

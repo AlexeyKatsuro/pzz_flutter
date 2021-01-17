@@ -26,18 +26,18 @@ UiMessage _validatePhone(PersonalInfo personalInfo) {
 
 UiMessage _validatePaymentWay(PersonalInfo personalInfo) {
   return personalInfo.paymentWay == null
-      ? const UiMessage.key(AppLocalizationKeys.errorEmptyPaymentPay)
-      : const UiMessage.empty();
+      ? UiMessage.key(AppLocalizationKeys.errorEmptyPaymentPay)
+      : UiMessage.empty();
 }
 
 UiMessage _validateStreet(PersonalInfo personalInfo) {
   return personalInfo.street.isEmpty
-      ? const UiMessage.key(AppLocalizationKeys.errorEmptyStreet)
-      : const UiMessage.empty();
+      ? UiMessage.key(AppLocalizationKeys.errorEmptyStreet)
+      : UiMessage.empty();
 }
 
 UiMessage _validateHouse(PersonalInfo personalInfo) {
-  return personalInfo.house.isEmpty ? const UiMessage.key(AppLocalizationKeys.errorEmptyHome) : const UiMessage.empty();
+  return personalInfo.house.isEmpty ? UiMessage.key(AppLocalizationKeys.errorEmptyHome) : UiMessage.empty();
 }
 
 final clearPersonalInfoErrorsReducer = combineReducers<PersonalInfoErrors>([
@@ -48,17 +48,17 @@ final clearPersonalInfoErrorsReducer = combineReducers<PersonalInfoErrors>([
 ]);
 
 PersonalInfoErrors _clearStreetErrorReducer(PersonalInfoErrors state, SelectStreetAction action) {
-  return state.copyWith(street: const UiMessage.empty());
+  return state.copyWith(street: UiMessage.empty());
 }
 
 PersonalInfoErrors _clearHouseErrorReducer(PersonalInfoErrors state, SelectHouseAction action) {
-  return state.copyWith(house: const UiMessage.empty());
+  return state.copyWith(house: UiMessage.empty());
 }
 
 PersonalInfoErrors _clearPhoneErrorReducer(PersonalInfoErrors state, PhoneChangedAction action) {
-  return state.copyWith(phone: const UiMessage.empty());
+  return state.copyWith(phone: UiMessage.empty());
 }
 
 PersonalInfoErrors _clearPaymentWayErrorReducer(PersonalInfoErrors state, PaymentWayChangedAction action) {
-  return state.copyWith(paymentWay: const UiMessage.empty());
+  return state.copyWith(paymentWay: UiMessage.empty());
 }

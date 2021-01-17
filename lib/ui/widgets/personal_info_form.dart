@@ -12,7 +12,6 @@ import 'package:pzz/ui/search_page.dart';
 import 'package:pzz/utils/extensions/text_form_field_ext.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:pzz/utils/UiMessage.dart';
 
 class PersonalInfoFormContainer extends StatelessWidget {
   const PersonalInfoFormContainer({Key key}) : super(key: key);
@@ -178,7 +177,7 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
         TextFormField(
           decoration: InputDecoration(
             labelText: localizations.yourPhoneNumber,
-            errorText: widget.errors.phone.localizeOrNull(localizations),
+            errorText: widget.errors.phone.tryLocalize(localizations),
           ),
           controller: phoneController,
           keyboardType: TextInputType.phone,
@@ -207,7 +206,7 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
           decoration: InputDecoration(
             labelText: localizations.street,
             suffixIcon: Icon(Icons.search),
-            errorText: widget.errors.street.localizeOrNull(localizations),
+            errorText: widget.errors.street.tryLocalize(localizations),
           ),
           controller: streetController,
         ),
@@ -220,7 +219,7 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
           decoration: InputDecoration(
             labelText: localizations.house,
             suffixIcon: Icon(Icons.keyboard_arrow_down),
-            errorText: widget.isHomeSelectionAllow ? widget.errors.house.localizeOrNull(localizations) : null,
+            errorText: widget.isHomeSelectionAllow ? widget.errors.house.tryLocalize(localizations) : null,
           ),
           enabled: widget.isHomeSelectionAllow,
           controller: houseController,
