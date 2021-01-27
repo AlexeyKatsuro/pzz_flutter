@@ -13,9 +13,9 @@ import 'package:pzz/ui/widgets/badge_counter.dart';
 import 'package:pzz/ui/widgets/counter.dart';
 import 'package:pzz/ui/widgets/error_view.dart';
 import 'package:pzz/ui/widgets/pizza.dart';
-import 'package:pzz/utils/UiMessage.dart';
 import 'package:pzz/utils/extensions/to_product_ext.dart';
 import 'package:pzz/utils/scoped.dart';
+import 'package:pzz/utils/ui_message.dart';
 import 'package:pzz/utils/widgets/error_scoped_notifier.dart';
 import 'package:pzz/utils/widgets/slivers/sliver_child_builder_separated_delegate.dart';
 import 'package:redux/redux.dart';
@@ -29,7 +29,7 @@ class HomePage extends StatefulWidget implements Scoped {
 }
 
 class _HomePageState extends State<HomePage> {
-  ScrollController scrollController;
+  late ScrollController scrollController;
 
   @override
   void initState() {
@@ -77,19 +77,19 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildContent(AppLocalizations localizations, _ViewModel viewModel) {
+  Widget _buildContent(AppLocalizations? localizations, _ViewModel viewModel) {
     if (viewModel.loading) {
       return _buildLoader();
     } else if (viewModel.errorMessage == null) {
       return _buildPizzasList(viewModel);
     } else {
-      return _buildError(localizations, viewModel);
+      return _buildError(localizations!, viewModel);
     }
   }
 
   Widget _buildError(AppLocalizations localizations, _ViewModel viewModel) {
     return ErrorView(
-      errorMessage: viewModel.errorMessage.localize(localizations),
+      errorMessage: viewModel.errorMessage!.localize(localizations),
       onRepeatClick: viewModel.onRepeat,
     );
   }
@@ -99,7 +99,7 @@ class _HomePageState extends State<HomePage> {
       controller: scrollController,
       slivers: [
         SliverAppBar(
-          title: Text(AppLocalizations.of(context).appName),
+          title: Text(AppLocalizations.of(context)!.appName),
           floating: true,
           forceElevated: true,
 /*          actions: [
@@ -112,10 +112,10 @@ class _HomePageState extends State<HomePage> {
           ],*/
         ),
         SliverPadding(
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
           sliver: SliverList(
             delegate: SliverChildBuilderSeparatedDelegate(
-              separatorBuilder: (context, index) => SizedBox(height: 8),
+              separatorBuilder: (context, index) => const SizedBox(height: 8),
               itemBuilder: (context, index) {
                 final pizza = vm.pizzas[index];
                 return PizzaWidget(
@@ -134,42 +134,26 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildLoader() {
-    return Center(
+    return const Center(
       child: CircularProgressIndicator(),
     );
   }
 }
 
 class _ViewModel {
-  final List<Pizza> pizzas;
-  final bool loading;
-  final int basketCount;
-  final UiMessage errorMessage;
-  final VoidCallback onRepeat;
-  final void Function(Pizza, ProductSize) onAddPizzaClick;
-  final void Function(Pizza, ProductSize) onRemovePizzaClick;
-  final CombinedBasketProduct Function(ProductType type, int productId) getCombinedProduct;
-  final VoidCallback onBasketClick;
-
-  bool get isBasketButtonVisible => basketCount != 0;
-
   _ViewModel({
-    @required this.pizzas,
-    @required this.errorMessage,
-    @required this.loading,
-    @required this.onAddPizzaClick,
-    @required this.onRemovePizzaClick,
-    @required this.getCombinedProduct,
-    @required this.onRepeat,
-    @required this.basketCount,
-    @required this.onBasketClick,
-  })  : assert(pizzas != null),
-        assert(loading != null),
-        assert(basketCount != null),
-        assert(getCombinedProduct != null),
-        assert(onAddPizzaClick != null);
+    required this.pizzas,
+    required this.errorMessage,
+    required this.loading,
+    required this.onAddPizzaClick,
+    required this.onRemovePizzaClick,
+    required this.getCombinedProduct,
+    required this.onRepeat,
+    required this.basketCount,
+    required this.onBasketClick,
+  });
 
-  static _ViewModel formStore(Store<AppState> store, String scope) {
+  factory _ViewModel.formStore(Store<AppState> store, String scope) {
     return _ViewModel(
       errorMessage: homePageStateSelector(store.state).errorMessage,
       pizzas: pizzasSelector(store.state),
@@ -187,16 +171,28 @@ class _ViewModel {
       onBasketClick: () => store.dispatch(NavigateAction.push(Routes.basketScreen)),
     );
   }
+
+  final List<Pizza> pizzas;
+  final bool loading;
+  final int basketCount;
+  final UiMessage? errorMessage;
+  final VoidCallback onRepeat;
+  final void Function(Pizza, ProductSize) onAddPizzaClick;
+  final void Function(Pizza, ProductSize) onRemovePizzaClick;
+  final CombinedBasketProduct? Function(ProductType type, int productId) getCombinedProduct;
+  final VoidCallback onBasketClick;
+
+  bool get isBasketButtonVisible => basketCount != 0;
 }
 
 class _HomeFab extends StatefulWidget {
   const _HomeFab({
-    Key key,
-    @required this.basketCount,
-    @required this.scrollController,
-    @required this.showOnOffset,
-    @required this.onArrowClick,
-    @required this.onBasketClick,
+    Key? key,
+    required this.basketCount,
+    required this.scrollController,
+    required this.showOnOffset,
+    required this.onArrowClick,
+    required this.onBasketClick,
   }) : super(key: key);
   final int basketCount;
   final double showOnOffset;
@@ -211,11 +207,11 @@ class _HomeFab extends StatefulWidget {
 class __HomeFabState extends State<_HomeFab> with TickerProviderStateMixin {
   bool _showUpButton = false;
 
-  AnimationController _arrowController;
-  Animation<double> _arrowAnimation;
-  AnimationController _basketController;
-  Animation<double> _basketAnimation;
-  Animation<Size> _sizeAnimation;
+  late AnimationController _arrowController;
+  late Animation<double> _arrowAnimation;
+  late AnimationController _basketController;
+  late Animation<double> _basketAnimation;
+  late Animation<Size?> _sizeAnimation;
   final double _fabSize = 56;
 
   @override
@@ -229,7 +225,7 @@ class __HomeFabState extends State<_HomeFab> with TickerProviderStateMixin {
     if (widget.basketCount > 0) {
       _basketController.forward();
     }
-    _sizeAnimation = SizeTween(begin: Size(0, 0), end: Size(_fabSize, _fabSize)).animate(_basketAnimation);
+    _sizeAnimation = SizeTween(begin: const Size(0, 0), end: Size(_fabSize, _fabSize)).animate(_basketAnimation);
   }
 
   @override
@@ -281,7 +277,7 @@ class __HomeFabState extends State<_HomeFab> with TickerProviderStateMixin {
                 onPrimary: theme.colorScheme.onPrimary,
                 elevation: 4,
               ),
-              child: Icon(Icons.keyboard_arrow_up),
+              child: const Icon(Icons.keyboard_arrow_up),
             ),
           ),
         ),
@@ -290,8 +286,8 @@ class __HomeFabState extends State<_HomeFab> with TickerProviderStateMixin {
           animation: _sizeAnimation,
           builder: (context, child) {
             return SizedBox.fromSize(
-              child: child,
               size: _sizeAnimation.value,
+              child: child,
             );
           },
           child: Center(
@@ -302,8 +298,8 @@ class __HomeFabState extends State<_HomeFab> with TickerProviderStateMixin {
                 child: BadgeCounter(
                   count: widget.basketCount,
                   child: FloatingActionButton(
-                    child: const Icon(Icons.shopping_cart),
                     onPressed: widget.onBasketClick,
+                    child: const Icon(Icons.shopping_cart),
                   ),
                 ),
               ),

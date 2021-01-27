@@ -2,23 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:pzz/ui/widgets/counter.dart';
 
 class BasketItem extends StatelessWidget {
+  const BasketItem({
+    required this.name,
+    required this.price,
+    required this.size,
+    required this.count,
+    required this.onAddClick,
+    required this.onRemoveClick,
+  });
+
   final String name;
   final num price;
-  final String size;
+  final String? size;
   final int count;
   final VoidCallback onAddClick;
   final VoidCallback onRemoveClick;
-
-  BasketItem({
-    @required this.name,
-    @required this.price,
-    @required this.size,
-    @required this.count,
-    @required this.onAddClick,
-    @required this.onRemoveClick,
-  })  : assert(name != null),
-        assert(price != null),
-        assert(count != null);
 
   @override
   Widget build(BuildContext context) {
@@ -28,15 +26,15 @@ class BasketItem extends StatelessWidget {
       children: [
         Text(
           name,
-          style: theme.textTheme.headline6.copyWith(
+          style: theme.textTheme.headline6!.copyWith(
             color: theme.primaryColor,
             fontWeight: FontWeight.bold,
           ),
         ),
-        if (size != null && size.isNotEmpty)
+        if (size != null && size!.isNotEmpty)
           Padding(
             padding: const EdgeInsets.only(bottom: 8.0),
-            child: Text(size),
+            child: Text(size!),
           ),
         Row(
           children: [
@@ -47,7 +45,7 @@ class BasketItem extends StatelessWidget {
                 textAlign: TextAlign.right,
                 style: Theme.of(context)
                     .textTheme
-                    .headline6
+                    .headline6!
                     .copyWith(color: Theme.of(context).colorScheme.onSurface, fontWeight: FontWeight.bold),
               ),
             )

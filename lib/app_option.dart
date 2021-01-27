@@ -3,8 +3,8 @@ import 'dart:ui';
 
 const systemLocaleOption = Locale('system');
 
-Locale _deviceLocale;
-Locale get deviceLocale => _deviceLocale;
-set deviceLocale(Locale locale) {
+Locale? _deviceLocale;
+Locale? get deviceLocale => _deviceLocale;
+set deviceLocale(Locale? locale) {
   _deviceLocale ??= locale;
 }

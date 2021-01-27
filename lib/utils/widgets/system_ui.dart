@@ -9,17 +9,9 @@ import 'package:pzz/utils/extensions/widget_extension.dart';
 /// TODO Note: there is some issue here, [statusBarIconBrightness]  may not be applied because [AppBar.brightness] overrides it,
 ///  even have the AppBar located on a different Route.
 class SystemUi extends StatelessWidget {
-  final Widget child;
-  final Color systemNavigationBarColor;
-  final Brightness systemNavigationBarIconBrightness;
-  final Color systemNavigationBarDividerColor;
-  final Color statusBarColor;
-  final Brightness statusBarBrightness;
-  final Brightness statusBarIconBrightness;
-
   const SystemUi({
-    Key key,
-    @required this.child,
+    Key? key,
+    required this.child,
     this.systemNavigationBarColor,
     this.systemNavigationBarDividerColor,
     this.systemNavigationBarIconBrightness,
@@ -28,12 +20,20 @@ class SystemUi extends StatelessWidget {
     this.statusBarIconBrightness,
   }) : super(key: key);
 
+  final Widget child;
+  final Color? systemNavigationBarColor;
+  final Brightness? systemNavigationBarIconBrightness;
+  final Color? systemNavigationBarDividerColor;
+  final Color? statusBarColor;
+  final Brightness? statusBarBrightness;
+  final Brightness? statusBarIconBrightness;
+
   @override
   Widget build(BuildContext context) {
     // This requires a minimum delay after calling the build method so that the change to the system bars is applied
-    SchedulerBinding.instance.addPostFrameCallback((_) {
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
       final theme = Theme.of(context);
-      if (ModalRoute.of(context).isCurrent) {
+      if (ModalRoute.of(context)!.isCurrent) {
         final themeBrightness = theme.colorScheme.brightness;
         SystemChrome.setSystemUIOverlayStyle(
           SystemUiOverlayStyle(

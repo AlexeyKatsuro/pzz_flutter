@@ -17,5 +17,5 @@ HomePageState _homeErrorReducer(HomePageState state, HomeErrorAction action) {
 }
 
 HomePageState _clearErrorReducer(HomePageState state, InitialAction action) {
-  return state.copyWithError(errorMessage: null);
+  return state.copyWithError();
 }

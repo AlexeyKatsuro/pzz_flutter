@@ -21,6 +21,7 @@ import 'package:redux/redux.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BasketPage extends StatefulWidget implements Scoped {
+  @override
   final String scope = Routes.basketScreen;
 
   @override
@@ -40,7 +41,7 @@ class _BasketPageState extends State<BasketPage> {
   }
 
   Widget _build(BuildContext context, _ViewModel vm) {
-    final localizations = AppLocalizations.of(context);
+    final localizations = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations.totalPrice('${vm.totalAmount.toStringAsFixed(2)} р.')),
@@ -49,7 +50,7 @@ class _BasketPageState extends State<BasketPage> {
         widget.scope,
         child: ListView(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             ..._buildProducts(localizations, vm, ProductType.pizza),
@@ -67,7 +68,7 @@ class _BasketPageState extends State<BasketPage> {
                             : localizations.addSauces,
                       ),
                     ),
-                    Icon(
+                    const Icon(
                       Icons.arrow_forward_ios_rounded,
                       size: 15,
                     )
@@ -76,12 +77,12 @@ class _BasketPageState extends State<BasketPage> {
               ),
             ),
             DividedCenterTitle(localizations.deliveryAddress),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: PersonalInfoFormContainer(),
             ),
             DividedCenterTitle(localizations.payment_way),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: PaymentWayContainer(),
@@ -91,11 +92,11 @@ class _BasketPageState extends State<BasketPage> {
               child: AbsorbPointer(
                 absorbing: vm.isLoading,
                 child: ElevatedButton(
+                  onPressed: vm.onPlaceOrderClick,
                   child: LoadingSwitcher(
                     isLoading: vm.isLoading,
                     child: Text(localizations.placeOrder),
                   ),
-                  onPressed: vm.onPlaceOrderClick,
                 ),
               ),
             )
@@ -109,10 +110,10 @@ class _BasketPageState extends State<BasketPage> {
     final items = vm.itemsMap[type] ?? [];
     return [
       DividedCenterTitle(type.localizedPlurals(localizations)),
-      if (items.length != 0) const SizedBox(height: 12),
+      if (items.isNotEmpty) const SizedBox(height: 12),
       for (int index = 0; index < items.length; index++)
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             children: [
               BasketCombinedItem(
@@ -120,7 +121,7 @@ class _BasketPageState extends State<BasketPage> {
                 onAddClick: (p) => vm.onAddItemClick(p.toProduct()),
                 onRemoveClick: (p) => vm.onRemoveItemClick(p.toProduct()),
               ),
-              if (index != items.length - 1) Divider(),
+              if (index != items.length - 1) const Divider(),
             ],
           ),
         ),
@@ -131,31 +132,56 @@ class _BasketPageState extends State<BasketPage> {
 class DividedCenterTitle extends StatelessWidget {
   const DividedCenterTitle(
     this.title, {
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   final String title;
 
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
+    final theme = Theme.of(context);
     return Row(
       children: [
-        Expanded(child: Divider()),
+        const Expanded(child: Divider()),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
             title,
             style: theme.textTheme.headline6,
           ),
         ),
-        Expanded(child: Divider()),
+        const Expanded(child: Divider()),
       ],
     );
   }
 }
 
 class _ViewModel {
+  _ViewModel({
+    required this.basketCount,
+    required this.itemsMap,
+    required this.basket,
+    required this.freeSauceCounts,
+    required this.isLoading,
+    required this.onAddItemClick,
+    required this.onRemoveItemClick,
+    required this.onPlaceOrderClick,
+    required this.onChooseSauceClick,
+  });
+
+  factory _ViewModel.formStore(Store<AppState> store, String scope) {
+    return _ViewModel(
+        isLoading: isConfirmLoadingSelector(store.state),
+        basket: basketSelector(store.state),
+        itemsMap: combinedBasketProductsTypedMap(store.state),
+        basketCount: basketCountSelector(store.state),
+        freeSauceCounts: freeSauceCountsSelector(store.state),
+        onChooseSauceClick: () => store.dispatch(NavigateAction.push(Routes.saucesScreen)),
+        onAddItemClick: (item) => store.dispatch(AddProductAction(product: item, scope: scope)),
+        onRemoveItemClick: (item) => store.dispatch(RemoveProductAction(product: item, scope: scope)),
+        onPlaceOrderClick: () => store.dispatch(TryPlaceOrderAction(scope: scope)));
+  }
+
   final int basketCount;
   final Map<ProductType, List<CombinedBasketProduct>> itemsMap;
   final Basket basket;
@@ -171,31 +197,4 @@ class _ViewModel {
   bool get isBasketEmpty => basketCount == 0;
 
   num get totalAmount => basket.totalAmount;
-
-  _ViewModel({
-    @required this.basketCount,
-    @required this.itemsMap,
-    @required this.basket,
-    @required this.freeSauceCounts,
-    @required this.isLoading,
-    @required this.onAddItemClick,
-    @required this.onRemoveItemClick,
-    @required this.onPlaceOrderClick,
-    @required this.onChooseSauceClick,
-  })  : assert(itemsMap != null),
-        assert(basketCount != null),
-        assert(onAddItemClick != null);
-
-  static _ViewModel formStore(Store<AppState> store, String scope) {
-    return _ViewModel(
-        isLoading: isConfirmLoadingSelector(store.state),
-        basket: basketSelector(store.state),
-        itemsMap: combinedBasketProductsTypedMap(store.state),
-        basketCount: basketCountSelector(store.state),
-        freeSauceCounts: freeSauceCountsSelector(store.state),
-        onChooseSauceClick: () => store.dispatch(NavigateAction.push(Routes.saucesScreen)),
-        onAddItemClick: (item) => store.dispatch(AddProductAction(product: item, scope: scope)),
-        onRemoveItemClick: (item) => store.dispatch(RemoveProductAction(product: item, scope: scope)),
-        onPlaceOrderClick: () => store.dispatch(TryPlaceOrderAction(scope: scope)));
-  }
 }

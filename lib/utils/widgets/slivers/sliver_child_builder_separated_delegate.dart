@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class SliverChildBuilderSeparatedDelegate extends SliverChildBuilderDelegate {
   SliverChildBuilderSeparatedDelegate(
-      {@required this.itemBuilder, @required this.separatorBuilder, @required int itemCount})
+      {required this.itemBuilder, required this.separatorBuilder, required int itemCount})
       : super(
           _makeSeperatedBuilder(itemBuilder, separatorBuilder),
           childCount: _makeChildCount(itemCount),
@@ -25,7 +25,7 @@ class SliverChildBuilderSeparatedDelegate extends SliverChildBuilderDelegate {
     };
   }
 
-  static _makeChildCount(int itemCount) => max(0, itemCount * 2 - 1);
+  static int _makeChildCount(int itemCount) => max(0, itemCount * 2 - 1);
 /*
   static _makeSemanticIndexCallback() => (Widget widget, int localIndex) {
         if (localIndex.isEven) {

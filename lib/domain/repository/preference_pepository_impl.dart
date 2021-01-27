@@ -6,17 +6,18 @@ import 'package:pzz/models/person_info/personal_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PreferenceRepositoryImpl extends PreferenceRepository {
-  static const KEY_PERSONAL_INFO = 'key_personal_info';
-
   PreferenceRepositoryImpl(this._preferences);
+
+  static const KEY_PERSONAL_INFO = 'key_personal_info';
 
   final SharedPreferences _preferences;
 
   @override
-  PersonalInfo getPersonalInfo() {
-    final source = _preferences.getString(KEY_PERSONAL_INFO);
+  PersonalInfo? getPersonalInfo() {
+    final source = _preferences.getString(KEY_PERSONAL_INFO)!;
+    // ignore: unnecessary_null_comparison
     if (source == null) return null;
-    var json = jsonDecode(source);
+    final json = jsonDecode(source) as Map<String, dynamic>;
     final PersonalInfoDto dto = PersonalInfoDto.fromJson(json);
     return dto.toModel();
   }

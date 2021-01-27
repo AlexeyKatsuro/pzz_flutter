@@ -16,7 +16,7 @@ import 'package:pzz/models/person_info/personal_info.dart';
 import 'package:pzz/models/person_info/street.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/models/sauce.dart';
-import 'package:pzz/utils/UiMessage.dart';
+import 'package:pzz/utils/ui_message.dart';
 import 'package:reselect/reselect.dart';
 
 NavigationStack navigationStackSelector(AppState state) => state.navigationStack;
@@ -51,11 +51,11 @@ Selector<AppState, Street> personalInfoStreetSelector = createSelector1(personal
 
 Selector<AppState, Map<ProductType, List<CombinedBasketProduct>>> combinedBasketProductsTypedMap =
     createSelector1(basketProductsSelector, (List<BasketProduct> products) {
-  Map<ProductType, List<BasketProduct>> typeMap = groupBy(products, (BasketProduct e) => e.type);
+  final Map<ProductType, List<BasketProduct>> typeMap = groupBy(products, (BasketProduct e) => e.type);
 
   return typeMap.map((key, products) {
-    Map<int, List<BasketProduct>> equalProductsMap = groupBy(products, (BasketProduct e) => e.id);
-    List<CombinedBasketProduct> combinedList = equalProductsMap.entries.map((e) {
+    final Map<int, List<BasketProduct>> equalProductsMap = groupBy(products, (BasketProduct e) => e.id);
+    final List<CombinedBasketProduct> combinedList = equalProductsMap.entries.map((e) {
       final item = e.value.first;
       return CombinedBasketProduct(
         id: item.id,
@@ -86,10 +86,10 @@ Selector<AppState, List<CombinedBasketProduct>> combinedBasketProducts =
   return combinedProductMap.values.fold([], (value, element) => value + element);
 });
 
-CombinedBasketProduct combinedProductSelectorBy(AppState state, ProductType type, int productId) {
+CombinedBasketProduct? combinedProductSelectorBy(AppState state, ProductType type, int productId) {
   final map = combinedBasketProductsTypedMap(state);
   final typedProducts = map[type];
-  return typedProducts?.firstWhere((element) => element.id == productId, orElse: () => null);
+  return typedProducts?.firstWhereOrNull((element) => element.id == productId);
 }
 
 /// Return count of free sauces
@@ -109,13 +109,13 @@ Selector<AppState, Map<int, int>> saucesCountsMapSelector = createSelector2(
     final Map<int, int> saucesCountsMap = {};
     for (final sauce in sauces) {
       saucesCountsMap[sauce.id] =
-          combinedSauces.firstWhere((element) => element.id == sauce.id, orElse: () => null)?.productsCount ?? 0;
+          combinedSauces.firstWhereOrNull((element) => element.id == sauce.id)?.productsCount ?? 0;
     }
     return saucesCountsMap;
   },
 );
 
-PaymentWay paymentWaySelector(AppState state) => state.personalInfoState.formInfo.paymentWay;
+PaymentWay? paymentWaySelector(AppState state) => state.personalInfoState.formInfo.paymentWay;
 
 PersonalInfoErrors personInfoFormErrorsSelector(AppState state) => state.personalInfoState.formInfoErrors;
 
@@ -132,4 +132,4 @@ String rentingSelector(AppState state) => state.personalInfoState.formInfo.renti
 
 bool isConfirmLoadingSelector(AppState state) => state.isConfirmLoading;
 
-Locale appLocaleSelector(AppState state) => state.locale ?? deviceLocale;
+Locale? appLocaleSelector(AppState state) => state.locale ?? deviceLocale;

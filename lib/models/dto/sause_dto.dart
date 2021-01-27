@@ -1,13 +1,4 @@
 class SauceDto {
-  int id;
-  String title;
-  String titleInner;
-  String photoSmall;
-  String photo;
-  String description;
-  num price;
-  bool inStock;
-
   SauceDto({
     this.id,
     this.title,
@@ -20,26 +11,35 @@ class SauceDto {
   });
 
   SauceDto.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    title = json['title'];
-    titleInner = json['title_inner'];
-    photoSmall = json['photo_small'];
-    photo = json['photo'];
-    description = json['description'];
-    price = json['price'];
-    inStock = json['in_stock'];
+    id = json['id'] as int?;
+    title = json['title'] as String?;
+    titleInner = json['title_inner'] as String?;
+    photoSmall = json['photo_small'] as String?;
+    photo = json['photo'] as String?;
+    description = json['description'] as String?;
+    price = json['price'] as num?;
+    inStock = json['in_stock'] as bool?;
   }
 
+  int? id;
+  String? title;
+  String? titleInner;
+  String? photoSmall;
+  String? photo;
+  String? description;
+  num? price;
+  bool? inStock;
+
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['title'] = this.title;
-    data['title_inner'] = this.titleInner;
-    data['photo_small'] = this.photoSmall;
-    data['photo'] = this.photo;
-    data['description'] = this.description;
-    data['price'] = this.price;
-    data['in_stock'] = this.inStock;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['title'] = title;
+    data['title_inner'] = titleInner;
+    data['photo_small'] = photoSmall;
+    data['photo'] = photo;
+    data['description'] = description;
+    data['price'] = price;
+    data['in_stock'] = inStock;
     return data;
   }
 }

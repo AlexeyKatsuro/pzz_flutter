@@ -19,10 +19,10 @@ extension PizzaToPoductExt on Pizza {
 extension BasketItemToPoductExt on BasketItemDto {
   Product toProduct() {
     return Product(
-      id: id,
-      type: ProductTypeExt.fromStringOrNull(type),
+      id: id!,
+      type: ProductTypeExt.fromStringOrNull(type)!,
       size: ProductSizeExt.fromStringOrNull(size),
-      price: price,
+      price: price!,
     );
   }
 }

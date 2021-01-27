@@ -7,19 +7,17 @@ import 'package:pzz/ui/widgets/pizza_variant.dart';
 import 'package:pzz/utils/extensions/widget_extension.dart';
 
 class PizzaWidget extends StatelessWidget {
+  const PizzaWidget({
+    required this.pizza,
+    required this.combinedProduct,
+    required this.onAddPizzaClick,
+    required this.onRemovePizzaClick,
+  });
+
   final Pizza pizza;
-  final CombinedBasketProduct combinedProduct; // nullable
+  final CombinedBasketProduct? combinedProduct; // nullable
   final void Function(Pizza, ProductSize) onAddPizzaClick;
   final void Function(Pizza, ProductSize) onRemovePizzaClick;
-
-  const PizzaWidget({
-    @required this.pizza,
-    @required this.combinedProduct,
-    @required this.onAddPizzaClick,
-    @required this.onRemovePizzaClick,
-  })  : assert(pizza != null),
-        assert(onRemovePizzaClick != null),
-        assert(onAddPizzaClick != null);
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +33,9 @@ class PizzaWidget extends StatelessWidget {
             imageUrl: pizza.photo,
             progressIndicatorBuilder: (context, url, downloadProgress) =>
                 Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
-            errorWidget: (context, url, error) => Icon(Icons.error_outline),
+            errorWidget: (context, url, error) => const Icon(Icons.error_outline),
           ),
-          Divider(
+          const Divider(
             height: 1,
           ),
           Padding(
@@ -47,7 +45,7 @@ class PizzaWidget extends StatelessWidget {
                 Text(
                   pizza.name,
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headline5.copyWith(color: Theme.of(context).primaryColor),
+                  style: Theme.of(context).textTheme.headline5!.copyWith(color: Theme.of(context).primaryColor),
                 ),
                 ...[
                   for (final variant in pizza.variants)
@@ -61,7 +59,7 @@ class PizzaWidget extends StatelessWidget {
                         onAddPizzaClick(pizza, size);
                       },
                     ),
-                ].divideChildren(divider: Divider(height: 12)),
+                ].divideChildren(divider: const Divider(height: 12)),
                 Text(
                   pizza.description,
                   style: Theme.of(context).textTheme.bodyText2,

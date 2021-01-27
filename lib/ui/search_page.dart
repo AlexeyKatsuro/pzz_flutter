@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:pzz/domain/person_info_form/actions/person_info_form_actions.dart';
 import 'package:pzz/domain/selectors/selector.dart';
@@ -9,20 +10,20 @@ import 'package:pzz/models/person_info/street.dart';
 import 'package:pzz/utils/scoped.dart';
 import 'package:pzz/utils/widgets/error_scoped_notifier.dart';
 import 'package:redux/redux.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SearchPage<T, VM extends SearchViewModel<T>> extends StatefulWidget implements Scoped {
+  const SearchPage({
+    required this.fromStore,
+    required this.prefill,
+    required this.stringify,
+    required this.scope,
+  });
+
   final VM Function(Store<AppState> store, String scope) fromStore;
   final String prefill;
   final String Function(T item) stringify;
+  @override
   final String scope;
-
-  SearchPage({
-    @required this.fromStore,
-    @required this.prefill,
-    @required this.stringify,
-    @required this.scope,
-  });
 
   @override
   _SearchPageState<T, VM> createState() => _SearchPageState<T, VM>();
@@ -53,7 +54,7 @@ class _SearchPageState<T, VM extends SearchViewModel<T>> extends State<SearchPag
   }
 
   Widget _build(BuildContext context, VM vm) {
-    final localizations = AppLocalizations.of(context);
+    final localizations = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
@@ -64,8 +65,8 @@ class _SearchPageState<T, VM extends SearchViewModel<T>> extends State<SearchPag
           style: TextStyle(
             color: theme.colorScheme.onSurface,
           ),
-          prefix: Padding(
-            padding: const EdgeInsets.all(4.0),
+          prefix: const Padding(
+            padding: EdgeInsets.all(4.0),
             child: Icon(Icons.search),
           ),
           onChanged: vm.onTyping,
@@ -75,9 +76,9 @@ class _SearchPageState<T, VM extends SearchViewModel<T>> extends State<SearchPag
       body: ErrorScopedNotifier(
         widget.scope,
         child: ListView.separated(
-          padding: EdgeInsets.all(8),
+          padding: const EdgeInsets.all(8),
           itemBuilder: (context, index) => _buildItems(context, index, vm),
-          separatorBuilder: (context, index) => SizedBox(height: 4),
+          separatorBuilder: (context, index) => const SizedBox(height: 4),
           itemCount: vm.items.length,
         ),
       ),
@@ -105,26 +106,26 @@ class _SearchPageState<T, VM extends SearchViewModel<T>> extends State<SearchPag
 
 abstract class SearchViewModel<T> {
   SearchViewModel({
-    @required this.items,
-    @required this.onTyping,
-    @required this.onItemClick,
+    required this.items,
+    required this.onTyping,
+    required this.onItemClick,
     this.onInitialBuild,
   });
 
   final List<T> items;
   final void Function(String query) onTyping;
   final void Function(T item) onItemClick;
-  final VoidCallback onInitialBuild;
+  final VoidCallback? onInitialBuild;
 }
 
 class StreetsSearchViewModel extends SearchViewModel<Street> {
   StreetsSearchViewModel({
-    @required List<Street> items,
-    @required void Function(String query) onTyping,
-    @required void Function(Street item) onItemClick,
+    required List<Street> items,
+    required void Function(String query) onTyping,
+    required void Function(Street item) onItemClick,
   }) : super(items: items, onItemClick: onItemClick, onTyping: onTyping);
 
-  static StreetsSearchViewModel fromStore(Store<AppState> store, String scope) {
+  factory StreetsSearchViewModel.fromStore(Store<AppState> store, String scope) {
     return StreetsSearchViewModel(
       onItemClick: (item) => store.dispatch(SelectStreetAction(item)),
       onTyping: (query) => store.dispatch(PerformStreetSearchAction(
@@ -138,10 +139,10 @@ class StreetsSearchViewModel extends SearchViewModel<Street> {
 
 class HousesSearchViewModel extends SearchViewModel<House> {
   HousesSearchViewModel({
-    @required List<House> items,
-    @required void Function(String query) onTyping,
-    @required void Function(House item) onItemClick,
-    @required VoidCallback onInitialBuild,
+    required List<House> items,
+    required void Function(String query) onTyping,
+    required void Function(House item) onItemClick,
+    required VoidCallback? onInitialBuild,
   }) : super(
           items: items,
           onItemClick: onItemClick,
@@ -149,7 +150,7 @@ class HousesSearchViewModel extends SearchViewModel<House> {
           onInitialBuild: onInitialBuild,
         );
 
-  static HousesSearchViewModel fromStore(
+  factory HousesSearchViewModel.fromStore(
     Store<AppState> store,
     String scope,
   ) {

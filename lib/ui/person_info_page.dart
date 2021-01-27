@@ -10,16 +10,16 @@ import 'package:pzz/ui/widgets/personal_info_form.dart';
 class PersonalInfoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context);
+    final localizations = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations.deliveryAddress),
       ),
       body: ListView(
-        physics: ScrollPhysics(),
+        physics: const ScrollPhysics(),
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         children: [
-          PersonalInfoFormContainer(),
+          const PersonalInfoFormContainer(),
           const SizedBox(height: 12),
           ElevatedButton(
             onPressed: () {

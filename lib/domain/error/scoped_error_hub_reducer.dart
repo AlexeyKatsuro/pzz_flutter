@@ -2,7 +2,7 @@ import 'package:pzz/domain/error/scoped_error_actions.dart';
 import 'package:pzz/domain/error/scoped_error_hub.dart';
 import 'package:redux/redux.dart';
 
-Reducer<ScopedErrorsHub> scopedErrorHubReducer = combineReducers([
+Reducer<ScopedErrorsHub> scopedErrorHubReducer = combineReducers<ScopedErrorsHub>([
   TypedReducer<ScopedErrorsHub, SetScopedErrorAction>(setScopedErrorReducer),
 ]);
 

@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:pzz/utils/UiMessage.dart';
+import 'package:pzz/utils/ui_message.dart';
 
 /// Class to contain all error messages over the App, which should be displayed on different Screen.
 ///
@@ -17,11 +17,11 @@ class ScopedErrorsHub {
 
   const ScopedErrorsHub.initial() : _scopedErrors = const {};
 
-  final Map<String, UiMessage> _scopedErrors;
+  final Map<String, UiMessage?> _scopedErrors;
 
-  UiMessage get(String scope) => _scopedErrors[scope];
+  UiMessage? get(String scope) => _scopedErrors[scope];
 
-  ScopedErrorsHub set({@required String scope, @required UiMessage error}) => _copy().._scopedErrors[scope] = error;
+  ScopedErrorsHub set({required String scope, required UiMessage? error}) => _copy().._scopedErrors[scope] = error;
 
   ScopedErrorsHub clear(String scope) => set(scope: scope, error: null);
 

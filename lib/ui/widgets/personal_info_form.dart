@@ -12,10 +12,10 @@ import 'package:pzz/ui/search_page.dart';
 import 'package:pzz/utils/extensions/text_form_field_ext.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:pzz/utils/UiMessage.dart';
+import 'package:pzz/utils/ui_message.dart';
 
 class PersonalInfoFormContainer extends StatelessWidget {
-  const PersonalInfoFormContainer({Key key}) : super(key: key);
+  const PersonalInfoFormContainer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -47,32 +47,19 @@ class PersonalInfoFormContainer extends StatelessWidget {
 
 class _ViewModel {
   _ViewModel({
-    @required this.personalInfo,
-    @required this.errors,
-    @required this.isHomeSelectionAllow,
-    @required this.onNameChange,
-    @required this.onPhoneChange,
-    @required this.onStreetChange,
-    @required this.onHouseChange,
-    @required this.onFlatChange,
-    @required this.onEntranceChange,
-    @required this.onFloorChange,
-    @required this.onIntercomChange,
-    @required this.onCommentChange,
+    required this.personalInfo,
+    required this.errors,
+    required this.isHomeSelectionAllow,
+    required this.onNameChange,
+    required this.onPhoneChange,
+    required this.onStreetChange,
+    required this.onHouseChange,
+    required this.onFlatChange,
+    required this.onEntranceChange,
+    required this.onFloorChange,
+    required this.onIntercomChange,
+    required this.onCommentChange,
   });
-
-  final PersonalInfo personalInfo;
-  final PersonalInfoErrors errors;
-  final bool isHomeSelectionAllow;
-  final ValueChanged<String> onNameChange;
-  final ValueChanged<String> onPhoneChange;
-  final ValueChanged<String> onStreetChange;
-  final ValueChanged<String> onHouseChange;
-  final ValueChanged<String> onFlatChange;
-  final ValueChanged<String> onEntranceChange;
-  final ValueChanged<String> onFloorChange;
-  final ValueChanged<String> onIntercomChange;
-  final ValueChanged<String> onCommentChange;
 
   factory _ViewModel.formStore(Store<AppState> store) {
     return _ViewModel(
@@ -90,22 +77,35 @@ class _ViewModel {
       onCommentChange: (text) => store.dispatch(CommentChangedAction(text)),
     );
   }
+
+  final PersonalInfo personalInfo;
+  final PersonalInfoErrors errors;
+  final bool isHomeSelectionAllow;
+  final ValueChanged<String> onNameChange;
+  final ValueChanged<String> onPhoneChange;
+  final ValueChanged<String> onStreetChange;
+  final ValueChanged<String> onHouseChange;
+  final ValueChanged<String> onFlatChange;
+  final ValueChanged<String> onEntranceChange;
+  final ValueChanged<String> onFloorChange;
+  final ValueChanged<String> onIntercomChange;
+  final ValueChanged<String> onCommentChange;
 }
 
 class PersonalInfoForm extends StatefulWidget {
   const PersonalInfoForm({
-    @required this.personalInfo,
-    @required this.errors,
-    @required this.isHomeSelectionAllow,
-    @required this.onNameChange,
-    @required this.onPhoneChange,
-    @required this.onStreetChange,
-    @required this.onHouseChange,
-    @required this.onFlatChange,
-    @required this.onEntranceChange,
-    @required this.onFloorChange,
-    @required this.onIntercomChange,
-    @required this.onCommentChange,
+    required this.personalInfo,
+    required this.errors,
+    required this.isHomeSelectionAllow,
+    required this.onNameChange,
+    required this.onPhoneChange,
+    required this.onStreetChange,
+    required this.onHouseChange,
+    required this.onFlatChange,
+    required this.onEntranceChange,
+    required this.onFloorChange,
+    required this.onIntercomChange,
+    required this.onCommentChange,
   });
 
   final PersonalInfo personalInfo;
@@ -150,13 +150,15 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
 
   @override
   void dispose() {
-    controllers.forEach((element) => element.dispose());
+    for (final controller in controllers) {
+      controller.dispose();
+    }
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context);
+    final localizations = AppLocalizations.of(context)!;
 
     nameController.setTextIfNew(widget.personalInfo.name);
     phoneController.setTextIfNew(widget.personalInfo.phone);
@@ -196,7 +198,7 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
                 builder: (context) {
                   return SearchPage(
                     scope: Routes.searchStreetScreen,
-                    fromStore: StreetsSearchViewModel.fromStore,
+                    fromStore: (store, scope) => StreetsSearchViewModel.fromStore(store, scope),
                     stringify: (Street item) => item.title,
                     prefill: widget.personalInfo.street,
                   );
@@ -206,7 +208,7 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
           },
           decoration: InputDecoration(
             labelText: localizations.street,
-            suffixIcon: Icon(Icons.search),
+            suffixIcon: const Icon(Icons.search),
             errorText: widget.errors.street.localizeOrNull(localizations),
           ),
           controller: streetController,
@@ -215,11 +217,11 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
         TextFormField(
           enableInteractiveSelection: false,
           // will disable paste operation
-          focusNode: new AlwaysDisabledFocusNode(),
+          focusNode: AlwaysDisabledFocusNode(),
           onChanged: widget.onHouseChange,
           decoration: InputDecoration(
             labelText: localizations.house,
-            suffixIcon: Icon(Icons.keyboard_arrow_down),
+            suffixIcon: const Icon(Icons.keyboard_arrow_down),
             errorText: widget.isHomeSelectionAllow ? widget.errors.house.localizeOrNull(localizations) : null,
           ),
           enabled: widget.isHomeSelectionAllow,
@@ -230,7 +232,7 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
                 builder: (context) {
                   return SearchPage(
                     scope: Routes.searchHouseScreen,
-                    fromStore: HousesSearchViewModel.fromStore,
+                    fromStore: (store, scope) => HousesSearchViewModel.fromStore(store, scope),
                     stringify: (House item) => item.title,
                     prefill: widget.personalInfo.house,
                   );

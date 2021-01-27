@@ -1,24 +1,4 @@
 class BasketItemDto {
-  String type;
-  int id;
-  String size;
-  String dough;
-  int isFailure;
-  bool is3in2;
-  bool withSauce;
-  int parts;
-  int itemId;
-  bool isNew;
-  bool autoRemoved;
-  String title;
-  int freeSaucesCount;
-  int toRemove;
-  int toSoftRemove;
-  int packed;
-  int prepared;
-  int isFree;
-  num price;
-
   BasketItemDto(
       {this.type,
       this.id,
@@ -41,48 +21,68 @@ class BasketItemDto {
       this.price});
 
   BasketItemDto.fromJson(Map<String, dynamic> json) {
-    type = json['type'];
-    id = int.parse(json['id']);
-    size = json['size'];
-    dough = json['dough'];
-    isFailure = json['is_failure'];
-    is3in2 = json['is_3in2'];
-    withSauce = json['with_sauce'];
-    parts = json['parts'];
-    itemId = json['item_id'];
-    isNew = json['is_new'];
-    autoRemoved = json['auto_removed'];
-    title = json['title'];
-    freeSaucesCount = json['free_sauces_count'];
-    toRemove = json['to_remove'];
-    toSoftRemove = json['to_soft_remove'];
-    packed = json['packed'];
-    prepared = json['prepared'];
-    isFree = json['is_free'];
-    price = json['price'];
+    type = json['type'] as String?;
+    id = int.parse(json['id'] as String);
+    size = json['size'] as String?;
+    dough = json['dough'] as String?;
+    isFailure = json['is_failure'] as int?;
+    is3in2 = json['is_3in2'] as bool?;
+    withSauce = json['with_sauce'] as bool?;
+    parts = json['parts'] as int?;
+    itemId = json['item_id'] as int?;
+    isNew = json['is_new'] as bool?;
+    autoRemoved = json['auto_removed'] as bool?;
+    title = json['title'] as String?;
+    freeSaucesCount = json['free_sauces_count'] as int?;
+    toRemove = json['to_remove'] as int?;
+    toSoftRemove = json['to_soft_remove'] as int?;
+    packed = json['packed'] as int?;
+    prepared = json['prepared'] as int?;
+    isFree = json['is_free'] as int?;
+    price = json['price'] as num?;
   }
 
+  String? type;
+  int? id;
+  String? size;
+  String? dough;
+  int? isFailure;
+  bool? is3in2;
+  bool? withSauce;
+  int? parts;
+  int? itemId;
+  bool? isNew;
+  bool? autoRemoved;
+  String? title;
+  int? freeSaucesCount;
+  int? toRemove;
+  int? toSoftRemove;
+  int? packed;
+  int? prepared;
+  int? isFree;
+  num? price;
+
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['type'] = this.type;
-    data['id'] = this.id;
-    data['size'] = this.size;
-    data['dough'] = this.dough;
-    data['is_failure'] = this.isFailure;
-    data['is_3in2'] = this.is3in2;
-    data['with_sauce'] = this.withSauce;
-    data['parts'] = this.parts;
-    data['item_id'] = this.itemId;
-    data['is_new'] = this.isNew;
-    data['auto_removed'] = this.autoRemoved;
-    data['title'] = this.title;
-    data['free_sauces_count'] = this.freeSaucesCount;
-    data['to_remove'] = this.toRemove;
-    data['to_soft_remove'] = this.toSoftRemove;
-    data['packed'] = this.packed;
-    data['prepared'] = this.prepared;
-    data['is_free'] = this.isFree;
-    data['price'] = this.price;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['type'] = type;
+    data['id'] = id;
+    data['size'] = size;
+    data['dough'] = dough;
+    data['is_failure'] = isFailure;
+    data['is_3in2'] = is3in2;
+    data['with_sauce'] = withSauce;
+    data['parts'] = parts;
+    data['item_id'] = itemId;
+    data['is_new'] = isNew;
+    data['auto_removed'] = autoRemoved;
+    data['title'] = title;
+    data['free_sauces_count'] = freeSaucesCount;
+    data['to_remove'] = toRemove;
+    data['to_soft_remove'] = toSoftRemove;
+    data['packed'] = packed;
+    data['prepared'] = prepared;
+    data['is_free'] = isFree;
+    data['price'] = price;
     return data;
   }
 }

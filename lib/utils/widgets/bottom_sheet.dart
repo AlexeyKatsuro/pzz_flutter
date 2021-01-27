@@ -28,7 +28,7 @@ typedef BottomSheetDragStartHandler = void Function(DragStartDetails details);
 /// Used by [BottomSheet.onDragEnd].
 typedef BottomSheetDragEndHandler = void Function(
   DragEndDetails details, {
-  @required bool isClosing,
+  required bool isClosing,
 });
 
 /// A material design bottom sheet.
@@ -65,7 +65,7 @@ class BottomSheet extends StatefulWidget {
   /// [ScaffoldState.showBottomSheet], for persistent bottom sheets, or by
   /// [showModalBottomSheet], for modal bottom sheets.
   const BottomSheet({
-    Key key,
+    Key? key,
     this.animationController,
     this.enableDrag = true,
     this.onDragStart,
@@ -74,20 +74,16 @@ class BottomSheet extends StatefulWidget {
     this.elevation,
     this.shape,
     this.clipBehavior,
-    @required this.onClosing,
-    @required this.builder,
-  })  : assert(enableDrag != null),
-        assert(onClosing != null),
-        assert(builder != null),
-        assert(elevation == null || elevation >= 0.0),
-        super(key: key);
+    required this.onClosing,
+    required this.builder,
+  }) : super(key: key);
 
   /// The animation controller that controls the bottom sheet's entrance and
   /// exit animations.
   ///
   /// The BottomSheet widget will manipulate the position of this animation, it
   /// is not just a passive observer.
-  final AnimationController animationController;
+  final AnimationController? animationController;
 
   /// Called when the bottom sheet begins to close.
   ///
@@ -113,7 +109,7 @@ class BottomSheet extends StatefulWidget {
   ///
   /// Would typically be used to change the bottom sheet animation curve so
   /// that it tracks the user's finger accurately.
-  final BottomSheetDragStartHandler onDragStart;
+  final BottomSheetDragStartHandler? onDragStart;
 
   /// Called when the user stops dragging the bottom sheet, if [enableDrag]
   /// is true.
@@ -121,28 +117,28 @@ class BottomSheet extends StatefulWidget {
   /// Would typically be used to reset the bottom sheet animation curve, so
   /// that it animates non-linearly. Called before [onClosing] if the bottom
   /// sheet is closing.
-  final BottomSheetDragEndHandler onDragEnd;
+  final BottomSheetDragEndHandler? onDragEnd;
 
   /// The bottom sheet's background color.
   ///
   /// Defines the bottom sheet's [Material.color].
   ///
   /// Defaults to null and falls back to [Material]'s default.
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   /// The z-coordinate at which to place this material relative to its parent.
   ///
   /// This controls the size of the shadow below the material.
   ///
   /// Defaults to 0. The value is non-negative.
-  final double elevation;
+  final double? elevation;
 
   /// The shape of the bottom sheet.
   ///
   /// Defines the bottom sheet's [Material.shape].
   ///
   /// Defaults to null and falls back to [Material]'s default.
-  final ShapeBorder shape;
+  final ShapeBorder? shape;
 
   /// {@macro flutter.material.Material.clipBehavior}
   ///
@@ -156,7 +152,7 @@ class BottomSheet extends StatefulWidget {
   /// If this property is null then [BottomSheetThemeData.clipBehavior] of
   /// [ThemeData.bottomSheetTheme] is used. If that's null then the behavior
   /// will be [Clip.none].
-  final Clip clipBehavior;
+  final Clip? clipBehavior;
 
   @override
   _BottomSheetState createState() => _BottomSheetState();
@@ -181,22 +177,22 @@ class _BottomSheetState extends State<BottomSheet> {
   final GlobalKey _childKey = GlobalKey(debugLabel: 'BottomSheet child');
 
   double get _childHeight {
-    final RenderBox renderBox = _childKey.currentContext.findRenderObject() as RenderBox;
+    final RenderBox renderBox = _childKey.currentContext!.findRenderObject() as RenderBox;
     return renderBox.size.height;
   }
 
-  bool get _dismissUnderway => widget.animationController.status == AnimationStatus.reverse;
+  bool get _dismissUnderway => widget.animationController!.status == AnimationStatus.reverse;
 
   void _handleDragStart(DragStartDetails details) {
     if (widget.onDragStart != null) {
-      widget.onDragStart(details);
+      widget.onDragStart!(details);
     }
   }
 
   void _handleDragUpdate(DragUpdateDetails details) {
     assert(widget.enableDrag);
     if (_dismissUnderway) return;
-    widget.animationController.value -= details.primaryDelta / _childHeight;
+    widget.animationController!.value -= details.primaryDelta! / _childHeight;
   }
 
   void _handleDragEnd(DragEndDetails details) {
@@ -205,21 +201,21 @@ class _BottomSheetState extends State<BottomSheet> {
     bool isClosing = false;
     if (details.velocity.pixelsPerSecond.dy > _minFlingVelocity) {
       final double flingVelocity = -details.velocity.pixelsPerSecond.dy / _childHeight;
-      if (widget.animationController.value > 0.0) {
-        widget.animationController.fling(velocity: flingVelocity);
+      if (widget.animationController!.value > 0.0) {
+        widget.animationController!.fling(velocity: flingVelocity);
       }
       if (flingVelocity < 0.0) {
         isClosing = true;
       }
-    } else if (widget.animationController.value < _closeProgressThreshold) {
-      if (widget.animationController.value > 0.0) widget.animationController.fling(velocity: -1.0);
+    } else if (widget.animationController!.value < _closeProgressThreshold) {
+      if (widget.animationController!.value > 0.0) widget.animationController!.fling(velocity: -1.0);
       isClosing = true;
     } else {
-      widget.animationController.forward();
+      widget.animationController!.forward();
     }
 
     if (widget.onDragEnd != null) {
-      widget.onDragEnd(
+      widget.onDragEnd!(
         details,
         isClosing: isClosing,
       );
@@ -240,9 +236,9 @@ class _BottomSheetState extends State<BottomSheet> {
   @override
   Widget build(BuildContext context) {
     final BottomSheetThemeData bottomSheetTheme = Theme.of(context).bottomSheetTheme;
-    final Color color = widget.backgroundColor ?? bottomSheetTheme.backgroundColor;
+    final Color? color = widget.backgroundColor ?? bottomSheetTheme.backgroundColor;
     final double elevation = widget.elevation ?? bottomSheetTheme.elevation ?? 0;
-    final ShapeBorder shape = widget.shape ?? bottomSheetTheme.shape;
+    final ShapeBorder? shape = widget.shape ?? bottomSheetTheme.shape;
     final Clip clipBehavior = widget.clipBehavior ?? bottomSheetTheme.clipBehavior ?? Clip.none;
 
     final Widget bottomSheet = Material(
@@ -262,8 +258,8 @@ class _BottomSheetState extends State<BottomSheet> {
             onVerticalDragStart: _handleDragStart,
             onVerticalDragUpdate: _handleDragUpdate,
             onVerticalDragEnd: _handleDragEnd,
-            child: bottomSheet,
             excludeFromSemantics: true,
+            child: bottomSheet,
           );
   }
 }
@@ -274,9 +270,9 @@ class _BottomSheetState extends State<BottomSheet> {
 
 // MODAL BOTTOM SHEETS
 class _ModalBottomSheetLayout extends SingleChildLayoutDelegate {
-  _ModalBottomSheetLayout(this.progress, this.isScrollControlled);
+  _ModalBottomSheetLayout({required this.progress, required this.isScrollControlled});
 
-  final double progress;
+  final double? progress;
   final bool isScrollControlled;
 
   @override
@@ -284,14 +280,13 @@ class _ModalBottomSheetLayout extends SingleChildLayoutDelegate {
     return BoxConstraints(
       minWidth: constraints.maxWidth,
       maxWidth: constraints.maxWidth,
-      minHeight: 0.0,
       maxHeight: isScrollControlled ? constraints.maxHeight : constraints.maxHeight * 9.0 / 16.0,
     );
   }
 
   @override
   Offset getPositionForChild(Size size, Size childSize) {
-    return Offset(0.0, size.height - childSize.height * progress);
+    return Offset(0.0, size.height - childSize.height * progress!);
   }
 
   @override
@@ -302,7 +297,7 @@ class _ModalBottomSheetLayout extends SingleChildLayoutDelegate {
 
 class _ModalBottomSheet<T> extends StatefulWidget {
   const _ModalBottomSheet({
-    Key key,
+    Key? key,
     this.route,
     this.backgroundColor,
     this.elevation,
@@ -310,16 +305,14 @@ class _ModalBottomSheet<T> extends StatefulWidget {
     this.clipBehavior,
     this.isScrollControlled = false,
     this.enableDrag = true,
-  })  : assert(isScrollControlled != null),
-        assert(enableDrag != null),
-        super(key: key);
+  }) : super(key: key);
 
-  final _ModalBottomSheetRoute<T> route;
+  final _ModalBottomSheetRoute<T>? route;
   final bool isScrollControlled;
-  final Color backgroundColor;
-  final double elevation;
-  final ShapeBorder shape;
-  final Clip clipBehavior;
+  final Color? backgroundColor;
+  final double? elevation;
+  final ShapeBorder? shape;
+  final Clip? clipBehavior;
   final bool enableDrag;
 
   @override
@@ -327,7 +320,7 @@ class _ModalBottomSheet<T> extends StatefulWidget {
 }
 
 class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
-  ParametricCurve<double> animationCurve = _modalBottomSheetCurve;
+  ParametricCurve<double?> animationCurve = _modalBottomSheetCurve;
 
   String _getRouteLabel(MaterialLocalizations localizations) {
     switch (Theme.of(context).platform) {
@@ -340,7 +333,6 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
       case TargetPlatform.windows:
         return localizations.dialogLabel;
     }
-    return '';
   }
 
   void handleDragStart(DragStartDetails details) {
@@ -348,10 +340,10 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
     animationCurve = Curves.linear;
   }
 
-  void handleDragEnd(DragEndDetails details, {bool isClosing}) {
+  void handleDragEnd(DragEndDetails details, {bool? isClosing}) {
     // Allow the bottom sheet to animate smoothly from its current position.
     animationCurve = _BottomSheetSuspendedCurve(
-      widget.route.animation.value,
+      widget.route!.animation!.value,
       curve: _modalBottomSheetCurve,
     );
   }
@@ -365,15 +357,36 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
     final String routeLabel = _getRouteLabel(localizations);
 
     return AnimatedBuilder(
-      animation: widget.route.animation,
+      animation: widget.route!.animation!,
+      builder: (BuildContext context, Widget? child) {
+        // Disable the initial animation when accessible navigation is on so
+        // that the semantics are added to the tree at the correct time.
+        final double? animationValue =
+            animationCurve.transform(mediaQuery.accessibleNavigation ? 1.0 : widget.route!.animation!.value);
+        return Semantics(
+          scopesRoute: true,
+          namesRoute: true,
+          label: routeLabel,
+          explicitChildNodes: true,
+          child: ClipRect(
+            child: CustomSingleChildLayout(
+              delegate: _ModalBottomSheetLayout(
+                progress: animationValue,
+                isScrollControlled: widget.isScrollControlled,
+              ),
+              child: child,
+            ),
+          ),
+        );
+      },
       child: BottomSheet(
-        animationController: widget.route._animationController,
+        animationController: widget.route!._animationController,
         onClosing: () {
-          if (widget.route.isCurrent) {
+          if (widget.route!.isCurrent) {
             Navigator.pop(context);
           }
         },
-        builder: widget.route.builder,
+        builder: widget.route!.builder!,
         backgroundColor: widget.backgroundColor,
         elevation: widget.elevation,
         shape: widget.shape,
@@ -382,24 +395,6 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
         onDragStart: handleDragStart,
         onDragEnd: handleDragEnd,
       ),
-      builder: (BuildContext context, Widget child) {
-        // Disable the initial animation when accessible navigation is on so
-        // that the semantics are added to the tree at the correct time.
-        final double animationValue =
-            animationCurve.transform(mediaQuery.accessibleNavigation ? 1.0 : widget.route.animation.value);
-        return Semantics(
-          scopesRoute: true,
-          namesRoute: true,
-          label: routeLabel,
-          explicitChildNodes: true,
-          child: ClipRect(
-            child: CustomSingleChildLayout(
-              delegate: _ModalBottomSheetLayout(animationValue, widget.isScrollControlled),
-              child: child,
-            ),
-          ),
-        );
-      },
     );
   }
 }
@@ -415,22 +410,19 @@ class _ModalBottomSheetRoute<T> extends PopupRoute<T> {
     this.modalBarrierColor,
     this.isDismissible = true,
     this.enableDrag = true,
-    @required this.isScrollControlled,
-    RouteSettings settings,
-  })  : assert(isScrollControlled != null),
-        assert(isDismissible != null),
-        assert(enableDrag != null),
-        super(settings: settings);
+    required this.isScrollControlled,
+    RouteSettings? settings,
+  }) : super(settings: settings);
 
-  final WidgetBuilder builder;
+  final WidgetBuilder? builder;
 
   //final CapturedThemes capturedThemes;
   final bool isScrollControlled;
-  final Color backgroundColor;
-  final double elevation;
-  final ShapeBorder shape;
-  final Clip clipBehavior;
-  final Color modalBarrierColor;
+  final Color? backgroundColor;
+  final double? elevation;
+  final ShapeBorder? shape;
+  final Clip? clipBehavior;
+  final Color? modalBarrierColor;
   final bool isDismissible;
   final bool enableDrag;
 
@@ -444,18 +436,18 @@ class _ModalBottomSheetRoute<T> extends PopupRoute<T> {
   bool get barrierDismissible => isDismissible;
 
   @override
-  final String barrierLabel;
+  final String? barrierLabel;
 
   @override
   Color get barrierColor => modalBarrierColor ?? Colors.black54;
 
-  AnimationController _animationController;
+  AnimationController? _animationController;
 
   @override
   AnimationController createAnimationController() {
     assert(_animationController == null);
-    _animationController = BottomSheet.createAnimationController(navigator.overlay);
-    return _animationController;
+    _animationController = BottomSheet.createAnimationController(navigator!.overlay!);
+    return _animationController!;
   }
 
   @override
@@ -480,8 +472,9 @@ class _ModalBottomSheetRoute<T> extends PopupRoute<T> {
         },
       ),
     );
-    if (isScrollControlled)
+    if (isScrollControlled) {
       bottomSheet = Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top), child: bottomSheet);
+    }
     // return capturedThemes.wrap(bottomSheet);
     return bottomSheet;
   }
@@ -505,13 +498,12 @@ class _ModalBottomSheetRoute<T> extends PopupRoute<T> {
 /// animation at the time when the finger was released.
 ///
 /// The [startingPoint] and [curve] arguments must not be null.
-class _BottomSheetSuspendedCurve extends ParametricCurve<double> {
+class _BottomSheetSuspendedCurve extends ParametricCurve<double?> {
   /// Creates a suspended curve.
   const _BottomSheetSuspendedCurve(
     this.startingPoint, {
     this.curve = Curves.easeOutCubic,
-  })  : assert(startingPoint != null),
-        assert(curve != null);
+  });
 
   /// The progress value at which [curve] should begin.
   ///
@@ -522,7 +514,7 @@ class _BottomSheetSuspendedCurve extends ParametricCurve<double> {
   final Curve curve;
 
   @override
-  double transform(double t) {
+  double? transform(double t) {
     assert(t >= 0.0 && t <= 1.0);
     assert(startingPoint >= 0.0 && startingPoint <= 1.0);
 
@@ -640,26 +632,20 @@ class _BottomSheetSuspendedCurve extends ParametricCurve<double> {
 ///  * [DraggableScrollableSheet], which allows you to create a bottom sheet
 ///    that grows and then becomes scrollable once it reaches its maximum size.
 ///  * <https://material.io/design/components/sheets-bottom.html#modal-bottom-sheet>
-Future<T> showModalBottomSheet<T>({
-  @required BuildContext context,
-  @required WidgetBuilder builder,
-  Color backgroundColor,
-  double elevation,
-  ShapeBorder shape,
-  Clip clipBehavior,
-  Color barrierColor,
+Future<T?> showModalBottomSheet<T>({
+  required BuildContext context,
+  required WidgetBuilder builder,
+  Color? backgroundColor,
+  double? elevation,
+  ShapeBorder? shape,
+  Clip? clipBehavior,
+  Color? barrierColor,
   bool isScrollControlled = false,
   bool useRootNavigator = false,
   bool isDismissible = true,
   bool enableDrag = true,
-  RouteSettings routeSettings,
+  RouteSettings? routeSettings,
 }) {
-  assert(context != null);
-  assert(builder != null);
-  assert(isScrollControlled != null);
-  assert(useRootNavigator != null);
-  assert(isDismissible != null);
-  assert(enableDrag != null);
   assert(debugCheckHasMediaQuery(context));
   assert(debugCheckHasMaterialLocalizations(context));
 
@@ -680,14 +666,12 @@ Future<T> showModalBottomSheet<T>({
 }
 
 class BottomSheetDialog<T> extends Page<T> {
-  final Widget child;
-
-  BottomSheetDialog({
-    @required this.child,
-    @required String name,
-    Object arguments,
-    LocalKey key,
-    String restorationId,
+  const BottomSheetDialog({
+    required this.child,
+    required String? name,
+    Object? arguments,
+    LocalKey? key,
+    String? restorationId,
     this.isScrollControlled,
     this.isDismissible,
     this.enableDrag,
@@ -702,14 +686,16 @@ class BottomSheetDialog<T> extends Page<T> {
           key: key,
           restorationId: restorationId,
         );
-  final bool isScrollControlled;
-  final bool isDismissible;
-  final bool enableDrag;
-  final Color backgroundColor;
-  final Color barrierColor;
-  final double elevation;
-  final ShapeBorder shape;
-  final Clip clipBehavior;
+
+  final Widget child;
+  final bool? isScrollControlled;
+  final bool? isDismissible;
+  final bool? enableDrag;
+  final Color? backgroundColor;
+  final Color? barrierColor;
+  final double? elevation;
+  final ShapeBorder? shape;
+  final Clip? clipBehavior;
 
   @override
   Route<T> createRoute(BuildContext context) {

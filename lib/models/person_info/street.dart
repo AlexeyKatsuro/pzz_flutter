@@ -2,10 +2,10 @@ import 'package:flutter/cupertino.dart';
 
 @immutable
 class Street {
+  const Street({required this.id, required this.title});
+
   final int id;
   final String title;
-
-  const Street({this.id, this.title});
 
   @override
   String toString() {

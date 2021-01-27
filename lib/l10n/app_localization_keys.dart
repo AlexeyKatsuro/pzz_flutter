@@ -1,5 +1,5 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:pzz/utils/UiMessage.dart';
+import 'package:pzz/utils/ui_message.dart';
 
 enum AppLocalizationKeys {
   appName,
@@ -55,7 +55,7 @@ enum AppLocalizationKeys {
 }
 
 extension AppLocalizationKeysExt on AppLocalizationKeys {
-  String localized(AppLocalizations localization, [Map<String, dynamic> params]) {
+  String localized(AppLocalizations localization, [Map<String, String>? params]) {
     switch (this) {
       case AppLocalizationKeys.appName:
         return localization.appName;
@@ -72,7 +72,7 @@ extension AppLocalizationKeysExt on AppLocalizationKeys {
       case AppLocalizationKeys.basket:
         return localization.basket;
       case AppLocalizationKeys.totalPrice:
-        return localization.totalPrice(params['cost']);
+        return localization.totalPrice(params!['cost']!);
       case AppLocalizationKeys.deliveryAddress:
         return localization.deliveryAddress;
       case AppLocalizationKeys.yourName:
@@ -152,15 +152,13 @@ extension AppLocalizationKeysExt on AppLocalizationKeys {
       case AppLocalizationKeys.toConfirmTotalPrice:
         return localization.toConfirmTotalPrice;
       case AppLocalizationKeys.streetHouse:
-        return localization.streetHouse(params['street'], params['house']);
+        return localization.streetHouse(params!['street']!, params['house']!);
       case AppLocalizationKeys.streetHouseFlat:
-        return localization.streetHouseFlat(params['street'], params['house'], params['flat']);
+        return localization.streetHouseFlat(params!['street']!, params['house']!, params['flat']!);
       case AppLocalizationKeys.chooseFeeSauces:
-        return localization.chooseFeeSauces(params['count']);
+        return localization.chooseFeeSauces(int.parse(params!['count']!));
     }
-    assert(false);
-    return null;
   }
 
-  UiMessage asMessage([Map<String, dynamic> param]) => UiMessage.key(this, param);
+  UiMessage asMessage([Map<String, String>? param]) => UiMessage.key(this, param);
 }

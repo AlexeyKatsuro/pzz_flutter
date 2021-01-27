@@ -8,11 +8,11 @@ import 'house.dart';
 @immutable
 class PersonalInfoState {
   const PersonalInfoState({
-    @required this.suggestedStreets,
-    @required this.totalHouses,
-    @required this.suggestedHouses,
-    @required this.formInfo,
-    @required this.formInfoErrors,
+    required this.suggestedStreets,
+    required this.totalHouses,
+    required this.suggestedHouses,
+    required this.formInfo,
+    required this.formInfoErrors,
   });
 
   const PersonalInfoState.initial({
@@ -30,11 +30,11 @@ class PersonalInfoState {
   final PersonalInfoErrors formInfoErrors;
 
   PersonalInfoState copyWith({
-    List<Street> suggestedStreets,
-    List<House> totalHouses,
-    List<House> suggestedHouses,
-    PersonalInfo formInfo,
-    PersonalInfoErrors formInfoErrors,
+    List<Street>? suggestedStreets,
+    List<House>? totalHouses,
+    List<House>? suggestedHouses,
+    PersonalInfo? formInfo,
+    PersonalInfoErrors? formInfoErrors,
   }) {
     return PersonalInfoState(
       suggestedStreets: suggestedStreets ?? this.suggestedStreets,

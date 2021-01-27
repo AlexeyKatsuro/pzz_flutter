@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: '>=2.12.0-0 <3.0.0'
 
 dependencies:
   flutter:
@@ -34,7 +34,7 @@ dependencies:
   flutter_redux: ^0.6.0
   http: ^0.12.2
   http_interceptor: ^0.3.2
-  collection: ^1.14.13
+  collection: ^1.15.0-nullsafety.4
   shared_preferences: '>=0.5.12+4 <2.0.0'
   get_it: ^4.0.4
   reselect: ^0.4.0
@@ -46,6 +46,7 @@ dependencies:
   redux_logging: ^0.4.0
 
 dev_dependencies:
+  lint: ^1.5.1
   flutter_test:
     sdk: flutter
 

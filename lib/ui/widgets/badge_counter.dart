@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
 class BadgeCounter extends StatelessWidget {
-  final int count;
-  final Widget child;
+  const BadgeCounter({required this.count, required this.child});
 
-  const BadgeCounter({this.count, this.child});
+  final int count;
+
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Stack(
       alignment: Alignment.topRight,
-      fit: StackFit.loose,
       clipBehavior: Clip.none,
       children: [
         child,
@@ -26,7 +26,7 @@ class BadgeCounter extends StatelessWidget {
             child: Text(
               '$count',
               maxLines: 1,
-              style: theme.textTheme.bodyText1.copyWith(
+              style: theme.textTheme.bodyText1!.copyWith(
                 color: theme.colorScheme.onPrimary,
               ),
             ),

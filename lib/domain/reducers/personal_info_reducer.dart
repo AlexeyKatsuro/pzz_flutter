@@ -43,7 +43,7 @@ PersonalInfoState _clearTotalHouses(PersonalInfoState state, SelectStreetAction 
 
 PersonalInfoState _setSuggestedHouses(PersonalInfoState state, PerformHouseSearchAction action) {
   List<House> suggestedHouses;
-  if (action.query == null || action.query.isEmpty) {
+  if (action.query.isEmpty) {
     suggestedHouses = state.totalHouses;
   }
   suggestedHouses = state.totalHouses.where((element) => element.title.contains(action.query)).toList(growable: false);
