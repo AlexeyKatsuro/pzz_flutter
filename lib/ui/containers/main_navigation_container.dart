@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:pzz/domain/actions/navigate_to_action.dart';
+import 'package:pzz/domain/actions/navigation_actions.dart';
 import 'package:pzz/domain/selectors/selector.dart';
 import 'package:pzz/models/app_state.dart';
 import 'package:pzz/models/navigation_stack.dart';
@@ -17,7 +17,7 @@ import 'package:pzz/utils/widgets/dialog_route.dart';
 import 'package:pzz/utils/widgets/system_ui.dart';
 import 'package:redux/redux.dart';
 
-typedef WidgetArgBuild = Widget Function(Object? args);
+typedef WidgetArgBuild<T> = Widget Function(T? args);
 
 class MainNavigationContainer extends StatelessWidget {
   final _navigatorKey = GlobalKey<NavigatorState>();
@@ -89,11 +89,11 @@ class MainNavigationContainer extends StatelessWidget {
     return pageBuilder.build(stackEntry);
   }
 
-  static MaterialPage<T> _buildBasePage<T>(NavStackEntry stackEntry, WidgetArgBuild builder) {
+  static MaterialPage<T> _buildBasePage<T>(NavStackEntry stackEntry, WidgetArgBuild<T> builder) {
     return MaterialPage(
       key: Key(stackEntry.name!) as LocalKey?,
       child: SystemUi(
-        child: builder(stackEntry.args),
+        child: builder(stackEntry.args as T),
       ),
     );
   }
@@ -165,8 +165,8 @@ class _PageBuilder<T> {
       : widgetBuilder = ((_) => NotFoundPage()),
         builder = MainNavigationContainer._buildBasePage;
 
-  final WidgetArgBuild widgetBuilder;
-  final Page<T> Function(NavStackEntry arguments, WidgetArgBuild builder) builder;
+  final WidgetArgBuild<T> widgetBuilder;
+  final Page<T> Function(NavStackEntry arguments, WidgetArgBuild<T> builder) builder;
 
   Page<T> build(NavStackEntry stackEntry) => builder(stackEntry, widgetBuilder);
 }

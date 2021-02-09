@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:pzz/domain/actions/actions.dart';
-import 'package:pzz/domain/actions/navigate_to_action.dart';
+import 'package:pzz/domain/actions/navigation_actions.dart';
 import 'package:pzz/domain/error/error_message_extractor.dart';
 import 'package:pzz/domain/error/scoped_error_actions.dart';
 import 'package:pzz/domain/person_info_form/actions/person_info_form_actions.dart';
