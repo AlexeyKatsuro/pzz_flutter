@@ -22,8 +22,8 @@ class PerformStreetSearchEpic implements EpicClass<AppState> {
             .searchStreet(action.query)
             .asStream()
             .map<dynamic>((streets) => SearchStreetResultAction(streets))
-            .onErrorResume((error) =>
-                Stream.value(SetScopedErrorAction(error: errorMessageExtractor(error as Object), scope: action.scope)))
+            .onErrorResume(
+                (error) => Stream.value(SetScopedErrorAction(error: errorMessageExtractor(error), scope: action.scope)))
             .takeUntil(actions.whereType<CancelStreetSearchAction>());
       } else {
         return Stream.value(SearchStreetResultAction([]));

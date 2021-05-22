@@ -1,9 +1,5 @@
-// @dart=2.9
-import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pzz/app.dart';
-import 'package:pzz/domain/middleware/app_epics.dart';
 import 'package:pzz/domain/middleware/middlewares.dart';
 import 'package:pzz/domain/reducers/app_state_reduser.dart';
 import 'package:pzz/domain/repository/preference_repository.dart';
@@ -14,13 +10,15 @@ import 'package:redux/redux.dart';
 import 'package:redux_epics/redux_epics.dart';
 import 'package:redux_logging/redux_logging.dart';
 
-Future<void> main() async {
+import 'domain/middleware/epics.dart';
+
+// ignore: avoid_void_async
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  /// Print stacktrace for widget exceptions.
+  FlutterError.onError = (details) => FlutterError.dumpErrorToConsole(details, forceReport: true);
   await initDependencies();
-  FlutterError.onError = (FlutterErrorDetails details) {
-    FlutterError.dumpErrorToConsole(details);
-    if (kReleaseMode) exit(1);
-  };
 
   final pzzRepository = getIt<PzzRepository>();
   final preferenceRepository = getIt<PreferenceRepository>();

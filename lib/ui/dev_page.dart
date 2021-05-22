@@ -30,7 +30,7 @@ class DevPage extends StatelessWidget {
           for (final screen in viewModel.navigationStack.backStack)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Text(screen.name!),
+              child: Text(screen.name),
             ),
           for (final locale in AppLocalizations.supportedLocales)
             RadioListTile(

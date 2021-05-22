@@ -10,7 +10,7 @@ UiMessage errorMessageExtractor(dynamic error) {
   if (error is PzzServerError) {
     return error.message;
   } else if (error is SocketException) {
-    return const UiMessage.key(AppLocalizationKeys.errorConnection);
+    return UiMessage.key(AppLocalizationKeys.errorConnection);
   }
   // Add new check for other `Exception` that can be happens in domain layer
   // and which can be mapped to user friendly string messages
@@ -19,5 +19,5 @@ UiMessage errorMessageExtractor(dynamic error) {
     // for debug return full data about unchecked error
     return UiMessage.text(error.toString());
   }
-  return const UiMessage.text('Unexpected error');
+  return UiMessage.text('Unexpected error');
 }

@@ -17,7 +17,13 @@ class SessionBearerImpl extends SessionBearer {
   String? get token => preferences.getString(_token_key);
 
   @override
-  set token(String? value) => preferences.setString(_token_key, value);
+  set token(String? value) {
+    if (value != null) {
+      preferences.setString(_token_key, value);
+    } else {
+      preferences.remove(_token_key);
+    }
+  }
 
   @override
   bool isTokenValid() => token != null && token!.isNotEmpty;

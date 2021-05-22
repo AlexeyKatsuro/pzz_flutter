@@ -25,45 +25,45 @@ import 'package:pzz/utils/house_comparator.dart';
 class PzzNetService {
   PzzNetService(this.client);
 
-  final baseUrl = 'https://pzz.by/api/v1/';
+  final baseUrl = Uri.parse('https://pzz.by/api/v1/');
 
   final http.Client client;
 
   Future<List<Pizza>> loadPizzas() async {
     const path = 'pizzas?load=ingredients,filters&filter=meal_only:0&order=position:asc';
-    return client.get(baseUrl + path).handleResponse(_pizzaResponseMapper);
+    return client.get(baseUrl.resolve(path)).handleResponse(_pizzaResponseMapper);
   }
 
   Future<List<Sauce>> loadSauces() {
     const path = 'sauces?order=title:asc';
-    return client.get(baseUrl + path).handleResponse(_sauceResponseMapper);
+    return client.get(baseUrl.resolve(path)).handleResponse(_sauceResponseMapper);
   }
 
   Future<Basket> loadBasket() async {
     const path = 'basket';
-    return client.get(baseUrl + path).handleResponse(_basketResponseMapper);
+    return client.get(baseUrl.resolve(path)).handleResponse(_basketResponseMapper);
   }
 
   Future<Basket> addProductToBasket(Product product) async {
     const path = 'basket/add-item';
     final formData = _makeProductFormData(product);
-    return client.post(baseUrl + path, body: formData).handleResponse(_basketResponseMapper);
+    return client.post(baseUrl.resolve(path), body: formData).handleResponse(_basketResponseMapper);
   }
 
   Future<Basket> removePizzaFromBasket(Product product) async {
     const path = 'basket/remove-item';
     final formData = _makeProductFormData(product);
-    return client.post(baseUrl + path, body: formData).handleResponse(_basketResponseMapper);
+    return client.post(baseUrl.resolve(path), body: formData).handleResponse(_basketResponseMapper);
   }
 
   Future<List<Street>> searchStreet(String query) async {
     final path = Uri.encodeFull('streets?order=title:asc&search=title:$query');
-    return client.get(baseUrl + path).handleResponse(_searchedStreetResponseMapper);
+    return client.get(baseUrl.resolve(path)).handleResponse(_searchedStreetResponseMapper);
   }
 
   Future<List<House>> loadHousesByStreet(int streetId) async {
     final path = Uri.encodeFull('streets/$streetId?order=title:asc&load=region.pizzeria');
-    return client.get(baseUrl + path).handleResponse(_houseResponseMapper);
+    return client.get(baseUrl.resolve(path)).handleResponse(_houseResponseMapper);
   }
 
   Future<Basket> updateAddress(PersonalInfo personalInfo) async {
@@ -71,7 +71,7 @@ class PzzNetService {
     const path = 'basket/update-address';
     return client
         .post(
-          baseUrl + path,
+          baseUrl.resolve(path),
           body: _makePersonalInfoFormData(personalInfo),
         )
         .handleResponse(_basketResponseMapper);
@@ -81,7 +81,7 @@ class PzzNetService {
     await Future.delayed(const Duration(seconds: 3));
     return const Basket.initial();
     // final path = 'basket/save';
-    // return client.post(baseUrl + path).handleResponse(_basketResponseMapper);
+    // return client.post(baseUrl.resolve(path)).handleResponse(_basketResponseMapper);
   }
 
   List<Pizza> _pizzaResponseMapper(dynamic data) {

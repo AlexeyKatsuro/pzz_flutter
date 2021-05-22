@@ -1,46 +1,88 @@
-import 'package:pzz/l10n/app_localization_keys.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class UiMessage {
-  const UiMessage.empty()
-      : _key = null,
-        _text = null,
-        _params = null;
+import '../l10n/app_localization_keys.dart';
 
-  const UiMessage.key(AppLocalizationKeys kye, [Map<String, String>? _params])
-      : _key = kye,
-        _text = null,
-        _params = _params;
+/// Class for representation of textual content that should be display on screen.
+///
+/// Case for: user hint/error messages that will be received from BackEnd or assigned into redux state by reducers.
+///
+/// Motivation - to have control over textual data that should be (or not) localized during showing on screen for user.
+/// Also to have ability to store raw (not localized) text into store, this allows avoid storing of irrelevant text
+/// if application locale will change.
+///
+/// Uncovered case: plurals([plural]), complex TKeys with context([TUtils.trWithCtx]). If you need this, you will have
+/// to do some extra work and create these implementations following the example of the existing ones.
+abstract class UiMessage {
+  const UiMessage();
 
-  const UiMessage.text(String? text)
-      : _key = null,
-        _text = text,
-        _params = null;
+  factory UiMessage.empty() => const UiMessageEmpty();
 
-  final AppLocalizationKeys? _key;
-  final Map<String, String>? _params;
-  final String? _text;
+  factory UiMessage.key(AppLocalizationKeys? kye, [Map<String, String>? params]) => UiMessageKey(kye, params);
 
-  bool get isNotEmpty => _key != null || _text != null;
+  factory UiMessage.text(String? text) => UiMessageText(text ?? '');
 
-  bool get isEmpty => _key == null && _text == null;
+  /// Return true if raw textual data is not null and not empty.
+  bool get isNotEmpty;
 
-  @override
-  String toString() {
-    return 'UiMessage{_key: $_key, _params: $_params, _text: $_text}';
-  }
+  /// Return true if textual data is null or empty.
+  bool get isEmpty;
+
+  /// Return ''(emptyString) if [isEmpty] == true otherwise localized text.
+  String localize(AppLocalizations localization);
+
+  /// Return null if [isEmpty] == true otherwise localized text.
+  String? tryLocalize(AppLocalizations localization) => isNotEmpty ? localize(localization) : null;
 }
 
-extension UiMessageExt on UiMessage {
-  String localize(AppLocalizations localizations) {
-    if (isEmpty) return '';
+class UiMessageText extends UiMessage {
+  const UiMessageText(this.text);
 
-    return _key?.localized(localizations, _params) ?? _text ?? '';
-  }
+  final String text;
 
-  String? localizeOrNull(AppLocalizations localizations) {
-    if (isEmpty) return null;
+  @override
+  bool get isEmpty => text.isEmpty;
 
-    return _key?.localized(localizations, _params) ?? _text;
-  }
+  @override
+  bool get isNotEmpty => !isEmpty;
+
+  @override
+  String localize(AppLocalizations localization) => text;
+
+  @override
+  String toString() => 'UiMessageText{text: $text}';
+}
+
+class UiMessageKey extends UiMessage {
+  const UiMessageKey(this.key, [this.params]);
+
+  final AppLocalizationKeys? key;
+  final Map<String, String>? params;
+
+  @override
+  bool get isEmpty => key == null;
+
+  @override
+  bool get isNotEmpty => key != null;
+
+  @override
+  String localize(AppLocalizations localization) => key!.localized(localization, params);
+
+  @override
+  String toString() => 'UiMessageKey{key: $key, params: $params}';
+}
+
+class UiMessageEmpty extends UiMessage {
+  const UiMessageEmpty();
+
+  @override
+  bool get isEmpty => true;
+
+  @override
+  bool get isNotEmpty => false;
+
+  @override
+  String localize(AppLocalizations localization) => '';
+
+  @override
+  String toString() => 'UiMessageEmpty{}';
 }

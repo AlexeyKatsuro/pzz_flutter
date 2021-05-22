@@ -19,9 +19,9 @@ class NavigationStack {
 }
 
 class NavStackEntry {
-  const NavStackEntry({this.name, this.args});
+  const NavStackEntry({required this.name, this.args});
 
-  final String? name;
+  final String name;
 
   final Object? args;
 }
