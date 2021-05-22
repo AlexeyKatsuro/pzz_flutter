@@ -5,11 +5,11 @@ import '../pizza.dart';
 class PizzaItemResponseMapper {
   static Pizza map(dynamic from) {
     return Pizza(
-      id: from['id'],
-      name: from['title'],
-      description: from['anonce'],
-      thumbnail: from['photo_small'],
-      photo: from['photo1'],
+      id: from['id'] as int,
+      name: from['title'] as String,
+      description: from['anonce'] as String,
+      thumbnail: from['photo_small'] as String,
+      photo: from['photo1'] as String,
       variants: _mapVariants(from),
     );
   }
@@ -24,7 +24,7 @@ class PizzaItemResponseMapper {
 
   static PizzaVariant _mapVariantsData(from, ProductSize size) => PizzaVariant(
       size: size,
-      weight: from['${size.name}_weight'],
-      diameter: from['${size.name}_diameter'],
-      price: (from['${size.name}_price'] ?? 0) / 10000);
+      weight: from['${size.name}_weight'] as String,
+      diameter: from['${size.name}_diameter'] as String,
+      price: (from['${size.name}_price'] as int? ?? 0) / 10000);
 }

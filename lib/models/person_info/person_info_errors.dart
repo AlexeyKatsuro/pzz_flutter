@@ -1,15 +1,10 @@
 import 'package:flutter/foundation.dart';
-import 'package:pzz/utils/UiMessage.dart';
+import 'package:pzz/utils/ui_message.dart';
 
 import '../../utils/UiMessage.dart';
 
 @immutable
 class PersonalInfoErrors {
-  final UiMessage phone;
-  final UiMessage street;
-  final UiMessage house;
-  final UiMessage paymentWay;
-
   const PersonalInfoErrors({
     this.phone = const UiMessageEmpty(),
     this.street =const UiMessageEmpty(),
@@ -17,11 +12,16 @@ class PersonalInfoErrors {
     this.paymentWay =const UiMessageEmpty(),
   });
 
+  final UiMessage phone;
+  final UiMessage street;
+  final UiMessage house;
+  final UiMessage paymentWay;
+
   PersonalInfoErrors copyWith({
-    UiMessage phone,
-    UiMessage street,
-    UiMessage house,
-    UiMessage paymentWay,
+    UiMessage? phone,
+    UiMessage? street,
+    UiMessage? house,
+    UiMessage? paymentWay,
   }) {
     return PersonalInfoErrors(
       phone: phone ?? this.phone,

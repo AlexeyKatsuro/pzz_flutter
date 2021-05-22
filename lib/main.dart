@@ -15,6 +15,7 @@ import 'package:redux_logging/redux_logging.dart';
 
 import 'domain/middleware/epics.dart';
 
+// ignore: avoid_void_async
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initDependencies();
@@ -36,7 +37,7 @@ void main() async {
     PzzApp(
       store: Store<AppState>(
         appReducer,
-        initialState: AppState.initial(),
+        initialState: const AppState.initial(),
         middleware: middleware,
       ),
     ),

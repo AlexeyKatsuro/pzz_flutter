@@ -32,7 +32,7 @@ bool _confirmLoadingReducer(bool previousValue, dynamic action) {
   }
 }
 
-Locale _localeReducer(Locale locale, dynamic action) {
+Locale? _localeReducer(Locale? locale, dynamic action) {
   if (action is ChangeLocaleAction) {
     return action.locale;
   } else {

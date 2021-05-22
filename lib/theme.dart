@@ -10,7 +10,7 @@ class PzzAppTheme {
   //static const _brand_blue = Colors.green;
   //static const _brand_blue_variant = Color(0xFFA5D6A7);
   static const _white_sheet = Color(0xFFF6F6F6);
-  static const _dark_sheet = Color(0xFF121212);
+  //static const _dark_sheet = Color(0xFF121212);
 
   static final pzzLightTheme = themeData(_pzzLightColorScheme, _textTheme);
   static final pzzDarkTheme = themeData(_pzzDarkColorScheme, _textTheme);
@@ -59,7 +59,7 @@ class PzzAppTheme {
         bottomSheetTheme: BottomSheetThemeData(
           elevation: 16,
           backgroundColor: colorScheme.surface,
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
               top: Radius.circular(10),
             ),
@@ -76,7 +76,8 @@ class PzzAppTheme {
 
   static AppBarTheme _buildAppBarTheme(TextTheme textTheme, IconThemeData iconTheme, ColorScheme colorScheme) {
     return AppBarTheme(
-      textTheme: textTheme.copyWith(headline6: textTheme.headline6.copyWith(color: colorScheme.primary, inherit: true)),
+      textTheme:
+          textTheme.copyWith(headline6: textTheme.headline6!.copyWith(color: colorScheme.primary, inherit: true)),
       color: colorScheme.surface,
       brightness: colorScheme.brightness,
       iconTheme: iconTheme,
@@ -106,7 +107,6 @@ class PzzAppTheme {
     primaryVariant: _brand_orange_variant,
     secondary: _brand_blue,
     secondaryVariant: _brand_blue_variant,
-    surface: Colors.white,
     onSecondary: Colors.white,
     background: _white_sheet,
   );
@@ -116,7 +116,6 @@ class PzzAppTheme {
     primaryVariant: _brand_orange_variant,
     secondary: _brand_blue_variant,
     secondaryVariant: _brand_blue,
-    surface: _dark_sheet,
     background: Colors.black,
   );
 

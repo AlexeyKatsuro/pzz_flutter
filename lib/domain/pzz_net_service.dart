@@ -22,65 +22,65 @@ import 'package:pzz/models/sauce.dart';
 import 'package:pzz/utils/house_comparator.dart';
 
 class PzzNetService {
-  final baseUrl = 'https://pzz.by/api/v1/';
-
   PzzNetService(this.client);
+
+  final baseUrl = Uri.parse('https://pzz.by/api/v1/');
 
   final http.Client client;
 
   Future<List<Pizza>> loadPizzas() async {
-    final path = 'pizzas?load=ingredients,filters&filter=meal_only:0&order=position:asc';
-    return client.get(baseUrl + path).handleResponse(_pizzaResponseMapper);
+    const path = 'pizzas?load=ingredients,filters&filter=meal_only:0&order=position:asc';
+    return client.get(baseUrl.resolve(path)).handleResponse(_pizzaResponseMapper);
   }
 
   Future<List<Sauce>> loadSauces() {
-    final path = 'sauces?order=title:asc';
-    return client.get(baseUrl + path).handleResponse(_sauceResponseMapper);
+    const path = 'sauces?order=title:asc';
+    return client.get(baseUrl.resolve(path)).handleResponse(_sauceResponseMapper);
   }
 
   Future<Basket> loadBasket() async {
-    final path = 'basket';
-    return client.get(baseUrl + path).handleResponse(_basketResponseMapper);
+    const path = 'basket';
+    return client.get(baseUrl.resolve(path)).handleResponse(_basketResponseMapper);
   }
 
   Future<Basket> addProductToBasket(Product product) async {
-    final path = 'basket/add-item';
+    const path = 'basket/add-item';
     final formData = _makeProductFormData(product);
-    return client.post(baseUrl + path, body: formData).handleResponse(_basketResponseMapper);
+    return client.post(baseUrl.resolve(path), body: formData).handleResponse(_basketResponseMapper);
   }
 
   Future<Basket> removePizzaFromBasket(Product product) async {
-    final path = 'basket/remove-item';
+    const path = 'basket/remove-item';
     final formData = _makeProductFormData(product);
-    return client.post(baseUrl + path, body: formData).handleResponse(_basketResponseMapper);
+    return client.post(baseUrl.resolve(path), body: formData).handleResponse(_basketResponseMapper);
   }
 
   Future<List<Street>> searchStreet(String query) async {
     final path = Uri.encodeFull('streets?order=title:asc&search=title:$query');
-    return client.get(baseUrl + path).handleResponse(_searchedStreetResponseMapper);
+    return client.get(baseUrl.resolve(path)).handleResponse(_searchedStreetResponseMapper);
   }
 
   Future<List<House>> loadHousesByStreet(int streetId) async {
     final path = Uri.encodeFull('streets/$streetId?order=title:asc&load=region.pizzeria');
-    return client.get(baseUrl + path).handleResponse(_houseResponseMapper);
+    return client.get(baseUrl.resolve(path)).handleResponse(_houseResponseMapper);
   }
 
   Future<Basket> updateAddress(PersonalInfo personalInfo) async {
-    await Future.delayed(Duration(seconds: 1));
-    final path = 'basket/update-address';
+    await Future.delayed(const Duration(seconds: 1));
+    const path = 'basket/update-address';
     return client
         .post(
-          baseUrl + path,
+          baseUrl.resolve(path),
           body: _makePersonalInfoFormData(personalInfo),
         )
         .handleResponse(_basketResponseMapper);
   }
 
   Future<Basket> placeOrder() async {
-    await Future.delayed(Duration(seconds: 3));
-    return Basket.initial();
+    await Future.delayed(const Duration(seconds: 3));
+    return const Basket.initial();
     // final path = 'basket/save';
-    // return client.post(baseUrl + path).handleResponse(_basketResponseMapper);
+    // return client.post(baseUrl.resolve(path)).handleResponse(_basketResponseMapper);
   }
 
   List<Pizza> _pizzaResponseMapper(dynamic data) {
@@ -90,8 +90,8 @@ class PzzNetService {
   List<Street> _searchedStreetResponseMapper(dynamic data) {
     return (data as Iterable).map((item) {
       return Street(
-        id: item['id'],
-        title: item['title'],
+        id: item['id'] as int,
+        title: item['title'] as String,
       );
     }).toList(growable: false);
   }
@@ -99,34 +99,40 @@ class PzzNetService {
   List<House> _houseResponseMapper(dynamic data) {
     return (data as Iterable).map((item) {
       return House(
-        id: item['id'],
-        title: item['title'],
+        id: item['id'] as int,
+        title: item['title'] as String,
       );
     }).toList(growable: false)
       ..sort(compareHouse);
   }
 
   List<Sauce> _sauceResponseMapper(dynamic data) {
-    return (data as Iterable).map((e) => SauceDto.fromJson(e)).map(SauceItemResponseMapper.map).toList(growable: false);
+    return (data as Iterable)
+        .map((e) => SauceDto.fromJson(e as Map<String, dynamic>))
+        .map(SauceItemResponseMapper.map)
+        .toList(growable: false);
   }
 
   Basket _basketResponseMapper(dynamic data) {
-    final basketDto = BasketDto.fromJson(data);
+    final basketDto = BasketDto.fromJson(data as Map<String, dynamic>);
     final products = basketDto.items.map(BasketItemResponseMapper.map).toList(growable: false);
     return Basket(
       items: products,
-      totalAmount: basketDto.total / 10000,
-      address: AddressResponseMapper.map(basketDto.address),
+      totalAmount: basketDto.total! / 10000,
+      address: AddressResponseMapper.map(basketDto.address!),
     );
   }
 
   Map<String, dynamic> _makeProductFormData(Product product) {
     // CRUTCH for back end, this props non nullable only for pizzas and hardcoded as 'thin'
-    final String dough = product.type == ProductType.pizza ? 'thin' : null;
-    return {
+    final String? dough = product.type == ProductType.pizza ? 'thin' : null;
+    return <String, String>{
       'id': '${product.id}',
-      'type': '${product.type.name}',
+      'type': product.type.name,
+      // if it null send 'null' string
+      // ignore: unnecessary_string_interpolations
       'size': '${product.size?.name}',
+      // ignore: unnecessary_string_interpolations
       'dough': '$dough',
     };
   }
@@ -149,27 +155,27 @@ Map<String, dynamic> _makePersonalInfoFormData(PersonalInfo personalInfo) {
     'no_contact_delivery': '0',
     'street': personalInfo.street,
     'house': personalInfo.house,
-    'payment': personalInfo.paymentWay.name
+    'payment': personalInfo.paymentWay!.name
   };
 }
 
 extension on Future<http.Response> {
   Future<T> handleResponse<T>(T Function(dynamic data) mapper) {
     return then((response) {
-      final body = jsonDecode(response.body) as Map<String, dynamic>;
+      final body = jsonDecode(response.body) as Map<String, dynamic>?;
       if (response.statusCode == 200) {
         // I'm not sure if the error can be true with code 200
         // But for a restful sleep I will add:)
-        if (body['error'] == false) {
+        if (body!['error'] == false) {
           final data = body['response']['data'];
           return mapper(data);
         } else {
           throw PzzServerError.fromJson(body);
         }
       } else {
-        throw PzzServerError.fromJson(body);
+        throw PzzServerError.fromJson(body!);
       }
-    }).catchError((ex, StackTrace stackTrace) {
+    }).catchError((Object ex, StackTrace stackTrace) {
       debugPrint(ex.toString());
       debugPrintStack(stackTrace: stackTrace);
       throw PzzServerError(errorMessageExtractor(ex));

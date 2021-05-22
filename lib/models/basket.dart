@@ -5,9 +5,9 @@ import 'package:pzz/models/basket_product.dart';
 @immutable
 class Basket {
   const Basket({
-    @required this.items,
-    @required this.totalAmount,
-    @required this.address,
+    required this.items,
+    required this.totalAmount,
+    required this.address,
   });
 
   const Basket.initial({

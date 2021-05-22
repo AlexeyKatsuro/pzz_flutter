@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pzz/models/basket_product.dart';
 import 'package:pzz/models/combined_basket_product.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/ui/widgets/counter.dart';
 import 'package:pzz/utils/extensions/enum_localization_ext.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BasketCombinedItem extends StatelessWidget {
+  const BasketCombinedItem({
+    required this.combinedProduct,
+    required this.onAddClick,
+    required this.onRemoveClick,
+  });
+
   final CombinedBasketProduct combinedProduct;
   final Function(BasketProduct) onAddClick;
   final Function(BasketProduct) onRemoveClick;
-
-  BasketCombinedItem({
-    @required this.combinedProduct,
-    @required this.onAddClick,
-    @required this.onRemoveClick,
-  }) : assert(combinedProduct != null);
 
   @override
   Widget build(BuildContext context) {
@@ -26,12 +26,12 @@ class BasketCombinedItem extends StatelessWidget {
       children: [
         Text(
           combinedProduct.title,
-          style: theme.textTheme.headline6.copyWith(
+          style: theme.textTheme.headline6!.copyWith(
             color: theme.primaryColor,
           ),
         ),
-        for (ProductSize size in combinedProduct.availableSizes) ...[
-          SizedBox(
+        for (ProductSize? size in combinedProduct.availableSizes) ...[
+          const SizedBox(
             height: 8,
           ),
           Row(
@@ -51,7 +51,7 @@ class BasketCombinedItem extends StatelessWidget {
                     left: 8.0,
                   ),
                   child: Text(
-                    size.localized(localizations),
+                    size.localized(localizations!),
                     style: Theme.of(context).textTheme.bodyText2,
                   ),
                 ),

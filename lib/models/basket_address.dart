@@ -4,16 +4,16 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 @immutable
 class BasketAddress {
   const BasketAddress({
-    @required this.streetId,
-    @required this.houseId,
-    @required this.name,
-    @required this.phone,
-    @required this.street,
-    @required this.house,
-    @required this.flat,
-    @required this.entrance,
-    @required this.floor,
-    @required this.intercom,
+    required this.streetId,
+    required this.houseId,
+    required this.name,
+    required this.phone,
+    required this.street,
+    required this.house,
+    required this.flat,
+    required this.entrance,
+    required this.floor,
+    required this.intercom,
   });
 
   const BasketAddress.initial({
@@ -52,7 +52,7 @@ class BasketAddress {
 
 extension BasketAddressExt on BasketAddress {
   String makeFullAddress(AppLocalizations localizations) {
-    if (flat != null && flat.isNotEmpty) {
+    if (flat.isNotEmpty) {
       return localizations.streetHouseFlat(street, house, flat);
     } else {
       return localizations.streetHouse(street, house);

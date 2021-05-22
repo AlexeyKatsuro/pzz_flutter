@@ -2,22 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:pzz/res/constants.dart';
 
 class LoadingSwitcher extends StatelessWidget {
-  final bool isLoading;
-  final Duration duration;
-  final Color loaderColor;
-  final Widget child;
-
   const LoadingSwitcher({
-    Key key,
-    @required this.isLoading,
+    Key? key,
+    required this.isLoading,
     this.duration,
     this.loaderColor,
-    @required this.child,
+    required this.child,
   }) : super(key: key);
+
+  final bool isLoading;
+  final Duration? duration;
+  final Color? loaderColor;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
+      duration: duration ?? kDurationFast,
       child: isLoading
           ? SizedBox(
               width: 24,
@@ -27,7 +28,6 @@ class LoadingSwitcher extends StatelessWidget {
                 valueColor: AlwaysStoppedAnimation(loaderColor ?? Theme.of(context).colorScheme.onPrimary),
               ))
           : child,
-      duration: duration ?? kDurationFast,
     );
   }
 }

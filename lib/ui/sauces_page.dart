@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:pzz/domain/actions/actions.dart';
-import 'package:pzz/domain/actions/navigate_to_action.dart';
+import 'package:pzz/domain/actions/navigation_actions.dart';
 import 'package:pzz/domain/selectors/selector.dart';
 import 'package:pzz/models/app_state.dart';
 import 'package:pzz/models/product.dart';
@@ -31,7 +31,7 @@ class SaucesPage extends StatelessWidget implements Scoped {
   }
 
   Widget _build(BuildContext context, _ViewModel viewModel) {
-    final localizations = AppLocalizations.of(context);
+    final localizations = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations.sauces),
@@ -68,9 +68,9 @@ class SaucesPage extends StatelessWidget implements Scoped {
 }
 
 class _HeaderFreeCountSauces extends StatefulWidget {
-  final int freeSauceCounts;
+  const _HeaderFreeCountSauces({Key? key, required this.freeSauceCounts}) : super(key: key);
 
-  const _HeaderFreeCountSauces({Key key, @required this.freeSauceCounts}) : super(key: key);
+  final int freeSauceCounts;
 
   @override
   _HeaderFreeCountSaucesState createState() => _HeaderFreeCountSaucesState();
@@ -89,33 +89,24 @@ class _HeaderFreeCountSaucesState extends State<_HeaderFreeCountSauces> with Sin
           ? Container(
               padding: const EdgeInsets.fromLTRB(0, 12, 0, 8),
               child: Text(
-                localizations.chooseFeeSauces(widget.freeSauceCounts),
+                localizations!.chooseFeeSauces(widget.freeSauceCounts),
                 style: Theme.of(context).textTheme.headline6,
               ),
             )
-          : SizedBox(),
+          : const SizedBox(),
     );
   }
 }
 
 class _ViewModel {
   const _ViewModel({
-    @required this.sauces,
-    @required this.saucesCountMap,
-    @required this.freeSauceCounts,
-    @required this.onAddItemClick,
-    @required this.onRemoveItemClick,
-    @required this.onDoneClick,
-  }) : assert(sauces != null);
-
-  final int freeSauceCounts;
-  final List<Sauce> sauces;
-  final Map<int, int> saucesCountMap;
-  final ValueSetter<Product> onAddItemClick;
-  final ValueSetter<Product> onRemoveItemClick;
-  final VoidCallback onDoneClick;
-
-  bool get hasFreeSauce => freeSauceCounts != 0;
+    required this.sauces,
+    required this.saucesCountMap,
+    required this.freeSauceCounts,
+    required this.onAddItemClick,
+    required this.onRemoveItemClick,
+    required this.onDoneClick,
+  });
 
   factory _ViewModel.fromStore(Store<AppState> store, String scope) {
     return _ViewModel(
@@ -127,4 +118,13 @@ class _ViewModel {
       onDoneClick: () => store.dispatch(NavigateAction.pop()),
     );
   }
+
+  final int freeSauceCounts;
+  final List<Sauce> sauces;
+  final Map<int, int> saucesCountMap;
+  final ValueSetter<Product> onAddItemClick;
+  final ValueSetter<Product> onRemoveItemClick;
+  final VoidCallback onDoneClick;
+
+  bool get hasFreeSauce => freeSauceCounts != 0;
 }

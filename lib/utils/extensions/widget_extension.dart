@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 
 extension ListWidgetExt on List<Widget> {
   List<Widget> divideChildren({
-    @required Widget divider,
+    required Widget divider,
     bool surround = false,
   }) {
     final children = this;
-    if (children == null || children.isEmpty) return [];
-    if (divider == null) return children;
+    if (children.isEmpty) return [];
 
     final listBuilder = <Widget>[];
     if (surround) listBuilder.add(divider);
@@ -27,7 +26,7 @@ extension ButtonStyleExt on ButtonStyle {
   ///
   /// In other words, this ButtonStyle is used to fill in unspecified (null) fields
   /// in [other].
-  ButtonStyle fill(ButtonStyle other) {
+  ButtonStyle fill(ButtonStyle? other) {
     if (other == null) return this;
     return other.merge(this);
   }

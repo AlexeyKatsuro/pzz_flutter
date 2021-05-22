@@ -3,20 +3,6 @@ import 'package:pzz/models/payment_way.dart';
 
 @immutable
 class PersonalInfo {
-  final String name;
-  final String phone;
-  final int streetId;
-  final int houseId;
-  final String street;
-  final String house;
-  final String flat;
-  final String entrance;
-  final String floor;
-  final String intercom;
-  final String comment;
-  final PaymentWay paymentWay;
-  final String renting;
-
   const PersonalInfo({
     this.name = '',
     this.phone = '',
@@ -33,20 +19,34 @@ class PersonalInfo {
     this.renting = '',
   });
 
+  final String name;
+  final String phone;
+  final int streetId;
+  final int houseId;
+  final String street;
+  final String house;
+  final String flat;
+  final String entrance;
+  final String floor;
+  final String intercom;
+  final String comment;
+  final PaymentWay? paymentWay;
+  final String renting;
+
   PersonalInfo copyWith({
-    String name,
-    String phone,
-    int streetId,
-    int houseId,
-    String street,
-    String house,
-    String flat,
-    String entrance,
-    String floor,
-    String intercom,
-    String comment,
-    PaymentWay paymentWay,
-    String renting,
+    String? name,
+    String? phone,
+    int? streetId,
+    int? houseId,
+    String? street,
+    String? house,
+    String? flat,
+    String? entrance,
+    String? floor,
+    String? intercom,
+    String? comment,
+    PaymentWay? paymentWay,
+    String? renting,
   }) {
     return PersonalInfo(
       name: name ?? this.name,

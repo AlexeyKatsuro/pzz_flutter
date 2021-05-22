@@ -47,18 +47,12 @@ class ConfirmPlaceOrderContainer extends StatelessWidget implements Scoped {
 
 class _ViewModel {
   _ViewModel({
-    @required this.isLoading,
-    @required this.totalPriceText,
-    @required this.address,
-    @required this.products,
-    @required this.onConfirm,
+    required this.isLoading,
+    required this.totalPriceText,
+    required this.address,
+    required this.products,
+    required this.onConfirm,
   });
-
-  final bool isLoading;
-  final String totalPriceText;
-  final BasketAddress address;
-  final List<BasketProduct> products;
-  final VoidCallback onConfirm;
 
   factory _ViewModel.fromStore(Store<AppState> store, String scope) {
     return _ViewModel(
@@ -71,4 +65,10 @@ class _ViewModel {
       },
     );
   }
+
+  final bool isLoading;
+  final String totalPriceText;
+  final BasketAddress address;
+  final List<BasketProduct> products;
+  final VoidCallback onConfirm;
 }

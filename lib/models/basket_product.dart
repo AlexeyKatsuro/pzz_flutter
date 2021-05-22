@@ -3,20 +3,19 @@ import 'package:pzz/models/pizza.dart';
 
 @immutable
 class BasketProduct {
+  const BasketProduct({
+    required this.id,
+    required this.type,
+    required this.title,
+    this.size,
+    required this.price,
+  });
+
   final int id;
   final String title;
   final ProductType type;
-  final ProductSize size;
+  final ProductSize? size;
   final num price;
-
-  const BasketProduct({
-    @required this.id,
-    @required this.type,
-    @required this.title,
-    this.size,
-    this.price,
-  })  : assert(id != null),
-        assert(type != null);
 
   String get priceText => '${price.toStringAsFixed(2)} р.';
 

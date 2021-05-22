@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:pzz/domain/actions/navigate_to_action.dart';
+import 'package:pzz/domain/actions/navigation_actions.dart';
 import 'package:pzz/domain/selectors/selector.dart';
 import 'package:pzz/models/app_state.dart';
 import 'package:pzz/models/navigation_stack.dart';
@@ -17,7 +17,7 @@ import 'package:pzz/utils/widgets/dialog_route.dart';
 import 'package:pzz/utils/widgets/system_ui.dart';
 import 'package:redux/redux.dart';
 
-typedef WidgetArgBuild = Widget Function(Object args);
+typedef WidgetArgBuild<T> = Widget Function(T? args);
 
 class MainNavigationContainer extends StatelessWidget {
   final _navigatorKey = GlobalKey<NavigatorState>();
@@ -41,11 +41,11 @@ class MainNavigationContainer extends StatelessWidget {
     ),
     Routes.successOrderPlacedDialog: _PageBuilder(
       widgetBuilder: (_) => AlertDialog(
-        title: Text('Text'),
+        title: const Text('Text'),
         actions: [
           TextButton(
-            child: Text('OK'),
             onPressed: () {},
+            child: const Text('OK'),
           )
         ],
       ),
@@ -70,7 +70,7 @@ class MainNavigationContainer extends StatelessWidget {
   Widget _build(BuildContext context, _ViewModel viewModel) {
     return WillPopScope(
       onWillPop: () async {
-        return !await _navigatorKey.currentState.maybePop();
+        return !await _navigatorKey.currentState!.maybePop();
       },
       child: Navigator(
         key: _navigatorKey,
@@ -85,22 +85,22 @@ class MainNavigationContainer extends StatelessWidget {
   }
 
   Page buildPage(NavStackEntry stackEntry) {
-    final _PageBuilder pageBuilder = routes[stackEntry.name] ?? _PageBuilder.unknown();
+    final _PageBuilder pageBuilder = routes[stackEntry.name!] ?? _PageBuilder.unknown();
     return pageBuilder.build(stackEntry);
   }
 
-  static MaterialPage<T> _buildBasePage<T>(NavStackEntry stackEntry, WidgetArgBuild builder) {
+  static MaterialPage<T> _buildBasePage<T>(NavStackEntry stackEntry, WidgetArgBuild<T> builder) {
     return MaterialPage(
-      key: Key(stackEntry.name),
+      key: Key(stackEntry.name!) as LocalKey?,
       child: SystemUi(
-        child: builder(stackEntry.args),
+        child: builder(stackEntry.args as T),
       ),
     );
   }
 
   static MaterialDialogPage<T> _buildBaseDialog<T>(NavStackEntry stackEntry, WidgetArgBuild builder) {
     return MaterialDialogPage<T>(
-      key: Key(stackEntry.name),
+      key: Key(stackEntry.name!) as LocalKey?,
       name: stackEntry.name,
       arguments: stackEntry.args,
       child: SystemUi(
@@ -116,7 +116,7 @@ class MainNavigationContainer extends StatelessWidget {
 
   static BottomSheetDialog<T> buildScrollBottomSheetDialog<T>(NavStackEntry stackEntry, WidgetArgBuild builder) {
     return BottomSheetDialog<T>(
-      key: Key(stackEntry.name),
+      key: Key(stackEntry.name!) as LocalKey?,
       name: stackEntry.name,
       arguments: stackEntry.args,
       isScrollControlled: true,
@@ -132,12 +132,9 @@ class MainNavigationContainer extends StatelessWidget {
 
 class _ViewModel {
   _ViewModel({
-    @required this.navigationStack,
-    @required this.onPopPage,
+    required this.navigationStack,
+    required this.onPopPage,
   });
-
-  final NavigationStack navigationStack;
-  final VoidCallback onPopPage;
 
   factory _ViewModel.fromStore(Store<AppState> store) {
     return _ViewModel(
@@ -145,6 +142,9 @@ class _ViewModel {
       onPopPage: () => store.dispatch(NavigateAction.pop()),
     );
   }
+
+  final NavigationStack navigationStack;
+  final VoidCallback onPopPage;
 
   @override
   bool operator ==(Object other) =>
@@ -156,17 +156,17 @@ class _ViewModel {
 }
 
 class _PageBuilder<T> {
-  final WidgetArgBuild widgetBuilder;
-  final Page<T> Function(NavStackEntry arguments, WidgetArgBuild builder) builder;
-
   _PageBuilder({
-    @required this.widgetBuilder,
-    @required this.builder,
+    required this.widgetBuilder,
+    required this.builder,
   });
 
   _PageBuilder.unknown()
       : widgetBuilder = ((_) => NotFoundPage()),
         builder = MainNavigationContainer._buildBasePage;
+
+  final WidgetArgBuild<T> widgetBuilder;
+  final Page<T> Function(NavStackEntry arguments, WidgetArgBuild<T> builder) builder;
 
   Page<T> build(NavStackEntry stackEntry) => builder(stackEntry, widgetBuilder);
 }

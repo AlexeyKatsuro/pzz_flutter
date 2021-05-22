@@ -4,18 +4,16 @@ import 'package:flutter/material.dart';
 
 class DialogRoute<T> extends PopupRoute<T> {
   DialogRoute({
-    @required WidgetBuilder builder,
+    required WidgetBuilder builder,
     bool barrierDismissible = true,
-    String barrierLabel,
+    String? barrierLabel,
     Color barrierColor = Colors.black45,
     Duration transitionDuration = const Duration(milliseconds: 200),
     RouteTransitionsBuilder transitionBuilder = buildMaterialDialogTransitions,
     bool useSafeArea = true,
-    ui.ImageFilter filter,
-    RouteSettings settings,
-  })  : assert(barrierDismissible != null),
-        assert(builder != null),
-        _builder = builder,
+    ui.ImageFilter? filter,
+    RouteSettings? settings,
+  })  : _builder = builder,
         _useSafeArea = useSafeArea,
         _barrierDismissible = barrierDismissible,
         _barrierLabel = barrierLabel,
@@ -28,15 +26,15 @@ class DialogRoute<T> extends PopupRoute<T> {
         );
 
   factory DialogRoute.defaultExcept({
-    @required WidgetBuilder builder,
-    bool barrierDismissible,
-    String barrierLabel,
-    Color barrierColor,
-    Duration transitionDuration,
-    RouteTransitionsBuilder transitionBuilder,
-    bool useSafeArea,
-    ui.ImageFilter filter,
-    RouteSettings settings,
+    required WidgetBuilder builder,
+    bool? barrierDismissible,
+    String? barrierLabel,
+    Color? barrierColor,
+    Duration? transitionDuration,
+    RouteTransitionsBuilder? transitionBuilder,
+    bool? useSafeArea,
+    ui.ImageFilter? filter,
+    RouteSettings? settings,
   }) {
     return DialogRoute(
       builder: builder,
@@ -59,8 +57,8 @@ class DialogRoute<T> extends PopupRoute<T> {
   final bool _barrierDismissible;
 
   @override
-  String get barrierLabel => _barrierLabel;
-  final String _barrierLabel;
+  String? get barrierLabel => _barrierLabel;
+  final String? _barrierLabel;
 
   @override
   Color get barrierColor => _barrierColor;
@@ -70,7 +68,7 @@ class DialogRoute<T> extends PopupRoute<T> {
   Duration get transitionDuration => _transitionDuration;
   final Duration _transitionDuration;
 
-  final RouteTransitionsBuilder _transitionBuilder;
+  final RouteTransitionsBuilder? _transitionBuilder;
 
   @override
   Widget buildPage(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
@@ -108,7 +106,7 @@ class DialogRoute<T> extends PopupRoute<T> {
           ),
           child: child);
     } // Some default transition
-    return _transitionBuilder(context, animation, secondaryAnimation, child);
+    return _transitionBuilder!(context, animation, secondaryAnimation, child);
   }
 
   static Widget buildMaterialDialogTransitions(
@@ -124,14 +122,12 @@ class DialogRoute<T> extends PopupRoute<T> {
 }
 
 class MaterialDialogPage<T> extends Page<T> {
-  final Widget child;
-
-  MaterialDialogPage({
-    @required this.child,
-    String name,
-    Object arguments,
-    LocalKey key,
-    String restorationId,
+  const MaterialDialogPage({
+    required this.child,
+    String? name,
+    Object? arguments,
+    LocalKey? key,
+    String? restorationId,
     this.barrierDismissible,
     this.barrierLabel,
     this.barrierColor,
@@ -147,14 +143,15 @@ class MaterialDialogPage<T> extends Page<T> {
           restorationId: restorationId,
         );
 
-  final bool barrierDismissible;
-  final String barrierLabel;
-  final Color barrierColor;
-  final Duration transitionDuration;
-  final RouteTransitionsBuilder transitionBuilder;
-  final bool useSafeArea;
-  final ui.ImageFilter filter;
-  final RouteSettings settings;
+  final Widget child;
+  final bool? barrierDismissible;
+  final String? barrierLabel;
+  final Color? barrierColor;
+  final Duration? transitionDuration;
+  final RouteTransitionsBuilder? transitionBuilder;
+  final bool? useSafeArea;
+  final ui.ImageFilter? filter;
+  final RouteSettings? settings;
 
   @override
   Route<T> createRoute(BuildContext context) {

@@ -7,12 +7,12 @@ import 'package:pzz/utils/extensions/widget_extension.dart';
 import 'package:pzz/utils/widgets/loading_switcher.dart';
 
 class ConfirmPlaceOrderView extends StatefulWidget {
-  ConfirmPlaceOrderView({
-    @required this.address,
-    @required this.products,
-    @required this.totalPriceText,
-    @required this.onConfirm,
-    @required this.isLoading,
+  const ConfirmPlaceOrderView({
+    required this.address,
+    required this.products,
+    required this.totalPriceText,
+    required this.onConfirm,
+    required this.isLoading,
   });
 
   final bool isLoading;
@@ -28,10 +28,10 @@ class ConfirmPlaceOrderView extends StatefulWidget {
 class _ConfirmPlaceOrderViewState extends State<ConfirmPlaceOrderView> {
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context);
+    final localizations = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -51,8 +51,8 @@ class _ConfirmPlaceOrderViewState extends State<ConfirmPlaceOrderView> {
           ),
           ...[
             for (final product in widget.products) _buildProductRow(theme, localizations, product),
-          ].divideChildren(divider: Divider()),
-          SizedBox(
+          ].divideChildren(divider: const Divider()),
+          const SizedBox(
             height: 20,
           ),
           _buildPersonInfo(
@@ -61,46 +61,46 @@ class _ConfirmPlaceOrderViewState extends State<ConfirmPlaceOrderView> {
             name: localizations.toConfirmPhone,
             value: widget.address.phone,
           ),
-          Divider(),
+          const Divider(),
           _buildPersonInfo(
             context: context,
             icon: Icons.room_outlined,
             name: localizations.toConfirmAddress,
             value: widget.address.makeFullAddress(localizations),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           Row(
             children: [
               Text(
                 localizations.toConfirmTotalPrice,
-                style: theme.textTheme.subtitle1.copyWith(fontFamily: 'Malina'),
+                style: theme.textTheme.subtitle1!.copyWith(fontFamily: 'Malina'),
               ),
-              SizedBox(width: 12),
+              const SizedBox(width: 12),
               Expanded(
                 child: Text(
                   widget.totalPriceText,
-                  style: theme.textTheme.headline6.copyWith(fontFamily: 'Malina'),
+                  style: theme.textTheme.headline6!.copyWith(fontFamily: 'Malina'),
                   textAlign: TextAlign.right,
                 ),
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 12,
           ),
           AbsorbPointer(
             absorbing: widget.isLoading,
             child: ElevatedButton(
+              onPressed: widget.onConfirm,
               child: LoadingSwitcher(
                 isLoading: widget.isLoading,
                 child: Text(localizations.toConfirmButton),
               ),
-              onPressed: widget.onConfirm,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
         ],
@@ -109,10 +109,10 @@ class _ConfirmPlaceOrderViewState extends State<ConfirmPlaceOrderView> {
   }
 
   Widget _buildPersonInfo({
-    BuildContext context,
-    IconData icon,
-    String name,
-    String value,
+    required BuildContext context,
+    IconData? icon,
+    required String name,
+    required String value,
   }) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,9 +121,9 @@ class _ConfirmPlaceOrderViewState extends State<ConfirmPlaceOrderView> {
           icon,
           size: 12,
         ),
-        SizedBox(width: 4),
+        const SizedBox(width: 4),
         Text(name),
-        SizedBox(width: 12),
+        const SizedBox(width: 12),
         Expanded(
           child: Text(
             value,
@@ -138,13 +138,13 @@ class _ConfirmPlaceOrderViewState extends State<ConfirmPlaceOrderView> {
   Widget _buildProductRow(ThemeData theme, AppLocalizations localizations, BasketProduct product) {
     String title = product.title;
     if (product.size != null) {
-      title += '(${product.size.localized(localizations)})';
+      title += '(${product.size!.localized(localizations)})';
     }
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(title),
-        SizedBox(width: 12),
+        const SizedBox(width: 12),
         Expanded(
           child: Text(
             product.priceText,

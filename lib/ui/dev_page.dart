@@ -20,7 +20,7 @@ class DevPage extends StatelessWidget {
   }
 
   Widget _build(BuildContext context, _ViewModel viewModel) {
-    final localizations = AppLocalizations.of(context);
+    final localizations = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations.devTools),
@@ -29,14 +29,14 @@ class DevPage extends StatelessWidget {
         children: [
           for (final screen in viewModel.navigationStack.backStack)
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Text(screen.name),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Text(screen.name!),
             ),
           for (final locale in AppLocalizations.supportedLocales)
             RadioListTile(
               value: locale,
               groupValue: viewModel.locale,
-              onChanged: viewModel.onSetLocale,
+              onChanged: (Locale? value) => viewModel.onSetLocale(value!),
               title: Text(_getLocaleName(localizations, locale)),
             )
         ],
@@ -51,20 +51,15 @@ class DevPage extends StatelessWidget {
       case 'ru':
         return localizations.russian;
     }
-    assert(false);
-    return null;
+    throw UnimplementedError("Didn't handled case for ${locale.languageCode}");
   }
 }
 
 class _ViewModel {
-  final Locale locale;
-  final NavigationStack navigationStack;
-  final ValueSetter<Locale> onSetLocale;
-
   _ViewModel({
-    @required this.locale,
-    @required this.onSetLocale,
-    @required this.navigationStack,
+    required this.locale,
+    required this.onSetLocale,
+    required this.navigationStack,
   });
 
   factory _ViewModel.fromStore(Store<AppState> store) {
@@ -74,6 +69,10 @@ class _ViewModel {
       onSetLocale: (value) => store.dispatch(ChangeLocaleAction(value)),
     );
   }
+
+  final Locale? locale;
+  final NavigationStack navigationStack;
+  final ValueSetter<Locale> onSetLocale;
 
   @override
   bool operator ==(Object other) =>

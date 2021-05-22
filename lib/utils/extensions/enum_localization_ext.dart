@@ -1,16 +1,16 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:pzz/models/payment_way.dart';
 import 'package:pzz/models/pizza.dart';
 
 extension ProductSizeLocalExt on ProductSize {
   static ProductSize fromString(String size) {
     final sizeEnum = fromStringOrNull(size);
-    assert(sizeEnum != null);
-    return sizeEnum;
+    return sizeEnum!;
   }
 
-  static ProductSize fromStringOrNull(String size) {
-    final sizeEnum = ProductSize.values.firstWhere((element) => element.name == size);
+  static ProductSize? fromStringOrNull(String size) {
+    final sizeEnum = ProductSize.values.firstWhereOrNull((element) => element.name == size);
     return sizeEnum;
   }
 
@@ -23,8 +23,6 @@ extension ProductSizeLocalExt on ProductSize {
       case ProductSize.thin:
         return localizations.pizzaSizeThin;
     }
-    assert(false);
-    return null;
   }
 }
 
@@ -42,8 +40,6 @@ extension ProductTypeLocalExt on ProductType {
       case ProductType.drink:
         return localizations.drinks;
     }
-    assert(false);
-    return null;
   }
 }
 
@@ -59,7 +55,5 @@ extension PaymentWayLocalExt on PaymentWay {
       case PaymentWay.halva:
         return localizations.halva;
     }
-    assert(false);
-    return null;
   }
 }

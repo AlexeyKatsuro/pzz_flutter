@@ -7,20 +7,23 @@ import 'package:redux_epics/redux_epics.dart';
 import 'package:rxdart/rxdart.dart';
 
 class PerformStreetSearchEpic implements EpicClass<AppState> {
-  final PzzRepository repository;
-
   PerformStreetSearchEpic(this.repository);
+
+  final PzzRepository repository;
 
   @override
   Stream<dynamic> call(Stream<dynamic> actions, EpicStore<AppState> store) {
-    return actions.whereType<PerformStreetSearchAction>().debounceTime(Duration(milliseconds: 300)).switchMap((action) {
+    return actions
+        .whereType<PerformStreetSearchAction>()
+        .debounceTime(const Duration(milliseconds: 300))
+        .switchMap((action) {
       if (action.query.length >= 2) {
         return repository
             .searchStreet(action.query)
             .asStream()
             .map<dynamic>((streets) => SearchStreetResultAction(streets))
-            .onErrorResume(
-                (error) => Stream.value(SetScopedErrorAction(error: errorMessageExtractor(error), scope: action.scope)))
+            .onErrorResume((error) =>
+                Stream.value(SetScopedErrorAction(error: errorMessageExtractor(error as Object), scope: action.scope)))
             .takeUntil(actions.whereType<CancelStreetSearchAction>());
       } else {
         return Stream.value(SearchStreetResultAction([]));

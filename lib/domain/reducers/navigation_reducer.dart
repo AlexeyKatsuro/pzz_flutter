@@ -1,4 +1,4 @@
-import 'package:pzz/domain/actions/navigate_to_action.dart';
+import 'package:pzz/domain/actions/navigation_actions.dart';
 import 'package:pzz/models/navigation_stack.dart';
 import 'package:redux/redux.dart';
 

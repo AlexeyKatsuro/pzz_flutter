@@ -3,20 +3,17 @@ import 'package:pzz/models/pizza.dart';
 
 @immutable
 class PizzaVariant {
+  const PizzaVariant({
+    required this.size,
+    required this.price,
+    required this.weight,
+    required this.diameter,
+  });
+
   final ProductSize size;
   final num price;
   final String weight;
   final String diameter;
-
-  PizzaVariant({
-    @required this.size,
-    @required this.price,
-    @required this.weight,
-    @required this.diameter,
-  })  : assert(size != null),
-        assert(price != null),
-        assert(weight != null),
-        assert(diameter != null);
 
   @override
   bool operator ==(Object other) =>

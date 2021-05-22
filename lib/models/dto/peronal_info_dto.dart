@@ -1,18 +1,6 @@
 import 'package:pzz/models/person_info/personal_info.dart';
 
 class PersonalInfoDto {
-  final int streetId;
-  final int houseId;
-  final String name;
-  final String phone;
-  final String street;
-  final String house;
-  final String flat;
-  final String entrance;
-  final String floor;
-  final String intercom;
-  final String comment;
-
   const PersonalInfoDto({
     this.streetId,
     this.houseId,
@@ -28,17 +16,17 @@ class PersonalInfoDto {
   });
 
   PersonalInfoDto.fromJson(Map<String, dynamic> json)
-      : streetId = json['street_id'],
-        houseId = json['house_id'],
-        name = json['name'],
-        phone = json['phone'],
-        street = json['street'],
-        house = json['house'],
-        flat = json['flat'],
-        entrance = json['entrance'],
-        floor = json['floor'],
-        intercom = json['intercom'],
-        comment = json['comment'];
+      : streetId = json['street_id'] as int?,
+        houseId = json['house_id'] as int?,
+        name = json['name'] as String?,
+        phone = json['phone'] as String?,
+        street = json['street'] as String?,
+        house = json['house'] as String?,
+        flat = json['flat'] as String?,
+        entrance = json['entrance'] as String?,
+        floor = json['floor'] as String?,
+        intercom = json['intercom'] as String?,
+        comment = json['comment'] as String?;
 
   PersonalInfoDto.fromModel(PersonalInfo model)
       : streetId = model.streetId,
@@ -53,35 +41,47 @@ class PersonalInfoDto {
         intercom = model.intercom,
         comment = model.comment;
 
+  final int? streetId;
+  final int? houseId;
+  final String? name;
+  final String? phone;
+  final String? street;
+  final String? house;
+  final String? flat;
+  final String? entrance;
+  final String? floor;
+  final String? intercom;
+  final String? comment;
+
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['street_id'] = this.streetId;
-    data['house_id'] = this.houseId;
-    data['name'] = this.name;
-    data['phone'] = this.phone;
-    data['street'] = this.street;
-    data['house'] = this.house;
-    data['flat'] = this.flat;
-    data['entrance'] = this.entrance;
-    data['floor'] = this.floor;
-    data['intercom'] = this.intercom;
-    data['comment'] = this.comment;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['street_id'] = streetId;
+    data['house_id'] = houseId;
+    data['name'] = name;
+    data['phone'] = phone;
+    data['street'] = street;
+    data['house'] = house;
+    data['flat'] = flat;
+    data['entrance'] = entrance;
+    data['floor'] = floor;
+    data['intercom'] = intercom;
+    data['comment'] = comment;
     return data;
   }
 
   PersonalInfo toModel() {
     return PersonalInfo(
-      streetId: this.streetId,
-      houseId: this.houseId,
-      name: this.name,
-      phone: this.phone,
-      street: this.street,
-      house: this.house,
-      flat: this.flat,
-      entrance: this.entrance,
-      floor: this.floor,
-      intercom: this.intercom,
-      comment: this.comment,
+      streetId: streetId!,
+      houseId: houseId!,
+      name: name!,
+      phone: phone!,
+      street: street!,
+      house: house!,
+      flat: flat!,
+      entrance: entrance!,
+      floor: floor!,
+      intercom: intercom!,
+      comment: comment!,
     );
   }
 }

@@ -6,24 +6,21 @@ import 'package:pzz/ui/widgets/counter.dart';
 import 'package:pzz/utils/extensions/enum_localization_ext.dart';
 
 class PizzaVariantWidget extends StatelessWidget {
+  const PizzaVariantWidget({
+    required this.countInBasket,
+    required this.variant,
+    required this.onAddPizzaClick,
+    required this.onRemovePizzaClick,
+  });
+
   final PizzaVariant variant;
   final int countInBasket;
   final void Function(ProductSize) onAddPizzaClick;
   final void Function(ProductSize) onRemovePizzaClick;
 
-  const PizzaVariantWidget({
-    @required this.countInBasket,
-    @required this.variant,
-    @required this.onAddPizzaClick,
-    @required this.onRemovePizzaClick,
-  })  : assert(variant != null),
-        assert(onRemovePizzaClick != null),
-        assert(countInBasket != null),
-        assert(onAddPizzaClick != null);
-
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context);
+    final localizations = AppLocalizations.of(context)!;
     return Row(
       children: [
         Expanded(

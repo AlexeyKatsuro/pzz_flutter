@@ -5,14 +5,11 @@ import 'package:pzz/models/pizza.dart';
 @immutable
 class CombinedBasketProduct {
   const CombinedBasketProduct({
-    @required this.id,
-    @required this.title,
-    @required this.type,
-    @required this.products,
-  })  : assert(id != null),
-        assert(title != null),
-        assert(type != null),
-        assert(products != null);
+    required this.id,
+    required this.title,
+    required this.type,
+    required this.products,
+  });
 
   final int id;
   final String title;
@@ -25,7 +22,7 @@ class CombinedBasketProduct {
 
   bool hasSize(ProductSize size) => products.any((element) => element.size == size);
 
-  int countOfProductsBy(ProductSize size) => products.fold(0, (count, element) {
+  int countOfProductsBy(ProductSize? size) => products.fold(0, (count, element) {
         if (element.size == size) {
           return count + 1;
         } else {
@@ -33,7 +30,7 @@ class CombinedBasketProduct {
         }
       });
 
-  num priceOfProductsBy(ProductSize size) => products.fold(0.0, (sum, element) {
+  num priceOfProductsBy(ProductSize? size) => products.fold(0.0, (sum, element) {
         if (element.size == size) {
           return sum + element.price;
         } else {
@@ -41,9 +38,9 @@ class CombinedBasketProduct {
         }
       });
 
-  BasketProduct productsBy(ProductSize size) => products.firstWhere((element) => element.size == size);
+  BasketProduct productsBy(ProductSize? size) => products.firstWhere((element) => element.size == size);
 
-  Set<ProductSize> get availableSizes => products.map((e) => e.size).toSet();
+  Set<ProductSize?> get availableSizes => products.map((e) => e.size).toSet();
 
   @override
   bool operator ==(Object other) =>
@@ -59,5 +56,5 @@ class CombinedBasketProduct {
 }
 
 extension ListCombinedBasketProductExt on List<CombinedBasketProduct> {
-  int get allProductsCount => this.fold(0, (previousValue, element) => previousValue + element.productsCount);
+  int get allProductsCount => fold(0, (previousValue, element) => previousValue + element.productsCount);
 }

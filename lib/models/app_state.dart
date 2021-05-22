@@ -12,26 +12,16 @@ import 'package:pzz/routes.dart';
 
 @immutable
 class AppState {
-  final HomePageState homePageState;
-  final PersonalInfoState personalInfoState;
-  final List<Pizza> pizzas;
-  final List<Sauce> sauce;
-  final Basket basket;
-  final bool isConfirmLoading; // TODO use local loading flags on App level
-  final ScopedErrorsHub scopedErrors;
-  final NavigationStack navigationStack;
-  final Locale locale;
-
   const AppState({
-    @required this.homePageState,
-    @required this.pizzas,
-    @required this.sauce,
-    @required this.basket,
-    @required this.personalInfoState,
-    @required this.isConfirmLoading,
-    @required this.scopedErrors,
-    @required this.navigationStack,
-    @required this.locale,
+    required this.homePageState,
+    required this.pizzas,
+    required this.sauce,
+    required this.basket,
+    required this.personalInfoState,
+    required this.isConfirmLoading,
+    required this.scopedErrors,
+    required this.navigationStack,
+    required this.locale,
   });
 
   const AppState.initial({
@@ -44,11 +34,15 @@ class AppState {
     this.scopedErrors = const ScopedErrorsHub.initial(),
     this.navigationStack = const NavigationStack([NavStackEntry(name: Routes.homeScreen)]),
     this.locale,
-  })  : assert(homePageState != null),
-        assert(isConfirmLoading != null),
-        assert(pizzas != null),
-        assert(sauce != null),
-        assert(basket != null),
-        assert(personalInfoState != null),
-        assert(scopedErrors != null);
+  });
+
+  final HomePageState homePageState;
+  final PersonalInfoState personalInfoState;
+  final List<Pizza> pizzas;
+  final List<Sauce> sauce;
+  final Basket basket;
+  final bool isConfirmLoading; // TODO use local loading flags on App level
+  final ScopedErrorsHub scopedErrors;
+  final NavigationStack navigationStack;
+  final Locale? locale;
 }

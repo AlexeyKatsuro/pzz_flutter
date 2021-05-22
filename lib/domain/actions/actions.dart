@@ -3,85 +3,93 @@ import 'package:pzz/models/basket.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/models/product.dart';
 import 'package:pzz/models/sauce.dart';
-import 'package:pzz/utils/UiMessage.dart';
 import 'package:pzz/utils/scoped.dart';
+import 'package:pzz/utils/ui_message.dart';
 
 class InitialAction implements Scoped {
-  final String scope;
+  InitialAction({required this.scope});
 
   @override
-  InitialAction({@required this.scope});
+  final String scope;
 }
 
-class LoadPizzasAction {}
+class LoadPizzasAction implements Scoped {
+  LoadPizzasAction({required this.scope});
+
+  @override
+  final String scope;
+}
 
 class LoadBasketAction implements Scoped {
-  LoadBasketAction({@required this.scope});
+  LoadBasketAction({required this.scope});
 
   @override
   final String scope;
 }
 
 class PizzasLoadedAction {
-  final List<Pizza> pizzas;
+  PizzasLoadedAction(this.pizzas);
 
-  PizzasLoadedAction(this.pizzas) : assert(pizzas != null);
+  final List<Pizza> pizzas;
 }
 
 class SaucesLoadedAction {
-  final List<Sauce> sauces;
+  SaucesLoadedAction(this.sauces);
 
-  SaucesLoadedAction(this.sauces) : assert(sauces != null);
+  final List<Sauce> sauces;
 }
 
 class BasketLoadedAction {
-  final Basket basket;
+  BasketLoadedAction(this.basket);
 
-  BasketLoadedAction(this.basket) : assert(basket != null);
+  final Basket basket;
 }
 
 class AddProductAction implements Scoped {
-  final Product product;
-  final String scope;
+  AddProductAction({required this.product, required this.scope});
 
-  AddProductAction({@required this.product, @required this.scope}) : assert(product != null);
+  final Product product;
+
+  @override
+  final String scope;
 }
 
 class RemoveProductAction implements Scoped {
+  RemoveProductAction({required this.product, required this.scope});
   final Product product;
-  final String scope;
 
-  RemoveProductAction({@required this.product, @required this.scope});
+  @override
+  final String scope;
 }
 
 class HomeLoadingAction {
-  HomeLoadingAction(this.isLoading);
+  HomeLoadingAction({required this.isLoading});
 
   final bool isLoading;
 }
 
 class HomeErrorAction {
-  final UiMessage errorMessage;
-
   HomeErrorAction(this.errorMessage);
+
+  final UiMessage errorMessage;
 }
 
 class TryPlaceOrderAction implements Scoped {
-  TryPlaceOrderAction({@required this.scope});
+  TryPlaceOrderAction({required this.scope});
 
   @override
   final String scope;
 }
 
 class ConfirmPlaceOrderAction implements Scoped {
-  ConfirmPlaceOrderAction({@required this.scope});
+  ConfirmPlaceOrderAction({required this.scope});
 
   @override
   final String scope;
 }
 
 class ConfirmLoadingAction {
-  ConfirmLoadingAction({this.isLoading});
+  ConfirmLoadingAction({required this.isLoading});
 
   final bool isLoading;
 }
@@ -89,7 +97,7 @@ class ConfirmLoadingAction {
 class OrderPlacedAction {}
 
 class ChangeLocaleAction {
-  final Locale locale;
-
   ChangeLocaleAction(this.locale);
+
+  final Locale locale;
 }

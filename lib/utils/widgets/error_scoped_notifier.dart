@@ -3,7 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:pzz/domain/error/scoped_error_actions.dart';
 import 'package:pzz/domain/error/scoped_error_hub_selectors.dart';
 import 'package:pzz/models/app_state.dart';
-import 'package:pzz/utils/UiMessage.dart';
+import 'package:pzz/utils/ui_message.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -20,10 +20,10 @@ typedef ErrorEventBuilder = void Function(BuildContext context, String error);
 class ErrorScopedNotifier extends StatelessWidget {
   const ErrorScopedNotifier(
     this.scope, {
-    @required this.child,
+    required this.child,
     this.errorBuilder = snackBarErrorHandler,
     this.showErrorOnInit = true,
-  }) : assert(errorBuilder != null);
+  });
 
   final String scope;
   final Widget child;
@@ -32,22 +32,22 @@ class ErrorScopedNotifier extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context);
+    final localizations = AppLocalizations.of(context)!;
     return StoreConnector<AppState, _ViewModel>(
       converter: (Store<AppState> store) => _ViewModel.fromStore(store, scope),
       onInitialBuild: (viewModel) {
-        final isTopPage = ModalRoute.of(context).isCurrent;
+        final isTopPage = ModalRoute.of(context)!.isCurrent;
         if (isTopPage && viewModel.errorScoped != null) {
           if (showErrorOnInit) {
-            errorBuilder(context, viewModel.errorScoped.localize(localizations));
+            errorBuilder(context, viewModel.errorScoped!.localize(localizations));
           }
           viewModel.clearError();
         }
       },
       onWillChange: (_, viewModel) {
-        final isTopPage = ModalRoute.of(context).isCurrent;
+        final isTopPage = ModalRoute.of(context)!.isCurrent;
         if (isTopPage && viewModel.errorScoped != null) {
-          errorBuilder(context, viewModel.errorScoped.localize(localizations));
+          errorBuilder(context, viewModel.errorScoped!.localize(localizations));
           viewModel.clearError();
         }
       },
@@ -90,8 +90,8 @@ class ErrorScopedNotifier extends StatelessWidget {
 
 class _ViewModel {
   _ViewModel({
-    @required this.clearError,
-    @required this.errorScoped,
+    required this.clearError,
+    required this.errorScoped,
   });
 
   factory _ViewModel.fromStore(Store<AppState> store, String scope) {
@@ -105,5 +105,5 @@ class _ViewModel {
   final VoidCallback clearError;
 
   // nullable
-  final UiMessage errorScoped;
+  final UiMessage? errorScoped;
 }

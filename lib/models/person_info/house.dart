@@ -2,13 +2,13 @@ import 'package:flutter/foundation.dart';
 
 @immutable
 class House {
+  const House({
+    required this.id,
+    required this.title,
+  });
+
   final int id;
   final String title;
-
-  const House({
-    @required this.id,
-    @required this.title,
-  });
 
   @override
   String toString() {

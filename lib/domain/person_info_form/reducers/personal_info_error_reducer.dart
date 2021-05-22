@@ -4,7 +4,7 @@ import 'package:pzz/l10n/app_localization_keys.dart';
 import 'package:pzz/models/person_info/person_info_errors.dart';
 import 'package:pzz/models/person_info/personal_info.dart';
 import 'package:pzz/models/person_info/personal_info_state.dart';
-import 'package:pzz/utils/UiMessage.dart';
+import 'package:pzz/utils/ui_message.dart';
 import 'package:redux/redux.dart';
 
 PersonalInfoState validateFormReducer(PersonalInfoState state, TryPlaceOrderAction action) {
@@ -21,7 +21,9 @@ PersonalInfoErrors _validator(PersonalInfoState state) {
 }
 
 UiMessage _validatePhone(PersonalInfo personalInfo) {
-  return personalInfo.phone.isEmpty ? UiMessage.key(AppLocalizationKeys.errorEmptyPhone) : UiMessage.empty();
+  return personalInfo.phone.isEmpty
+      ? const UiMessage.key(AppLocalizationKeys.errorEmptyPhone)
+      : const UiMessage.empty();
 }
 
 UiMessage _validatePaymentWay(PersonalInfo personalInfo) {

@@ -3,19 +3,17 @@ import 'package:pzz/models/pizza.dart';
 
 @immutable
 class Sauce {
+  const Sauce({
+    required this.id,
+    required this.title,
+    required this.photo,
+    required this.price,
+  });
+
   final int id;
   final String title;
   final String photo;
   final num price;
-
-  const Sauce({
-    @required this.id,
-    @required this.title,
-    @required this.photo,
-    @required this.price,
-  })  : assert(id != null),
-        assert(title != null),
-        assert(price != null);
 
   ProductType get type => ProductType.sauce;
 

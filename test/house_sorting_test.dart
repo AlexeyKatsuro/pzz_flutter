@@ -10,10 +10,10 @@ import 'package:pzz/models/person_info/house.dart';
 import 'package:pzz/utils/house_comparator.dart';
 
 void main() {
-  final house3A = const House(id: 0, title: '1');
-  final house3B = House(id: 3, title: '3B');
-  final house14 = const House(id: 4, title: '14');
-  final house101 = const House(id: 8, title: '101');
+  const house3A = House(id: 0, title: '1');
+  const house3B = House(id: 3, title: '3B');
+  const house14 = House(id: 4, title: '14');
+  const house101 = House(id: 8, title: '101');
   group('Single compare houses', () {
     test("'14' should be higher than '3A", () {
       expect(compareHouse(house14, house3A), 1);
@@ -55,7 +55,7 @@ void main() {
 
     final houseSorted = houses..sort(compareHouse);
 
-    Function stringify = (List<House> houses) => houses.map((e) => e.title).join(', ');
+    String stringify(List<House> houses) => houses.map((e) => e.title).join(', ');
     test('Test sorting by compareWeight prop ', () {
       expect(stringify(houseSorted), stringify(housesSortedMatcher));
     });

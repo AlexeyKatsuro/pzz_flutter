@@ -4,7 +4,7 @@ extension Iterables<E> on Iterable<E> {
 
   Iterable<E> whereNotNull() => where((element) => element != null);
 
-  E get tryLast => length > 0 ? last : null;
+  E? get tryLast => length > 0 ? last : null;
 }
 
 extension ListExt<E> on List<E> {

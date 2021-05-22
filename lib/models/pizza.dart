@@ -1,28 +1,24 @@
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/foundation.dart';
 import 'package:pzz/models/pizza_variant.dart';
 
 @immutable
 class Pizza {
+  const Pizza({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.thumbnail,
+    required this.variants,
+    required this.photo,
+  });
+
   final int id;
   final String name;
   final String description;
   final String thumbnail;
   final String photo;
   final List<PizzaVariant> variants;
-
-  Pizza(
-      {@required this.id,
-      @required this.name,
-      @required this.description,
-      @required this.thumbnail,
-      @required this.variants,
-      @required this.photo})
-      : assert(id != null),
-        assert(name != null),
-        assert(description != null),
-        assert(thumbnail != null),
-        assert(variants != null),
-        assert(photo != null);
 
   ProductType get type => ProductType.pizza;
 
@@ -54,8 +50,8 @@ enum ProductType { pizza, sauce, snack, dessert, drink }
 extension ProductSizeExt on ProductSize {
   String get name => describeEnum(this);
 
-  static ProductSize fromStringOrNull(String size) {
-    final sizeEnum = ProductSize.values.firstWhere((element) => element.name == size, orElse: () => null);
+  static ProductSize? fromStringOrNull(String? size) {
+    final sizeEnum = ProductSize.values.firstWhereOrNull((element) => element.name == size);
     return sizeEnum;
   }
 }
@@ -63,8 +59,8 @@ extension ProductSizeExt on ProductSize {
 extension ProductTypeExt on ProductType {
   String get name => describeEnum(this);
 
-  static ProductType fromStringOrNull(String size) {
-    final sizeEnum = ProductType.values.firstWhere((element) => element.name == size, orElse: () => null);
+  static ProductType? fromStringOrNull(String? size) {
+    final sizeEnum = ProductType.values.firstWhereOrNull((element) => element.name == size);
     return sizeEnum;
   }
 }

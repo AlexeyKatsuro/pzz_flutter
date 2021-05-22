@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:pzz/models/payment_way.dart';
 import 'package:pzz/models/person_info/house.dart';
 import 'package:pzz/models/person_info/personal_info.dart';
@@ -6,55 +5,58 @@ import 'package:pzz/models/person_info/street.dart';
 import 'package:pzz/utils/scoped.dart';
 
 class PerformStreetSearchAction implements Scoped {
-  final String query;
-  final String scope;
+  PerformStreetSearchAction({required this.query, required this.scope});
 
-  PerformStreetSearchAction({@required this.query, @required this.scope});
+  final String query;
+  @override
+  final String scope;
 }
 
 class PerformHouseSearchAction {
-  final String query;
-
   PerformHouseSearchAction(this.query);
+
+  final String query;
 }
 
 class SearchStreetResultAction {
-  final List<Street> streets;
-
   SearchStreetResultAction(this.streets);
+
+  final List<Street> streets;
 }
 
 class CancelStreetSearchAction {}
 
 class SelectStreetAction {
-  final Street street;
-
   SelectStreetAction(this.street);
+
+  final Street street;
 }
 
 class LoadHousesAction implements Scoped {
-  final int streetId;
-  final String scope;
+  LoadHousesAction({required this.streetId, required this.scope});
 
-  LoadHousesAction({@required this.streetId, @required this.scope});
+  final int streetId;
+
+  @override
+  final String scope;
 }
 
 class LoadedHouseAction {
-  final List<House> houses;
-
   LoadedHouseAction(this.houses);
+
+  final List<House> houses;
 }
 
 class SelectHouseAction {
-  final House house;
-
   SelectHouseAction(this.house);
+
+  final House house;
 }
 
 class SavePersonalInfoAction {
-  final PersonalInfo info;
-
   SavePersonalInfoAction(this.info);
+
+  final PersonalInfo info;
 }
 
 class NameChangedAction {

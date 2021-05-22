@@ -1,5 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:pzz/domain/actions/actions.dart';
-import 'package:pzz/domain/actions/navigate_to_action.dart';
+import 'package:pzz/domain/actions/navigation_actions.dart';
 import 'package:pzz/domain/error/error_message_extractor.dart';
 import 'package:pzz/domain/error/scoped_error_actions.dart';
 import 'package:pzz/domain/person_info_form/actions/person_info_form_actions.dart';
@@ -38,7 +39,7 @@ MiddlewareTyped<AppState, InitialAction> _createInitial(
     PzzRepository repository, PreferenceRepository preferenceRepository) {
   return (Store<AppState> store, InitialAction action, NextDispatcher next) async {
     next(action);
-    next(HomeLoadingAction(true));
+    next(HomeLoadingAction(isLoading: true));
     try {
       final pizzas = repository.loadPizzas();
       final sauces = repository.loadSauces();
@@ -48,19 +49,19 @@ MiddlewareTyped<AppState, InitialAction> _createInitial(
       final basket = await repository.loadBasket();
       next(BasketLoadedAction(basket));
     } catch (ex) {
-      print(ex);
+      debugPrint('$ex');
       next(HomeErrorAction(errorMessageExtractor(ex)));
     }
-    next(HomeLoadingAction(false));
+    next(HomeLoadingAction(isLoading: false));
   };
 }
 
-Middleware<AppState> _createLoadPizzas(PzzRepository repository) {
-  return (Store<AppState> store, dynamic action, NextDispatcher next) async {
+MiddlewareTyped<AppState, LoadPizzasAction> _createLoadPizzas(PzzRepository repository) {
+  return (Store<AppState> store, LoadPizzasAction action, NextDispatcher next) async {
     repository.loadPizzas().then((pizzas) {
       next(PizzasLoadedAction(pizzas));
-    }).catchError((ex) {
-      print(ex);
+    }).catchError((Object ex) {
+      debugPrint('$ex');
       next(SetScopedErrorAction(error: errorMessageExtractor(ex), scope: action.scope));
     });
 
@@ -72,8 +73,8 @@ MiddlewareTyped<AppState, LoadBasketAction> _createLoadBasket(PzzRepository repo
   return (Store<AppState> store, LoadBasketAction action, NextDispatcher next) {
     repository.loadBasket().then((basket) {
       next(BasketLoadedAction(basket));
-    }).catchError((ex) {
-      print(ex);
+    }).catchError((Object ex) {
+      debugPrint('$ex');
       next(SetScopedErrorAction(error: errorMessageExtractor(ex), scope: action.scope));
     });
 
@@ -85,8 +86,8 @@ MiddlewareTyped<AppState, AddProductAction> _createAddPizzaItem(PzzRepository re
   return (Store<AppState> store, AddProductAction action, NextDispatcher next) {
     repository.addProductToBasket(action.product).then((basket) {
       next(BasketLoadedAction(basket));
-    }).catchError((ex) {
-      print(ex);
+    }).catchError((Object ex) {
+      debugPrint('$ex');
       next(SetScopedErrorAction(error: errorMessageExtractor(ex), scope: action.scope));
     });
     next(action);
@@ -97,8 +98,8 @@ MiddlewareTyped<AppState, RemoveProductAction> _createRemovePizzaItem(PzzReposit
   return (Store<AppState> store, RemoveProductAction action, NextDispatcher next) {
     repository.removeProductFromBasket(action.product).then((basket) {
       next(BasketLoadedAction(basket));
-    }).catchError((ex) {
-      print(ex);
+    }).catchError((Object ex) {
+      debugPrint('$ex');
       next(SetScopedErrorAction(error: errorMessageExtractor(ex), scope: action.scope));
     });
     next(action);
@@ -118,8 +119,8 @@ MiddlewareTyped<AppState, LoadHousesAction> _createLoadHouses(
     //repository.savePersonalInfo(personalInfoSelector(store.state));
     pzzRepository.loadHousesByStreet(action.streetId).then((houses) {
       next(LoadedHouseAction(houses));
-    }).catchError((ex) {
-      print(ex);
+    }).catchError((Object ex) {
+      debugPrint('$ex');
       next(SetScopedErrorAction(error: errorMessageExtractor(ex), scope: action.scope));
     });
     next(action);
@@ -141,8 +142,8 @@ MiddlewareTyped<AppState, TryPlaceOrderAction> _createUpdateAddress(PzzRepositor
       repository.updateAddress(personalInfoSelector(store.state)).then((basket) {
         next(BasketLoadedAction(basket));
         next(NavigateAction.push(Routes.confirmPlaceOrderDialog));
-      }).catchError((ex) {
-        print(ex);
+      }).catchError((Object ex) {
+        debugPrint('$ex');
         next(SetScopedErrorAction(error: errorMessageExtractor(ex), scope: action.scope));
       }).whenComplete(() {
         next(ConfirmLoadingAction(isLoading: false));
@@ -158,8 +159,8 @@ MiddlewareTyped<AppState, ConfirmPlaceOrderAction> _createConfirmPlaceOrder(PzzR
     repository.placeOrder().then((basket) {
       next(NavigateAction.push(Routes.successOrderPlacedDialog));
       next(BasketLoadedAction(basket));
-    }).catchError((ex) {
-      print(ex);
+    }).catchError((Object ex) {
+      debugPrint('$ex');
       next(SetScopedErrorAction(error: errorMessageExtractor(ex), scope: action.scope));
     }).whenComplete(() {
       next(ConfirmLoadingAction(isLoading: false));
