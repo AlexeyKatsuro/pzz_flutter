@@ -17,11 +17,9 @@ abstract class UiMessage {
 
   factory UiMessage.empty() => const UiMessageEmpty();
 
-  factory UiMessage.key(AppLocalizationKeys kye,
-          [Map<String, String> params]) =>
-      UiMessageKey(kye, params);
+  factory UiMessage.key(AppLocalizationKeys? kye, [Map<String, String>? params]) => UiMessageKey(kye, params);
 
-  factory UiMessage.text(String text) => UiMessageText(text);
+  factory UiMessage.text(String? text) => UiMessageText(text ?? '');
 
   /// Return true if raw textual data is not null and not empty.
   bool get isNotEmpty;
@@ -33,7 +31,7 @@ abstract class UiMessage {
   String localize(AppLocalizations localization);
 
   /// Return null if [isEmpty] == true otherwise localized text.
-  String tryLocalize(AppLocalizations localization);
+  String? tryLocalize(AppLocalizations localization) => isNotEmpty ? localize(localization) : null;
 }
 
 class UiMessageText extends UiMessage {
@@ -42,17 +40,13 @@ class UiMessageText extends UiMessage {
   final String text;
 
   @override
-  bool get isEmpty => text?.isEmpty ?? true;
+  bool get isEmpty => text.isEmpty;
 
   @override
   bool get isNotEmpty => !isEmpty;
 
   @override
-  String localize(AppLocalizations localization) =>
-      tryLocalize(localization) ?? '';
-
-  @override
-  String tryLocalize(AppLocalizations localization) => isNotEmpty ? text : null;
+  String localize(AppLocalizations localization) => text;
 
   @override
   String toString() => 'UiMessageText{text: $text}';
@@ -61,8 +55,8 @@ class UiMessageText extends UiMessage {
 class UiMessageKey extends UiMessage {
   const UiMessageKey(this.key, [this.params]);
 
-  final AppLocalizationKeys key;
-  final Map<String, String> params;
+  final AppLocalizationKeys? key;
+  final Map<String, String>? params;
 
   @override
   bool get isEmpty => key == null;
@@ -71,12 +65,7 @@ class UiMessageKey extends UiMessage {
   bool get isNotEmpty => key != null;
 
   @override
-  String localize(AppLocalizations localization) =>
-      tryLocalize(localization) ?? '';
-
-  @override
-  String tryLocalize(AppLocalizations localization) =>
-      isNotEmpty ? key.localized(localization, params) : null;
+  String localize(AppLocalizations localization) => key!.localized(localization, params);
 
   @override
   String toString() => 'UiMessageKey{key: $key, params: $params}';
@@ -93,9 +82,6 @@ class UiMessageEmpty extends UiMessage {
 
   @override
   String localize(AppLocalizations localization) => '';
-
-  @override
-  String tryLocalize(AppLocalizations localization) => null;
 
   @override
   String toString() => 'UiMessageEmpty{}';

@@ -1,6 +1,10 @@
 include: package:lint/analysis_options.yaml
 
 analyzer:
+  #Exclude the file borrowed from flutter sdk
+  exclude:
+    - lib/utils/widgets/bottom_sheet_route.dart
+
   errors:
     # reasonable fpr no-sound-null-safety project
     import_of_legacy_library_into_null_safe: ignore

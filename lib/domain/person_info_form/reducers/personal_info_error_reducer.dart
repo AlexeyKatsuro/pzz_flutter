@@ -21,21 +21,15 @@ PersonalInfoErrors _validator(PersonalInfoState state) {
 }
 
 UiMessage _validatePhone(PersonalInfo personalInfo) {
-  return personalInfo.phone.isEmpty
-      ? const UiMessage.key(AppLocalizationKeys.errorEmptyPhone)
-      : const UiMessage.empty();
+  return personalInfo.phone.isEmpty ? UiMessage.key(AppLocalizationKeys.errorEmptyPhone) : UiMessage.empty();
 }
 
 UiMessage _validatePaymentWay(PersonalInfo personalInfo) {
-  return personalInfo.paymentWay == null
-      ? UiMessage.key(AppLocalizationKeys.errorEmptyPaymentPay)
-      : UiMessage.empty();
+  return personalInfo.paymentWay == null ? UiMessage.key(AppLocalizationKeys.errorEmptyPaymentPay) : UiMessage.empty();
 }
 
 UiMessage _validateStreet(PersonalInfo personalInfo) {
-  return personalInfo.street.isEmpty
-      ? UiMessage.key(AppLocalizationKeys.errorEmptyStreet)
-      : UiMessage.empty();
+  return personalInfo.street.isEmpty ? UiMessage.key(AppLocalizationKeys.errorEmptyStreet) : UiMessage.empty();
 }
 
 UiMessage _validateHouse(PersonalInfo personalInfo) {

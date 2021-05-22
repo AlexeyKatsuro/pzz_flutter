@@ -24,7 +24,6 @@ class PzzAppTheme {
     return ThemeData(
         textTheme: textTheme,
         primaryTextTheme: textTheme,
-        accentTextTheme: textTheme,
         iconTheme: iconTheme,
         brightness: colorScheme.brightness,
         colorScheme: colorScheme,
@@ -33,7 +32,6 @@ class PzzAppTheme {
         primaryColorDark: colorScheme.primaryVariant,
         errorColor: colorScheme.error,
         toggleableActiveColor: colorScheme.primary,
-        accentColor: colorScheme.secondary,
         cardColor: colorScheme.surface,
         applyElevationOverlayColor: true,
         dividerColor: dividerColor,

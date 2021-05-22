@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:pzz/utils/ui_message.dart';
 
-import '../../utils/UiMessage.dart';
+
 
 @immutable
 class PersonalInfoErrors {

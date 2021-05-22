@@ -12,7 +12,7 @@ import 'package:pzz/ui/home_page.dart';
 import 'package:pzz/ui/not_found_page.dart';
 import 'package:pzz/ui/person_info_page.dart';
 import 'package:pzz/ui/sauces_page.dart';
-import 'package:pzz/utils/widgets/bottom_sheet.dart';
+import 'package:pzz/utils/widgets/bottom_sheet_route.dart';
 import 'package:pzz/utils/widgets/dialog_route.dart';
 import 'package:pzz/utils/widgets/system_ui.dart';
 import 'package:redux/redux.dart';
@@ -85,13 +85,13 @@ class MainNavigationContainer extends StatelessWidget {
   }
 
   Page buildPage(NavStackEntry stackEntry) {
-    final _PageBuilder pageBuilder = routes[stackEntry.name!] ?? _PageBuilder.unknown();
+    final _PageBuilder pageBuilder = routes[stackEntry.name] ?? _PageBuilder.unknown();
     return pageBuilder.build(stackEntry);
   }
 
   static MaterialPage<T> _buildBasePage<T>(NavStackEntry stackEntry, WidgetArgBuild<T> builder) {
     return MaterialPage(
-      key: Key(stackEntry.name!) as LocalKey?,
+      key: Key(stackEntry.name) as LocalKey?,
       child: SystemUi(
         child: builder(stackEntry.args as T),
       ),
@@ -100,7 +100,7 @@ class MainNavigationContainer extends StatelessWidget {
 
   static MaterialDialogPage<T> _buildBaseDialog<T>(NavStackEntry stackEntry, WidgetArgBuild builder) {
     return MaterialDialogPage<T>(
-      key: Key(stackEntry.name!) as LocalKey?,
+      key: Key(stackEntry.name) as LocalKey?,
       name: stackEntry.name,
       arguments: stackEntry.args,
       child: SystemUi(
@@ -116,7 +116,7 @@ class MainNavigationContainer extends StatelessWidget {
 
   static BottomSheetDialog<T> buildScrollBottomSheetDialog<T>(NavStackEntry stackEntry, WidgetArgBuild builder) {
     return BottomSheetDialog<T>(
-      key: Key(stackEntry.name!) as LocalKey?,
+      key: Key(stackEntry.name) as LocalKey?,
       name: stackEntry.name,
       arguments: stackEntry.args,
       isScrollControlled: true,

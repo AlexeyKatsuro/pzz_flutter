@@ -8,7 +8,7 @@ class PzzServerError implements Exception {
     final payload = body['data'] ?? body['response'];
     final message = payload != null
         ? UiMessage.text(payload['message'] as String)
-        : const UiMessage.key(AppLocalizationKeys.errorUnexpected);
+        : UiMessage.key(AppLocalizationKeys.errorUnexpected);
     return PzzServerError(message);
   }
 
