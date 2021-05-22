@@ -7,7 +7,7 @@ import 'package:pzz/domain/pzz_net_service.dart';
 import 'package:pzz/domain/repository/preference_pepository_impl.dart';
 import 'package:pzz/domain/repository/preference_repository.dart';
 import 'package:pzz/domain/repository/pzz_repository.dart';
-import 'package:pzz/domain/repository/pzz_repository_impl.dart';
+import 'package:pzz/domain/repository/pzz_repository_mock.dart';
 import 'package:pzz/domain/session_bearer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,7 +18,8 @@ Future<void> initDependencies() async {
   getIt.registerLazySingleton<SessionBearer>(() => SessionBearerImpl(getIt.get<SharedPreferences>()));
   getIt.registerLazySingleton<PzzNetService>(() => PzzNetService(getIt<http.Client>()));
 
-  getIt.registerLazySingleton<PzzRepository>(() => PzzRepositoryImpl(getIt<PzzNetService>()));
+  // getIt.registerLazySingleton<PzzRepository>(() => PzzRepositoryImpl(getIt<PzzNetService>()));
+  getIt.registerLazySingleton<PzzRepository>(() => PzzRepositoryMock());
   getIt.registerLazySingleton<PreferenceRepository>(() => PreferenceRepositoryImpl(getIt<SharedPreferences>()));
   getIt.registerLazySingleton<http.Client>(
     () => HttpClientWithInterceptor.build(

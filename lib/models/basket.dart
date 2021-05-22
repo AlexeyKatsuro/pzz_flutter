@@ -23,4 +23,16 @@ class Basket {
   final BasketAddress address;
 
   String get totalAmountText => '${totalAmount.toStringAsFixed(2)} р.';
+
+  Basket copyWith({
+    List<BasketProduct>? items,
+    num? totalAmount,
+    BasketAddress? address,
+  }) {
+    return Basket(
+      items: items ?? this.items,
+      totalAmount: totalAmount ?? this.totalAmount,
+      address: address ?? this.address,
+    );
+  }
 }

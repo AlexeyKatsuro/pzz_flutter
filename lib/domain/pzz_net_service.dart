@@ -56,12 +56,12 @@ class PzzNetService {
   }
 
   Future<List<Street>> searchStreet(String query) async {
-    final path = Uri.encodeFull('streets?order=title:asc&search=title:$query');
+    final path = Uri.encodeFull('streets.json?order=title:asc&search=title:$query');
     return client.get(baseUrl.resolve(path)).handleResponse(_searchedStreetResponseMapper);
   }
 
   Future<List<House>> loadHousesByStreet(int streetId) async {
-    final path = Uri.encodeFull('streets/$streetId?order=title:asc&load=region.pizzeria');
+    final path = Uri.encodeFull('streets.json/$streetId?order=title:asc&load=region.pizzeria');
     return client.get(baseUrl.resolve(path)).handleResponse(_houseResponseMapper);
   }
 
@@ -76,9 +76,8 @@ class PzzNetService {
         .handleResponse(_basketResponseMapper);
   }
 
-  Future<Basket> placeOrder() async {
+  Future<void> placeOrder() async {
     await Future.delayed(const Duration(seconds: 3));
-    return const Basket.initial();
     // final path = 'basket/save';
     // return client.post(baseUrl.resolve(path)).handleResponse(_basketResponseMapper);
   }

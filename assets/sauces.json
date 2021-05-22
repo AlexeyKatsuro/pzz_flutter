@@ -1,0 +1,79 @@
+{
+  "error": false,
+  "code": 200,
+  "response": {
+    "data": [
+      {
+        "id": 3,
+        "title": "Соус Горчичный",
+        "title_inner": "Соус Горчичный",
+        "photo_small": "https://app.pzzby.com/uploads/photos/md9WKn25Tw.jpg",
+        "photo": "https://app.pzzby.com/uploads/photos/YNCRkUoAZI.jpg",
+        "description": "",
+        "price": 7000,
+        "in_stock": true
+      },
+      {
+        "id": 14,
+        "title": "Кетчуп томатный",
+        "title_inner": "Кетчуп томатный",
+        "photo_small": "https://app.pzzby.com/uploads/photos/IKucIIGDIe.jpg",
+        "photo": "",
+        "description": "",
+        "price": 7000,
+        "in_stock": true
+      },
+      {
+        "id": 1,
+        "title": "Соус Сырный ",
+        "title_inner": "Соус Сырный",
+        "photo_small": "https://app.pzzby.com/uploads/photos/0S2TNZVk5X.jpg",
+        "photo": "https://app.pzzby.com/uploads/photos/4g1LhRJCRu.jpg",
+        "description": "",
+        "price": 7000,
+        "in_stock": true
+      },
+      {
+        "id": 9,
+        "title": "Соус Терияки",
+        "title_inner": "Соус Терияки",
+        "photo_small": "https://app.pzzby.com/uploads/photos/7GvxxQcWms.jpg",
+        "photo": "https://app.pzzby.com/uploads/photos/WYS0nNy4kb.jpg",
+        "description": "",
+        "price": 7000,
+        "in_stock": true
+      },
+      {
+        "id": 5,
+        "title": "Соус Кисло-сладкий",
+        "title_inner": "Кисло-сладкий",
+        "photo_small": "https://app.pzzby.com/uploads/photos/qH6e61tx6q.jpg",
+        "photo": "https://app.pzzby.com/uploads/photos/FNlrZaIDbX.jpg",
+        "description": "",
+        "price": 7000,
+        "in_stock": true
+      },
+      {
+        "id": 4,
+        "title": "Соус Чесночный",
+        "title_inner": "Соус Чесночный",
+        "photo_small": "https://app.pzzby.com/uploads/photos/LNO0Qbtn7F.jpg",
+        "photo": "https://app.pzzby.com/uploads/photos/FPPaPPIgoH.jpg",
+        "description": "",
+        "price": 7000,
+        "in_stock": true
+      },
+      {
+        "id": 2,
+        "title": "Соус Барбекю",
+        "title_inner": "Соус Барбекю",
+        "photo_small": "https://app.pzzby.com/uploads/photos/VkgBDMwl8l.jpg",
+        "photo": "https://app.pzzby.com/uploads/photos/TgeTFTekkW.jpg",
+        "description": "",
+        "price": 7000,
+        "in_stock": true
+      }
+    ],
+    "meta": null
+  }
+}

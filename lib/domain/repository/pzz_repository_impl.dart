@@ -54,7 +54,7 @@ class PzzRepositoryImpl implements PzzRepository {
   }
 
   @override
-  Future<Basket> placeOrder() {
+  Future<void> placeOrder() {
     return _service.placeOrder();
   }
 }
