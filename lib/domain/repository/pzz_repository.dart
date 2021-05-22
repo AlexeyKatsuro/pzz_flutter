@@ -23,5 +23,5 @@ abstract class PzzRepository {
 
   Future<Basket> updateAddress(PersonalInfo personalInfo);
 
-  Future<Basket> placeOrder();
+  Future<void> placeOrder();
 }

@@ -52,5 +52,16 @@
   "chooseFeeSauces": "{count,plural, =1{Выберите {count} бесплатный соус} other{Выберите {count} бесплатных соусов}}",
 
   "english": "Английский",
-  "russian": "Русский"
+  "russian": "Русский",
+  "thankForOrder": "Спасибо за Ваш заказ!",
+  "toMenu": "К меню",
+  "deliveryConditions": "Tсли мы не доставим заказ за {count} минут вы получите одну пиццу из заказа бесплатно",
+  "@deliveryConditions": {
+    "placeholders": {
+      "count" : {
+        "type": "String",
+        "example": "60"
+      }
+    }
+  }
 }

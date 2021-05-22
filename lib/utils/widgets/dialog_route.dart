@@ -7,10 +7,10 @@ class DialogRoute<T> extends PopupRoute<T> {
     required WidgetBuilder builder,
     bool barrierDismissible = true,
     String? barrierLabel,
-    Color barrierColor = Colors.black45,
-    Duration transitionDuration = const Duration(milliseconds: 200),
-    RouteTransitionsBuilder transitionBuilder = buildMaterialDialogTransitions,
-    bool useSafeArea = true,
+    Color? barrierColor = Colors.black45,
+    Duration? transitionDuration = const Duration(milliseconds: 200),
+    RouteTransitionsBuilder? transitionBuilder = buildMaterialDialogTransitions,
+    bool? useSafeArea = true,
     ui.ImageFilter? filter,
     RouteSettings? settings,
   })  : _builder = builder,
@@ -25,32 +25,35 @@ class DialogRoute<T> extends PopupRoute<T> {
           filter: filter,
         );
 
-  factory DialogRoute.defaultExcept({
+  factory DialogRoute.withStyle({
     required WidgetBuilder builder,
-    bool? barrierDismissible,
-    String? barrierLabel,
-    Color? barrierColor,
-    Duration? transitionDuration,
-    RouteTransitionsBuilder? transitionBuilder,
-    bool? useSafeArea,
-    ui.ImageFilter? filter,
     RouteSettings? settings,
+    DialogRouteStyle? style,
   }) {
+    final defaultStyle = DialogRouteStyle(
+      barrierDismissible: true,
+      barrierColor: Colors.black45,
+      transitionDuration: const Duration(milliseconds: 200),
+      transitionBuilder: buildMaterialDialogTransitions,
+      useSafeArea: true,
+      //filter: ui.ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
+    );
+    final effectiveStyle = defaultStyle.fill(style);
     return DialogRoute(
       builder: builder,
-      barrierDismissible: barrierDismissible ?? true,
-      barrierLabel: barrierLabel,
-      barrierColor: barrierColor ?? Colors.black45,
-      transitionDuration: transitionDuration ?? const Duration(milliseconds: 200),
-      transitionBuilder: transitionBuilder ?? buildMaterialDialogTransitions,
-      useSafeArea: useSafeArea ?? true,
-      filter: filter ?? ui.ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
+      barrierDismissible: effectiveStyle.barrierDismissible!,
+      barrierLabel: effectiveStyle.barrierLabel,
+      barrierColor: effectiveStyle.barrierColor,
+      transitionDuration: effectiveStyle.transitionDuration,
+      transitionBuilder: effectiveStyle.transitionBuilder,
+      useSafeArea: effectiveStyle.useSafeArea,
+      filter: effectiveStyle.filter,
       settings: settings,
     );
   }
 
   final WidgetBuilder _builder;
-  final bool _useSafeArea;
+  final bool? _useSafeArea;
 
   @override
   bool get barrierDismissible => _barrierDismissible;
@@ -61,12 +64,12 @@ class DialogRoute<T> extends PopupRoute<T> {
   final String? _barrierLabel;
 
   @override
-  Color get barrierColor => _barrierColor;
-  final Color _barrierColor;
+  Color? get barrierColor => _barrierColor;
+  final Color? _barrierColor;
 
   @override
-  Duration get transitionDuration => _transitionDuration;
-  final Duration _transitionDuration;
+  Duration get transitionDuration => _transitionDuration!;
+  final Duration? _transitionDuration;
 
   final RouteTransitionsBuilder? _transitionBuilder;
 
@@ -81,7 +84,7 @@ class DialogRoute<T> extends PopupRoute<T> {
 
   Widget buildContent(BuildContext context) {
     Widget dialog = Builder(builder: _builder);
-    if (_useSafeArea) {
+    if (_useSafeArea!) {
       dialog = SafeArea(child: dialog);
     }
     // Fix for https://github.com/flutter/flutter/issues/12722
@@ -128,14 +131,7 @@ class MaterialDialogPage<T> extends Page<T> {
     Object? arguments,
     LocalKey? key,
     String? restorationId,
-    this.barrierDismissible,
-    this.barrierLabel,
-    this.barrierColor,
-    this.transitionDuration,
-    this.transitionBuilder,
-    this.useSafeArea,
-    this.filter,
-    this.settings,
+    this.style,
   }) : super(
           name: name,
           arguments: arguments,
@@ -144,6 +140,30 @@ class MaterialDialogPage<T> extends Page<T> {
         );
 
   final Widget child;
+  final DialogRouteStyle? style;
+
+  @override
+  Route<T> createRoute(BuildContext context) {
+    return DialogRoute.withStyle(
+      builder: (context) => child,
+      style: style,
+      settings: this,
+    );
+  }
+}
+
+class DialogRouteStyle {
+  DialogRouteStyle({
+    this.barrierDismissible,
+    this.barrierLabel,
+    this.barrierColor,
+    this.transitionDuration,
+    this.transitionBuilder,
+    this.useSafeArea,
+    this.filter,
+    this.settings,
+  });
+
   final bool? barrierDismissible;
   final String? barrierLabel;
   final Color? barrierColor;
@@ -153,18 +173,51 @@ class MaterialDialogPage<T> extends Page<T> {
   final ui.ImageFilter? filter;
   final RouteSettings? settings;
 
-  @override
-  Route<T> createRoute(BuildContext context) {
-    return DialogRoute.defaultExcept(
-      builder: (context) => child,
-      barrierDismissible: barrierDismissible,
-      barrierLabel: barrierLabel,
-      barrierColor: barrierColor,
-      transitionDuration: transitionDuration,
-      transitionBuilder: transitionBuilder,
-      useSafeArea: useSafeArea,
-      filter: filter,
-      settings: this,
+  /// Returns a copy of DialogRouteStyle where the null fields in [other]
+  /// have replaced the corresponding non-null fields from this ButtonStyle.
+  ///
+  /// In other words, this DialogRouteStyle is used to fill in unspecified (null) fields
+  /// in [other].
+  DialogRouteStyle fill(DialogRouteStyle? other) {
+    if (other == null) return this;
+    return other.merge(this);
+  }
+
+  /// Returns a copy of this DialogRouteStyle where the non-null fields in [style]
+  /// have replaced the corresponding null fields in this ButtonStyle.
+  ///
+  /// In other words, [style] is used to fill in unspecified (null) fields
+  /// this DialogRouteStyle.
+  DialogRouteStyle merge(DialogRouteStyle? style) {
+    if (style == null) return this;
+    return DialogRouteStyle(
+      barrierDismissible: barrierDismissible ?? style.barrierDismissible,
+      barrierLabel: barrierLabel ?? style.barrierLabel,
+      barrierColor: barrierColor ?? style.barrierColor,
+      transitionDuration: transitionDuration ?? style.transitionDuration,
+      transitionBuilder: transitionBuilder ?? style.transitionBuilder,
+      useSafeArea: useSafeArea ?? style.useSafeArea,
+      filter: filter ?? style.filter,
+    );
+  }
+
+  DialogRouteStyle copyWith({
+    bool? barrierDismissible,
+    String? barrierLabel,
+    Color? barrierColor,
+    Duration? transitionDuration,
+    RouteTransitionsBuilder? transitionBuilder,
+    bool? useSafeArea,
+    ui.ImageFilter? filter,
+  }) {
+    return DialogRouteStyle(
+      barrierDismissible: barrierDismissible ?? this.barrierDismissible,
+      barrierLabel: barrierLabel ?? this.barrierLabel,
+      barrierColor: barrierColor ?? this.barrierColor,
+      transitionDuration: transitionDuration ?? this.transitionDuration,
+      transitionBuilder: transitionBuilder ?? this.transitionBuilder,
+      useSafeArea: useSafeArea ?? this.useSafeArea,
+      filter: filter ?? this.filter,
     );
   }
 }

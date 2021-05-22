@@ -8,7 +8,6 @@ import 'package:pzz/models/navigation/navigation_state.dart';
 import 'package:pzz/models/person_info/personal_info_state.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/models/sauce.dart';
-import 'package:pzz/routes.dart';
 
 @immutable
 class AppState {
@@ -25,6 +24,7 @@ class AppState {
   });
 
   factory AppState.initial({
+    required String initialRoute,
     HomePageState? homePageState,
     PersonalInfoState? personalInfoState,
     List<Pizza>? pizzas,
@@ -43,7 +43,7 @@ class AppState {
         basket: basket ?? const Basket.initial(),
         isConfirmLoading: isConfirmLoading ?? false,
         scopedErrors: scopedErrors ?? const ScopedErrorsHub.initial(),
-        navigationState: navigationState ?? NavigationState.initial(initialRoute: Routes.homeScreen),
+        navigationState: navigationState ?? NavigationState.initial(initialRoute: initialRoute),
         locale: locale);
   }
 

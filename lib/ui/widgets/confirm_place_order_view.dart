@@ -6,6 +6,8 @@ import 'package:pzz/utils/extensions/enum_localization_ext.dart';
 import 'package:pzz/utils/extensions/widget_extension.dart';
 import 'package:pzz/utils/widgets/loading_switcher.dart';
 
+import 'bottom_sheet_drag_bar.dart';
+
 class ConfirmPlaceOrderView extends StatefulWidget {
   const ConfirmPlaceOrderView({
     required this.address,
@@ -36,19 +38,7 @@ class _ConfirmPlaceOrderViewState extends State<ConfirmPlaceOrderView> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: 32,
-                height: 6,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).dividerColor,
-                  borderRadius: BorderRadius.circular(4),
-                ),
-              ),
-            ),
-          ),
+          const BottomSheetDragBar(),
           ...[
             for (final product in widget.products) _buildProductRow(theme, localizations, product),
           ].divideChildren(divider: const Divider()),

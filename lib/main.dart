@@ -5,6 +5,7 @@ import 'package:pzz/domain/reducers/app_state_reduser.dart';
 import 'package:pzz/domain/repository/preference_repository.dart';
 import 'package:pzz/domain/repository/pzz_repository.dart';
 import 'package:pzz/models/app_state.dart';
+import 'package:pzz/routes.dart';
 import 'package:pzz/service_locator.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_epics/redux_epics.dart';
@@ -12,8 +13,7 @@ import 'package:redux_logging/redux_logging.dart';
 
 import 'domain/middleware/epics.dart';
 
-// ignore: avoid_void_async
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   /// Print stacktrace for widget exceptions.
@@ -33,7 +33,7 @@ void main() async {
     PzzApp(
       store: Store<AppState>(
         appReducer,
-        initialState: AppState.initial(),
+        initialState: AppState.initial(initialRoute: Routes.homeScreen),
         middleware: middleware,
       ),
     ),

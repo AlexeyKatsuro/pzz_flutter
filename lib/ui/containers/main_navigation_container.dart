@@ -12,12 +12,13 @@ import 'package:pzz/ui/home_page.dart';
 import 'package:pzz/ui/not_found_page.dart';
 import 'package:pzz/ui/person_info_page.dart';
 import 'package:pzz/ui/sauces_page.dart';
+import 'package:pzz/ui/widgets/success_order_dialog.dart';
 import 'package:pzz/utils/widgets/bottom_sheet_route.dart';
 import 'package:pzz/utils/widgets/dialog_route.dart';
 import 'package:pzz/utils/widgets/system_ui.dart';
 import 'package:redux/redux.dart';
 
-typedef WidgetArgBuild<T> = Widget Function(T? args);
+typedef WidgetArgBuild<T> = Widget Function(T args);
 
 class MainNavigationContainer extends StatelessWidget {
   final _navigatorKey = GlobalKey<NavigatorState>();
@@ -39,21 +40,15 @@ class MainNavigationContainer extends StatelessWidget {
       widgetBuilder: (_) => SaucesPage(),
       builder: _buildBasePage,
     ),
-    Routes.successOrderPlacedDialog: _PageBuilder(
-      widgetBuilder: (_) => AlertDialog(
-        title: const Text('Text'),
-        actions: [
-          TextButton(
-            onPressed: () {},
-            child: const Text('OK'),
-          )
-        ],
+    Routes.successOrderPlacedDialog: _PageBuilder<int>(
+      widgetBuilder: (arg) => SuccessOrderDialog(
+        freeAfterMinute: arg,
       ),
-      builder: _buildBaseDialog,
+      builder: _buildBottomSheetDialog,
     ),
     Routes.confirmPlaceOrderDialog: _PageBuilder(
       widgetBuilder: (_) => ConfirmPlaceOrderDialog(),
-      builder: buildScrollBottomSheetDialog,
+      builder: _buildScrollBottomSheetDialog,
     ),
     Routes.devScreen: _PageBuilder(widgetBuilder: (_) => DevPage(), builder: _buildBasePage)
   };
@@ -98,7 +93,8 @@ class MainNavigationContainer extends StatelessWidget {
     );
   }
 
-  static MaterialDialogPage<T> _buildBaseDialog<T>(NavDestination destination, WidgetArgBuild builder) {
+  // ignore: unused_element
+  static MaterialDialogPage<T> _buildBaseDialog<T>(NavDestination destination, WidgetArgBuild<T> builder) {
     return MaterialDialogPage<T>(
       key: Key(destination.name) as LocalKey?,
       name: destination.name,
@@ -109,13 +105,13 @@ class MainNavigationContainer extends StatelessWidget {
         systemNavigationBarIconBrightness: Brightness.light,
         systemNavigationBarColor: Colors.black54,
         statusBarColor: Colors.transparent,
-        child: builder(destination.args),
+        child: builder(destination.args as T),
       ),
     );
   }
 
-  static BottomSheetDialog<T> buildScrollBottomSheetDialog<T>(NavDestination destination, WidgetArgBuild builder) {
-    return BottomSheetDialog<T>(
+  static BottomSheetDialog _buildScrollBottomSheetDialog<T>(NavDestination destination, WidgetArgBuild<T> builder) {
+    return BottomSheetDialog(
       key: Key(destination.name) as LocalKey?,
       name: destination.name,
       arguments: destination.args,
@@ -124,7 +120,21 @@ class MainNavigationContainer extends StatelessWidget {
         statusBarBrightness: Brightness.dark,
         statusBarIconBrightness: Brightness.light,
         statusBarColor: Colors.transparent,
-        child: builder(destination.args),
+        child: builder(destination.args as T),
+      ),
+    );
+  }
+
+  static BottomSheetDialog _buildBottomSheetDialog<T>(NavDestination destination, WidgetArgBuild<T> builder) {
+    return BottomSheetDialog(
+      key: Key(destination.name) as LocalKey?,
+      name: destination.name,
+      arguments: destination.args,
+      child: SystemUi(
+        statusBarBrightness: Brightness.dark,
+        statusBarIconBrightness: Brightness.light,
+        statusBarColor: Colors.transparent,
+        child: builder(destination.args as T),
       ),
     );
   }
@@ -166,7 +176,7 @@ class _PageBuilder<T> {
         builder = MainNavigationContainer._buildBasePage;
 
   final WidgetArgBuild<T> widgetBuilder;
-  final Page<T> Function(NavDestination arguments, WidgetArgBuild<T> builder) builder;
+  final Page Function(NavDestination arguments, WidgetArgBuild<T> builder) builder;
 
-  Page<T> build(NavDestination destination) => builder(destination, widgetBuilder);
+  Page build(NavDestination destination) => builder(destination, widgetBuilder);
 }

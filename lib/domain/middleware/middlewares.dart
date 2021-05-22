@@ -8,6 +8,7 @@ import 'package:pzz/domain/repository/preference_repository.dart';
 import 'package:pzz/domain/repository/pzz_repository.dart';
 import 'package:pzz/domain/selectors/selector.dart';
 import 'package:pzz/models/app_state.dart';
+import 'package:pzz/models/basket.dart';
 import 'package:pzz/routes.dart';
 import 'package:redux/redux.dart';
 
@@ -157,8 +158,9 @@ MiddlewareTyped<AppState, ConfirmPlaceOrderAction> _createConfirmPlaceOrder(PzzR
     next(action);
     next(ConfirmLoadingAction(isLoading: true));
     repository.placeOrder().then((basket) {
-      next(NavigateAction.pushAndRemoveUntil(Routes.successOrderPlacedDialog, untilPage: Routes.homeScreen));
-      next(BasketLoadedAction(basket));
+      next(NavigateAction.pushAndRemoveUntil(Routes.successOrderPlacedDialog,
+          untilPage: Routes.homeScreen, arguments: 60));
+      next(BasketLoadedAction(const Basket.initial()));
     }).catchError((Object ex) {
       debugPrint('$ex');
       next(SetScopedErrorAction(error: errorMessageExtractor(ex), scope: action.scope));

@@ -94,5 +94,16 @@
     }
   },
   "english": "English",
-  "russian": "Russian"
+  "russian": "Russian",
+  "thankForOrder": "Thank you for your order!",
+  "toMenu": "To menu",
+  "deliveryConditions": "If we do not deliver the order in {count} minutes you will receive one pizza from the order for free",
+  "@deliveryConditions": {
+    "placeholders": {
+      "count" : {
+        "type": "String",
+        "example": "60"
+      }
+    }
+  }
 }
