@@ -157,7 +157,7 @@ MiddlewareTyped<AppState, ConfirmPlaceOrderAction> _createConfirmPlaceOrder(PzzR
     next(action);
     next(ConfirmLoadingAction(isLoading: true));
     repository.placeOrder().then((basket) {
-      next(NavigateAction.push(Routes.successOrderPlacedDialog));
+      next(NavigateAction.pushAndRemoveUntil(Routes.successOrderPlacedDialog, untilPage: Routes.homeScreen));
       next(BasketLoadedAction(basket));
     }).catchError((Object ex) {
       debugPrint('$ex');

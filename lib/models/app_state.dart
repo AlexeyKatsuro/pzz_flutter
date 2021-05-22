@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:pzz/domain/error/scoped_error_hub.dart';
 import 'package:pzz/models/basket.dart';
 import 'package:pzz/models/home_page_state.dart';
-import 'package:pzz/models/navigation_stack.dart';
+import 'package:pzz/models/navigation/navigation_state.dart';
 import 'package:pzz/models/person_info/personal_info_state.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/models/sauce.dart';
@@ -14,27 +14,38 @@ import 'package:pzz/routes.dart';
 class AppState {
   const AppState({
     required this.homePageState,
+    required this.personalInfoState,
     required this.pizzas,
     required this.sauce,
     required this.basket,
-    required this.personalInfoState,
     required this.isConfirmLoading,
     required this.scopedErrors,
-    required this.navigationStack,
+    required this.navigationState,
     required this.locale,
   });
 
-  const AppState.initial({
-    this.homePageState = const HomePageState.initial(),
-    this.isConfirmLoading = false,
-    this.pizzas = const [],
-    this.sauce = const [],
-    this.basket = const Basket.initial(),
-    this.personalInfoState = const PersonalInfoState.initial(),
-    this.scopedErrors = const ScopedErrorsHub.initial(),
-    this.navigationStack = const NavigationStack([NavStackEntry(name: Routes.homeScreen)]),
-    this.locale,
-  });
+  factory AppState.initial({
+    HomePageState? homePageState,
+    PersonalInfoState? personalInfoState,
+    List<Pizza>? pizzas,
+    List<Sauce>? sauce,
+    Basket? basket,
+    bool? isConfirmLoading,
+    ScopedErrorsHub? scopedErrors,
+    NavigationState? navigationState,
+    Locale? locale,
+  }) {
+    return AppState(
+        homePageState: homePageState ?? const HomePageState.initial(),
+        personalInfoState: personalInfoState ?? const PersonalInfoState.initial(),
+        pizzas: pizzas ?? const [],
+        sauce: sauce ?? const [],
+        basket: basket ?? const Basket.initial(),
+        isConfirmLoading: isConfirmLoading ?? false,
+        scopedErrors: scopedErrors ?? const ScopedErrorsHub.initial(),
+        navigationState: navigationState ?? NavigationState.initial(initialRoute: Routes.homeScreen),
+        locale: locale);
+  }
 
   final HomePageState homePageState;
   final PersonalInfoState personalInfoState;
@@ -43,6 +54,6 @@ class AppState {
   final Basket basket;
   final bool isConfirmLoading; // TODO use local loading flags on App level
   final ScopedErrorsHub scopedErrors;
-  final NavigationStack navigationStack;
+  final NavigationState navigationState;
   final Locale? locale;
 }

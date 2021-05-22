@@ -3,7 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:pzz/domain/actions/navigation_actions.dart';
 import 'package:pzz/domain/selectors/selector.dart';
 import 'package:pzz/models/app_state.dart';
-import 'package:pzz/models/navigation_stack.dart';
+import 'package:pzz/models/navigation/navigation_stack.dart';
 import 'package:pzz/routes.dart';
 import 'package:pzz/ui/basket_page.dart';
 import 'package:pzz/ui/containers/confirm_place_order_container.dart';
@@ -84,47 +84,47 @@ class MainNavigationContainer extends StatelessWidget {
     );
   }
 
-  Page buildPage(NavStackEntry stackEntry) {
-    final _PageBuilder pageBuilder = routes[stackEntry.name] ?? _PageBuilder.unknown();
-    return pageBuilder.build(stackEntry);
+  Page buildPage(NavDestination destination) {
+    final _PageBuilder pageBuilder = routes[destination.name] ?? _PageBuilder.unknown();
+    return pageBuilder.build(destination);
   }
 
-  static MaterialPage<T> _buildBasePage<T>(NavStackEntry stackEntry, WidgetArgBuild<T> builder) {
+  static MaterialPage<T> _buildBasePage<T>(NavDestination destination, WidgetArgBuild<T> builder) {
     return MaterialPage(
-      key: Key(stackEntry.name) as LocalKey?,
+      key: Key(destination.name) as LocalKey?,
       child: SystemUi(
-        child: builder(stackEntry.args as T),
+        child: builder(destination.args as T),
       ),
     );
   }
 
-  static MaterialDialogPage<T> _buildBaseDialog<T>(NavStackEntry stackEntry, WidgetArgBuild builder) {
+  static MaterialDialogPage<T> _buildBaseDialog<T>(NavDestination destination, WidgetArgBuild builder) {
     return MaterialDialogPage<T>(
-      key: Key(stackEntry.name) as LocalKey?,
-      name: stackEntry.name,
-      arguments: stackEntry.args,
+      key: Key(destination.name) as LocalKey?,
+      name: destination.name,
+      arguments: destination.args,
       child: SystemUi(
         statusBarBrightness: Brightness.dark,
         statusBarIconBrightness: Brightness.light,
         systemNavigationBarIconBrightness: Brightness.light,
         systemNavigationBarColor: Colors.black54,
         statusBarColor: Colors.transparent,
-        child: builder(stackEntry.args),
+        child: builder(destination.args),
       ),
     );
   }
 
-  static BottomSheetDialog<T> buildScrollBottomSheetDialog<T>(NavStackEntry stackEntry, WidgetArgBuild builder) {
+  static BottomSheetDialog<T> buildScrollBottomSheetDialog<T>(NavDestination destination, WidgetArgBuild builder) {
     return BottomSheetDialog<T>(
-      key: Key(stackEntry.name) as LocalKey?,
-      name: stackEntry.name,
-      arguments: stackEntry.args,
+      key: Key(destination.name) as LocalKey?,
+      name: destination.name,
+      arguments: destination.args,
       isScrollControlled: true,
       child: SystemUi(
         statusBarBrightness: Brightness.dark,
         statusBarIconBrightness: Brightness.light,
         statusBarColor: Colors.transparent,
-        child: builder(stackEntry.args),
+        child: builder(destination.args),
       ),
     );
   }
@@ -166,7 +166,7 @@ class _PageBuilder<T> {
         builder = MainNavigationContainer._buildBasePage;
 
   final WidgetArgBuild<T> widgetBuilder;
-  final Page<T> Function(NavStackEntry arguments, WidgetArgBuild<T> builder) builder;
+  final Page<T> Function(NavDestination arguments, WidgetArgBuild<T> builder) builder;
 
-  Page<T> build(NavStackEntry stackEntry) => builder(stackEntry, widgetBuilder);
+  Page<T> build(NavDestination destination) => builder(destination, widgetBuilder);
 }

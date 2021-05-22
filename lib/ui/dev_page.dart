@@ -4,7 +4,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:pzz/domain/actions/actions.dart';
 import 'package:pzz/domain/selectors/selector.dart';
 import 'package:pzz/models/app_state.dart';
-import 'package:pzz/models/navigation_stack.dart';
+import 'package:pzz/models/navigation/navigation_stack.dart';
 import 'package:redux/redux.dart';
 
 class DevPage extends StatelessWidget {

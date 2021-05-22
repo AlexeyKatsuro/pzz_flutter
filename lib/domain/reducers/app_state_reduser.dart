@@ -19,7 +19,7 @@ AppState appReducer(AppState state, dynamic action) {
     basket: basketReducer(state.basket, action),
     personalInfoState: personalInfoStateReducer(state.personalInfoState, action),
     isConfirmLoading: _confirmLoadingReducer(state.isConfirmLoading, action),
-    navigationStack: navigationStackReducer(state.navigationStack, action),
+    navigationState: navigationStackReducer(state.navigationState, action),
     locale: _localeReducer(state.locale, action),
   );
 }

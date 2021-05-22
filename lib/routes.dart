@@ -1,14 +1,14 @@
 class Routes {
-  static const homeScreen = '/home';
-  static const basketScreen = '/basketScreen';
-  static const personalInfoScreen = '/personalInfoScreen';
-  static const saucesScreen = '/saucesScreen';
-  static const confirmPlaceOrderDialog = '/confirmPlaceOrderDialog';
-  static const successOrderPlacedDialog = '/successOrderPlacedDialog';
+  static const homeScreen = '/';
+  static const basketScreen = '/basketS';
+  static const personalInfoScreen = '/personal';
+  static const saucesScreen = '/sauces';
+  static const confirmPlaceOrderDialog = '/confirm_order';
+  static const successOrderPlacedDialog = '/success_order';
 
   static const devScreen = '/devScreen';
 
   // TODO create separated scopes constants
-  static const searchStreetScreen = '/searchStreetScreen';
-  static const searchHouseScreen = '/searchHouseScreen';
+  static const searchStreetScreen = '/search_street';
+  static const searchHouseScreen = '/search_house';
 }

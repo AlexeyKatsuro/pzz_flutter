@@ -7,10 +7,8 @@ class PzzAppTheme {
   static const _brand_blue = Color(0xFF277dff);
   static const _brand_blue_variant = Color(0xFF9abef5);
 
-  //static const _brand_blue = Colors.green;
-  //static const _brand_blue_variant = Color(0xFFA5D6A7);
   static const _white_sheet = Color(0xFFF6F6F6);
-  //static const _dark_sheet = Color(0xFF121212);
+  static const _dark_sheet = Color(0xFF121212);
 
   static final pzzLightTheme = themeData(_pzzLightColorScheme, _textTheme);
   static final pzzDarkTheme = themeData(_pzzDarkColorScheme, _textTheme);
@@ -40,6 +38,7 @@ class PzzAppTheme {
         scaffoldBackgroundColor: colorScheme.background,
         cardTheme: _buildCardTheme(dividerColor, colorScheme),
         appBarTheme: _buildAppBarTheme(textTheme, iconTheme, colorScheme),
+        progressIndicatorTheme: ProgressIndicatorThemeData(color: colorScheme.secondary),
         inputDecorationTheme: _buildInputDecorationTheme(),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
@@ -114,7 +113,8 @@ class PzzAppTheme {
     primaryVariant: _brand_orange_variant,
     secondary: _brand_blue_variant,
     secondaryVariant: _brand_blue,
-    background: Colors.black,
+    // ignore: avoid_redundant_argument_values
+    background: _dark_sheet,
   );
 
   static const _fontFamily = 'Malina';

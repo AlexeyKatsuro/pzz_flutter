@@ -33,7 +33,7 @@ void main() async {
     PzzApp(
       store: Store<AppState>(
         appReducer,
-        initialState: const AppState.initial(),
+        initialState: AppState.initial(),
         middleware: middleware,
       ),
     ),
