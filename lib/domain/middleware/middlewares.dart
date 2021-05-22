@@ -3,6 +3,7 @@ import 'package:pzz/domain/actions/actions.dart';
 import 'package:pzz/domain/actions/navigation_actions.dart';
 import 'package:pzz/domain/error/error_message_extractor.dart';
 import 'package:pzz/domain/error/scoped_error_actions.dart';
+import 'package:pzz/domain/middleware/navigation_middleware.dart';
 import 'package:pzz/domain/person_info_form/actions/person_info_form_actions.dart';
 import 'package:pzz/domain/repository/preference_repository.dart';
 import 'package:pzz/domain/repository/pzz_repository.dart';
@@ -22,6 +23,7 @@ List<Middleware<AppState>> createPzzMiddleware(
   PreferenceRepository preferenceRepository,
 ) {
   return [
+    TypedMiddleware<AppState, NavigateAction>(navigationMiddleware),
     TypedMiddleware<AppState, InitialAction>(_createInitial(pzzRepository, preferenceRepository)),
     TypedMiddleware<AppState, LoadPizzasAction>(_createLoadPizzas(pzzRepository)),
     TypedMiddleware<AppState, LoadBasketAction>(_createLoadBasket(pzzRepository)),

@@ -7,7 +7,7 @@ class SessionCookiesInterceptor implements InterceptorContract {
 
   static const PHPSESSID = 'PHPSESSID';
   static const COOKIE = 'Cookie';
-  static const SET_COOKIE = 'set-±cookie';
+  static const SET_COOKIE = 'set-cookie';
 
   final SessionBearer _sessionBearer;
 
@@ -15,7 +15,7 @@ class SessionCookiesInterceptor implements InterceptorContract {
   Future<RequestData?> interceptRequest({RequestData? data}) async {
     if (_sessionBearer.isTokenValid()) {
       try {
-        data!.headers[COOKIE] = _sessionBearer.token;
+        data?.headers[COOKIE] = _sessionBearer.token;
       } catch (e) {
         debugPrint('$e');
       }
@@ -25,9 +25,11 @@ class SessionCookiesInterceptor implements InterceptorContract {
 
   @override
   Future<ResponseData?> interceptResponse({ResponseData? data}) async {
-    if (!_sessionBearer.isTokenValid()) {
-      final setCookieHeader = data!.headers[SET_COOKIE]!;
-      _sessionBearer.token = setCookieHeader.split(';').firstWhere((element) => element.contains(PHPSESSID));
+    if (!_sessionBearer.isTokenValid() && data != null) {
+      final setCookieHeader = data.headers[SET_COOKIE];
+      if (setCookieHeader != null) {
+        _sessionBearer.token = setCookieHeader.split(';').firstWhere((element) => element.contains(PHPSESSID));
+      }
     }
     return data;
   }

@@ -6,7 +6,7 @@ import 'package:pzz/l10n/app_localization_keys.dart';
 import 'package:pzz/utils/ui_message.dart';
 
 /// Parse [error] to meaningful and useful messages for the user.
-UiMessage errorMessageExtractor(Object error) {
+UiMessage errorMessageExtractor(dynamic error) {
   if (error is PzzServerError) {
     return error.message;
   } else if (error is SocketException) {
