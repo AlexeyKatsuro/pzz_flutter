@@ -10,10 +10,9 @@ import 'package:redux/redux.dart';
 import 'package:redux_epics/redux_epics.dart';
 import 'package:redux_logging/redux_logging.dart';
 
-import 'domain/middleware/epics.dart';
+import 'domain/middleware/app_epics.dart';
 
-// ignore: avoid_void_async
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   /// Print stacktrace for widget exceptions.

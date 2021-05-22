@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'package:http_parser/http_parser.dart';
 import 'package:pzz/domain/error/error_message_extractor.dart';
 import 'package:pzz/domain/error/standard_pzz_error.dart';
 import 'package:pzz/models/basket.dart';
