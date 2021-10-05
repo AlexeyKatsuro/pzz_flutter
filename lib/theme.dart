@@ -73,15 +73,10 @@ class PzzAppTheme {
 
   static AppBarTheme _buildAppBarTheme(TextTheme textTheme, IconThemeData iconTheme, ColorScheme colorScheme) {
     return AppBarTheme(
-      textTheme:
-          textTheme.copyWith(headline6: textTheme.headline6!.copyWith(color: colorScheme.primary, inherit: true)),
+      titleTextStyle: textTheme.headline6!.copyWith(color: colorScheme.primary, inherit: true),
       color: colorScheme.surface,
-      brightness: colorScheme.brightness,
       iconTheme: iconTheme,
       actionsIconTheme: IconThemeData(color: colorScheme.primary),
-      /* color: colorScheme.surface,
-      textTheme: textTheme,
-      brightness: colorScheme.brightness,*/
     );
   }
 
