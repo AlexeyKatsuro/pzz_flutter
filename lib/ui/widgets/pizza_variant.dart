@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/models/pizza_variant.dart';
+import 'package:pzz/res/constants.dart';
 import 'package:pzz/ui/widgets/counter.dart';
 import 'package:pzz/utils/extensions/enum_localization_ext.dart';
 
@@ -40,9 +41,24 @@ class PizzaVariantWidget extends StatelessWidget {
           ),
         ),
         Expanded(
-          child: countInBasket > 0 ? _buildCounter() : _buildToBasketButton(localizations),
+          child: _buildAction(localizations),
         )
       ],
+    );
+  }
+
+  Widget _buildAction(AppLocalizations localizations) {
+    return AnimatedSwitcher(
+      duration: kDurationFast,
+      transitionBuilder: (Widget child, Animation<double> animation) {
+        return ScaleTransition(
+            scale: CurvedAnimation(
+              parent: animation,
+              curve: Curves.easeOut,
+            ),
+            child: child);
+      },
+      child: countInBasket > 0 ? _buildCounter() : _buildToBasketButton(localizations),
     );
   }
 
