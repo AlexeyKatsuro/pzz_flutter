@@ -42,7 +42,7 @@ class SaucesLoadedAction {
 class BasketLoadedAction {
   BasketLoadedAction(this.basket);
 
-  final Basket basket;
+  final BasketEntity basket;
 }
 
 class AddProductAction implements Scoped {

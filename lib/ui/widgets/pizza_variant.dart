@@ -59,9 +59,7 @@ class PizzaVariantWidget extends StatelessWidget {
           child: child,
         );
       },
-      child: countInBasket > 0
-          ? _buildCounter()
-          : _buildToBasketButton(localizations),
+      child: countInBasket > 0 ? _buildCounter() : _buildToBasketButton(localizations),
     );
   }
 

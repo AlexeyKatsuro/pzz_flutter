@@ -15,12 +15,16 @@ final getIt = GetIt.instance;
 
 Future<void> initDependencies() async {
   getIt.registerSingleton(await SharedPreferences.getInstance());
-  getIt.registerLazySingleton<SessionBearer>(() => SessionBearerImpl(getIt.get<SharedPreferences>()));
+  getIt.registerLazySingleton<SessionBearer>(
+    () => SessionBearerImpl(getIt.get<SharedPreferences>()),
+  );
   getIt.registerLazySingleton<PzzNetService>(() => PzzNetService(getIt<http.Client>()));
 
   // getIt.registerLazySingleton<PzzRepository>(() => PzzRepositoryImpl(getIt<PzzNetService>()));
   getIt.registerLazySingleton<PzzRepository>(() => PzzRepositoryMock());
-  getIt.registerLazySingleton<PreferenceRepository>(() => PreferenceRepositoryImpl(getIt<SharedPreferences>()));
+  getIt.registerLazySingleton<PreferenceRepository>(
+    () => PreferenceRepositoryImpl(getIt<SharedPreferences>()),
+  );
   getIt.registerLazySingleton<http.Client>(
     () => InterceptedClient.build(
       interceptors: [

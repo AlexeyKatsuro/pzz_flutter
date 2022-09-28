@@ -40,7 +40,10 @@ class SauceWidget extends StatelessWidget {
                 children: [
                   Text(
                     item.title,
-                    style: Theme.of(context).textTheme.headline6!.copyWith(color: Theme.of(context).primaryColor),
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline6!
+                        .copyWith(color: Theme.of(context).primaryColor),
                   ),
                   Text(
                     isFree ? '0.00 р' : item.priceText,

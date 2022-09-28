@@ -21,7 +21,7 @@ import 'package:reselect/reselect.dart';
 
 NavigationStack navigationStackSelector(AppState state) => state.navigationState.history;
 
-Basket basketSelector(AppState state) => state.basket;
+BasketEntity basketSelector(AppState state) => state.basket;
 
 HomePageState homePageStateSelector(AppState state) => state.homePageState;
 
@@ -35,7 +35,8 @@ List<Sauce> saucesSelector(AppState state) => state.sauce;
 
 PersonalInfo personalInfoSelector(AppState state) => state.personalInfoState.formInfo;
 
-PersonalInfoErrors personalInfoErrorsSelector(AppState state) => state.personalInfoState.formInfoErrors;
+PersonalInfoErrors personalInfoErrorsSelector(AppState state) =>
+    state.personalInfoState.formInfoErrors;
 
 bool isHomeSelectionAllowSelector(AppState state) => state.personalInfoState.formInfo.streetId != 0;
 
@@ -45,16 +46,19 @@ List<House> suggestedHousesSelector(AppState state) => state.personalInfoState.s
 
 List<House> totalHousesSelector(AppState state) => state.personalInfoState.totalHouses;
 
-Selector<AppState, Street> personalInfoStreetSelector = createSelector1(personalInfoSelector, (PersonalInfo info) {
+Selector<AppState, Street> personalInfoStreetSelector =
+    createSelector1(personalInfoSelector, (PersonalInfo info) {
   return Street(id: info.streetId, title: info.street);
 });
 
 Selector<AppState, Map<ProductType, List<CombinedBasketProduct>>> combinedBasketProductsTypedMap =
     createSelector1(basketProductsSelector, (List<BasketProduct> products) {
-  final Map<ProductType, List<BasketProduct>> typeMap = groupBy(products, (BasketProduct e) => e.type);
+  final Map<ProductType, List<BasketProduct>> typeMap =
+      groupBy(products, (BasketProduct e) => e.type);
 
   return typeMap.map((key, products) {
-    final Map<int, List<BasketProduct>> equalProductsMap = groupBy(products, (BasketProduct e) => e.id);
+    final Map<int, List<BasketProduct>> equalProductsMap =
+        groupBy(products, (BasketProduct e) => e.id);
     final List<CombinedBasketProduct> combinedList = equalProductsMap.entries.map((e) {
       final item = e.value.first;
       return CombinedBasketProduct(
@@ -69,7 +73,9 @@ Selector<AppState, Map<ProductType, List<CombinedBasketProduct>>> combinedBasket
 });
 
 /// Curried function from 2 arguments
-Selector<AppState, List<CombinedBasketProduct>> combinedBasketProductsByTypeSelector2(ProductType type) =>
+Selector<AppState, List<CombinedBasketProduct>> combinedBasketProductsByTypeSelector2(
+  ProductType type,
+) =>
     createSelector1(
       combinedBasketProductsTypedMap,
       (Map<ProductType, List<CombinedBasketProduct>> productMap) {
@@ -82,7 +88,8 @@ Selector<AppState, List<CombinedBasketProduct>> combinedBasketSaucesSelector =
     combinedBasketProductsByTypeSelector2(ProductType.sauce);
 
 Selector<AppState, List<CombinedBasketProduct>> combinedBasketProducts =
-    createSelector1(combinedBasketProductsTypedMap, (Map<ProductType, List<CombinedBasketProduct>> combinedProductMap) {
+    createSelector1(combinedBasketProductsTypedMap,
+        (Map<ProductType, List<CombinedBasketProduct>> combinedProductMap) {
   return combinedProductMap.values.fold([], (value, element) => value + element);
 });
 
@@ -96,8 +103,8 @@ CombinedBasketProduct? combinedProductSelectorBy(AppState state, ProductType typ
 Selector<AppState, int> freeSauceCountsSelector = createSelector1(
   combinedBasketProductsTypedMap,
   (Map<ProductType, List<CombinedBasketProduct>> productMap) {
-    final count =
-        (productMap[ProductType.pizza]?.allProductsCount ?? 0) - (productMap[ProductType.sauce]?.allProductsCount ?? 0);
+    final count = (productMap[ProductType.pizza]?.allProductsCount ?? 0) -
+        (productMap[ProductType.sauce]?.allProductsCount ?? 0);
     return count > 0 ? count : 0;
   },
 );
@@ -117,7 +124,8 @@ Selector<AppState, Map<int, int>> saucesCountsMapSelector = createSelector2(
 
 PaymentWay? paymentWaySelector(AppState state) => state.personalInfoState.formInfo.paymentWay;
 
-PersonalInfoErrors personInfoFormErrorsSelector(AppState state) => state.personalInfoState.formInfoErrors;
+PersonalInfoErrors personInfoFormErrorsSelector(AppState state) =>
+    state.personalInfoState.formInfoErrors;
 
 UiMessage paymentWayErrorSelector(AppState state) => personInfoFormErrorsSelector(state).paymentWay;
 

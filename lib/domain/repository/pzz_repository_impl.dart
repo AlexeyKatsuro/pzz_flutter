@@ -14,7 +14,7 @@ class PzzRepositoryImpl implements PzzRepository {
   final PzzNetService _service;
 
   @override
-  Future<Basket> addProductToBasket(Product product) {
+  Future<BasketEntity> addProductToBasket(Product product) {
     return _service.addProductToBasket(product);
   }
 
@@ -24,7 +24,7 @@ class PzzRepositoryImpl implements PzzRepository {
   }
 
   @override
-  Future<Basket> loadBasket() {
+  Future<BasketEntity> loadBasket() {
     return _service.loadBasket();
   }
 
@@ -34,7 +34,7 @@ class PzzRepositoryImpl implements PzzRepository {
   }
 
   @override
-  Future<Basket> removeProductFromBasket(Product product) {
+  Future<BasketEntity> removeProductFromBasket(Product product) {
     return _service.removePizzaFromBasket(product);
   }
 
@@ -49,7 +49,7 @@ class PzzRepositoryImpl implements PzzRepository {
   }
 
   @override
-  Future<Basket> updateAddress(PersonalInfo personalInfo) {
+  Future<BasketEntity> updateAddress(PersonalInfo personalInfo) {
     return _service.updateAddress(personalInfo);
   }
 

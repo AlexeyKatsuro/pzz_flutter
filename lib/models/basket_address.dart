@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 @immutable
-class BasketAddress {
-  const BasketAddress({
+class BasketAddressEntity {
+  const BasketAddressEntity({
     required this.streetId,
     required this.houseId,
     required this.name,
@@ -16,7 +16,7 @@ class BasketAddress {
     required this.intercom,
   });
 
-  const BasketAddress.initial({
+  const BasketAddressEntity.initial({
     this.streetId = 0,
     this.houseId = 0,
     this.name = '',
@@ -50,7 +50,7 @@ class BasketAddress {
   final String intercom;
 }
 
-extension BasketAddressExt on BasketAddress {
+extension BasketAddressExt on BasketAddressEntity {
   String makeFullAddress(AppLocalizations localizations) {
     if (flat.isNotEmpty) {
       return localizations.streetHouseFlat(street, house, flat);

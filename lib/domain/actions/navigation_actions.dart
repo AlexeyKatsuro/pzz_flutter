@@ -3,9 +3,11 @@ import 'package:pzz/models/navigation/navigation_stack.dart';
 abstract class NavigateAction {
   NavigateAction();
 
-  factory NavigateAction.push(String name, {Object? arguments}) => NavigatePushAction(name, arguments: arguments);
+  factory NavigateAction.push(String name, {Object? arguments}) =>
+      NavigatePushAction(name, arguments: arguments);
 
-  factory NavigateAction.replace(String name, {Object? arguments}) => NavigateReplaceAction(name, arguments: arguments);
+  factory NavigateAction.replace(String name, {Object? arguments}) =>
+      NavigateReplaceAction(name, arguments: arguments);
 
   factory NavigateAction.pop() => NavigatePopAction();
 

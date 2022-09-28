@@ -4,6 +4,11 @@ analyzer:
   #Exclude the file borrowed from flutter sdk
   exclude:
     - lib/utils/widgets/bottom_sheet_route.dart
+    - lib/**/*.gr.dart
+    - lib/**/*.g.dart
+    - test/**/*.mocks.dart
+    - lib/**/*.freezed.dart
+    - lib/**/*.gql.g.dart
 
   errors:
     # reasonable fpr no-sound-null-safety project

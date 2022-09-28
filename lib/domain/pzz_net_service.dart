@@ -40,18 +40,18 @@ class PzzNetService {
     return client.get(baseUrl.resolve(path)).handleResponse(_sauceResponseMapper);
   }
 
-  Future<Basket> loadBasket() async {
+  Future<BasketEntity> loadBasket() async {
     const path = 'basket';
     return client.get(baseUrl.resolve(path)).handleResponse(_basketResponseMapper);
   }
 
-  Future<Basket> addProductToBasket(Product product) async {
+  Future<BasketEntity> addProductToBasket(Product product) async {
     const path = 'basket/add-item';
     final formData = _makeProductFormData(product);
     return client.post(baseUrl.resolve(path), body: formData).handleResponse(_basketResponseMapper);
   }
 
-  Future<Basket> removePizzaFromBasket(Product product) async {
+  Future<BasketEntity> removePizzaFromBasket(Product product) async {
     const path = 'basket/remove-item';
     final formData = _makeProductFormData(product);
     return client.post(baseUrl.resolve(path), body: formData).handleResponse(_basketResponseMapper);
@@ -67,7 +67,7 @@ class PzzNetService {
     return client.get(baseUrl.resolve(path)).handleResponse(_houseResponseMapper);
   }
 
-  Future<Basket> updateAddress(PersonalInfo personalInfo) async {
+  Future<BasketEntity> updateAddress(PersonalInfo personalInfo) async {
     await Future.delayed(const Duration(seconds: 1));
     const path = 'basket/update-address';
     return client
@@ -114,10 +114,10 @@ class PzzNetService {
         .toList(growable: false);
   }
 
-  Basket _basketResponseMapper(dynamic data) {
+  BasketEntity _basketResponseMapper(dynamic data) {
     final basketDto = BasketDto.fromJson(data as Map<String, dynamic>);
     final products = basketDto.items.map(BasketItemResponseMapper.map).toList(growable: false);
-    return Basket(
+    return BasketEntity(
       items: products,
       totalAmount: basketDto.total! / 10000,
       address: AddressResponseMapper.map(basketDto.address!),

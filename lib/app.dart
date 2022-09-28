@@ -24,8 +24,7 @@ class PzzApp extends StatelessWidget {
       store: store,
       child: StoreConnector<AppState, _ViewModel>(
         distinct: true,
-        onInit: (store) =>
-            store.dispatch(InitialAction(scope: Routes.homeScreen)),
+        onInit: (store) => store.dispatch(InitialAction(scope: Routes.homeScreen)),
         converter: (store) => _ViewModel.fromStore(store),
         builder: (context, viewModel) {
           final navigator = MainNavigationContainer();
@@ -99,8 +98,7 @@ class _ViewModel {
     return _ViewModel(
       locale: appLocaleSelector(store.state),
       onSetLocale: (value) => store.dispatch(ChangeLocaleAction(value)),
-      onDevPageClick: () =>
-          store.dispatch(NavigateAction.push(Routes.devScreen)),
+      onDevPageClick: () => store.dispatch(NavigateAction.push(Routes.devScreen)),
     );
   }
 
@@ -111,9 +109,7 @@ class _ViewModel {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is _ViewModel &&
-          runtimeType == other.runtimeType &&
-          locale == other.locale;
+      other is _ViewModel && runtimeType == other.runtimeType && locale == other.locale;
 
   @override
   int get hashCode => locale.hashCode;

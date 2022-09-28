@@ -20,8 +20,7 @@ class PzzAppTheme {
         : const IconThemeData(color: Colors.black54);
     final dividerColor = colorScheme.onSurface.withOpacity(0.20);
 
-    final buttonsShapeStateProp =
-        MaterialStateProperty.all(kRoundedShapeBorder);
+    final buttonsShapeStateProp = MaterialStateProperty.all(kRoundedShapeBorder);
     return ThemeData(
       textTheme: textTheme,
       primaryTextTheme: textTheme,
@@ -41,8 +40,7 @@ class PzzAppTheme {
       scaffoldBackgroundColor: colorScheme.background,
       cardTheme: _buildCardTheme(dividerColor, colorScheme),
       appBarTheme: _buildAppBarTheme(textTheme, iconTheme, colorScheme),
-      progressIndicatorTheme:
-          ProgressIndicatorThemeData(color: colorScheme.secondary),
+      progressIndicatorTheme: ProgressIndicatorThemeData(color: colorScheme.secondary),
       inputDecorationTheme: _buildInputDecorationTheme(),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
@@ -83,8 +81,7 @@ class PzzAppTheme {
     ColorScheme colorScheme,
   ) {
     return AppBarTheme(
-      titleTextStyle: textTheme.headline6!
-          .copyWith(color: colorScheme.primary, inherit: true),
+      titleTextStyle: textTheme.headline6!.copyWith(color: colorScheme.primary, inherit: true),
       color: colorScheme.surface,
       iconTheme: iconTheme,
       actionsIconTheme: IconThemeData(color: colorScheme.primary),
@@ -145,8 +142,7 @@ class PzzAppTheme {
     subtitle2: TextStyle(fontSize: 14.0),
     bodyText1: TextStyle(fontSize: 16.0),
     bodyText2: TextStyle(fontSize: 14.0),
-    button:
-        TextStyle(fontSize: 14.0, fontFamily: _fontFamily, fontWeight: _bold),
+    button: TextStyle(fontSize: 14.0, fontFamily: _fontFamily, fontWeight: _bold),
     caption: TextStyle(fontSize: 12.0),
     overline: TextStyle(fontSize: 10.0),
   );

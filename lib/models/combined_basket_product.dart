@@ -38,7 +38,8 @@ class CombinedBasketProduct {
         }
       });
 
-  BasketProduct productsBy(ProductSize? size) => products.firstWhere((element) => element.size == size);
+  BasketProduct productsBy(ProductSize? size) =>
+      products.firstWhere((element) => element.size == size);
 
   Set<ProductSize?> get availableSizes => products.map((e) => e.size).toSet();
 
@@ -56,5 +57,6 @@ class CombinedBasketProduct {
 }
 
 extension ListCombinedBasketProductExt on List<CombinedBasketProduct> {
-  int get allProductsCount => fold(0, (previousValue, element) => previousValue + element.productsCount);
+  int get allProductsCount =>
+      fold(0, (previousValue, element) => previousValue + element.productsCount);
 }

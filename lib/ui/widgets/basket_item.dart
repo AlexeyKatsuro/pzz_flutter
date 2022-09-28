@@ -43,10 +43,10 @@ class BasketItem extends StatelessWidget {
               child: Text(
                 '${(price * count).toStringAsFixed(2)} р.',
                 textAlign: TextAlign.right,
-                style: Theme.of(context)
-                    .textTheme
-                    .headline6!
-                    .copyWith(color: Theme.of(context).colorScheme.onSurface, fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.headline6!.copyWith(
+                      color: Theme.of(context).colorScheme.onSurface,
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
             )
           ],

@@ -1,24 +1,25 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:pzz/domain/actions/actions.dart';
-import 'package:pzz/domain/actions/navigation_actions.dart';
-import 'package:pzz/domain/selectors/selector.dart';
-import 'package:pzz/models/app_state.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
+import 'package:provider/provider.dart';
 import 'package:pzz/models/combined_basket_product.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/res/constants.dart';
 import 'package:pzz/routes.dart';
+import 'package:pzz/stores/basket_store.dart';
+import 'package:pzz/stores/home_store.dart';
 import 'package:pzz/ui/widgets/badge_counter.dart';
 import 'package:pzz/ui/widgets/counter.dart';
 import 'package:pzz/ui/widgets/error_view.dart';
 import 'package:pzz/ui/widgets/pizza.dart';
-import 'package:pzz/utils/extensions/to_product_ext.dart';
 import 'package:pzz/utils/scoped.dart';
 import 'package:pzz/utils/ui_message.dart';
 import 'package:pzz/utils/widgets/error_scoped_notifier.dart';
 import 'package:pzz/utils/widgets/slivers/sliver_child_builder_separated_delegate.dart';
-import 'package:redux/redux.dart';
+
+part 'home_page.g.dart';
 
 class HomePage extends StatefulWidget implements Scoped {
   @override
@@ -46,34 +47,36 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-    return StoreConnector<AppState, _ViewModel>(
-      converter: (store) => _ViewModel.formStore(store, widget.scope),
-      builder: (context, vm) {
-        final localizations = AppLocalizations.of(context);
-        return Scaffold(
-          body: ErrorScopedNotifier(
-            widget.scope,
-            child: AnimatedSwitcher(
-              duration: kDurationFast,
-              child: _buildContent(localizations, vm),
-            ),
-          ),
-          floatingActionButton: _HomeFab(
-            scrollController: scrollController,
-            basketCount: vm.basketCount,
-            showOnOffset: screenSize.height,
-            onArrowClick: () {
-              // scroll to top
-              scrollController.animateTo(
-                scrollController.initialScrollOffset,
-                curve: Curves.easeInOutCirc,
-                duration: kDurationMedium,
-              );
-            },
-            onBasketClick: vm.onBasketClick,
-          ),
+    final homeStore = Provider.of<HomeStore>(context);
+    final basketStore = Provider.of<BasketStore>(context);
+    final localizations = AppLocalizations.of(context);
+    final vm = _ViewModel(homeStore, basketStore);
+    return Scaffold(
+      body: ErrorScopedNotifier(
+        widget.scope,
+        child: AnimatedSwitcher(
+          duration: kDurationFast,
+          child: Observer(builder: (context) {
+            return _buildContent(localizations, vm);
+          },),
+        ),
+      ),
+      floatingActionButton: Observer(builder: (context) {
+        return _HomeFab(
+          scrollController: scrollController,
+          basketCount: vm.basketCount,
+          showOnOffset: screenSize.height,
+          onArrowClick: () {
+            // scroll to top
+            scrollController.animateTo(
+              scrollController.initialScrollOffset,
+              curve: Curves.easeInOutCirc,
+              duration: kDurationMedium,
+            );
+          },
+          onBasketClick: vm.onBasketClick,
         );
-      },
+      },),
     );
   }
 
@@ -113,21 +116,28 @@ class _HomePageState extends State<HomePage> {
         ),
         SliverPadding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-          sliver: SliverList(
-            delegate: SliverChildBuilderSeparatedDelegate(
-              separatorBuilder: (context, index) => const SizedBox(height: 8),
-              itemBuilder: (context, index) {
-                final pizza = vm.pizzas[index];
-                return PizzaWidget(
-                  combinedProduct: vm.getCombinedProduct(pizza.type, pizza.id),
-                  pizza: pizza,
-                  onRemovePizzaClick: vm.onRemovePizzaClick,
-                  onAddPizzaClick: vm.onAddPizzaClick,
-                );
-              },
-              itemCount: vm.pizzas.length,
-            ),
-          ),
+          sliver: Observer(builder: (context) {
+            return SliverList(
+              delegate: SliverChildBuilderSeparatedDelegate(
+                separatorBuilder: (context, index) => const SizedBox(height: 8),
+                itemBuilder: (context, index) {
+                  return Observer(
+                    builder: (context) {
+                      final pizza = vm.pizzas[index];
+                      return PizzaWidget(
+                        combinedProduct:
+                            pizza.value, // vm.getCombinedProduct(pizza.type, pizza.id),
+                        pizza: pizza.key,
+                        onRemovePizzaClick: vm.onRemovePizzaClick,
+                        onAddPizzaClick: vm.onAddPizzaClick,
+                      );
+                    },
+                  );
+                },
+                itemCount: vm.pizzasCount,
+              ),
+            );
+          },),
         )
       ],
     );
@@ -140,52 +150,48 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class _ViewModel {
-  _ViewModel({
-    required this.pizzas,
-    required this.errorMessage,
-    required this.loading,
-    required this.onAddPizzaClick,
-    required this.onRemovePizzaClick,
-    required this.getCombinedProduct,
-    required this.onRepeat,
-    required this.basketCount,
-    required this.onBasketClick,
-  });
+class _ViewModel = _ViewModelBase with _$_ViewModel;
 
-  factory _ViewModel.formStore(Store<AppState> store, String scope) {
-    return _ViewModel(
-      errorMessage: homePageStateSelector(store.state).errorMessage,
-      pizzas: pizzasSelector(store.state),
-      loading: homePageStateSelector(store.state).isLoading,
-      basketCount: basketCountSelector(store.state),
-      // TODO wrong approach, UI doesn't should request data through ViewModel
-      getCombinedProduct: (type, productId) =>
-          combinedProductSelectorBy(store.state, type, productId),
-      onAddPizzaClick: (pizza, size) => store.dispatch(
-        AddProductAction(scope: scope, product: pizza.toProduct(size)),
-      ),
-      onRemovePizzaClick: (pizza, size) => store.dispatch(
-        RemoveProductAction(scope: scope, product: pizza.toProduct(size)),
-      ),
-      onRepeat: () => store.dispatch(InitialAction(scope: scope)),
-      onBasketClick: () =>
-          store.dispatch(NavigateAction.push(Routes.basketScreen)),
-    );
+abstract class _ViewModelBase with Store {
+  _ViewModelBase(this.homeStore, this.basketStore);
+
+  final HomeStore homeStore;
+  final BasketStore basketStore;
+
+  @computed
+  List<MapEntry<Pizza, CombinedBasketProduct?>> get pizzas {
+    return [
+      for (final pizza in homeStore.pizzas)
+        MapEntry(
+            pizza,
+            basketStore.combinedProductBy[ProductType.pizza]
+                ?.firstWhereOrNull((product) => product.id == pizza.id),),
+    ];
   }
 
-  final List<Pizza> pizzas;
-  final bool loading;
-  final int basketCount;
-  final UiMessage? errorMessage;
-  final VoidCallback onRepeat;
-  final void Function(Pizza, ProductSize) onAddPizzaClick;
-  final void Function(Pizza, ProductSize) onRemovePizzaClick;
-  final CombinedBasketProduct? Function(ProductType type, int productId)
-      getCombinedProduct;
-  final VoidCallback onBasketClick;
+  @computed
+  bool get loading => homeStore.isLoading;
 
+  @computed
+  int get basketCount => basketStore.basket.items.length;
+
+  @computed
+  UiMessage? get errorMessage => homeStore.errorMessage;
+
+  @computed
   bool get isBasketButtonVisible => basketCount != 0;
+
+  @computed
+  int get pizzasCount => pizzas.length;
+
+  void onRepeat() => homeStore.onRepeat();
+
+  void onAddPizzaClick(Pizza pizza, ProductSize size) => basketStore.onAddPizzaClick(pizza, size);
+
+  void onRemovePizzaClick(Pizza pizza, ProductSize size) =>
+      basketStore.onRemovePizzaClick(pizza, size);
+
+  void onBasketClick() => homeStore.onBasketClick();
 }
 
 class _HomeFab extends StatefulWidget {
@@ -221,19 +227,15 @@ class __HomeFabState extends State<_HomeFab> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     widget.scrollController.addListener(_checkOffset);
-    _arrowController =
-        AnimationController(duration: kDurationFast, vsync: this);
-    _arrowAnimation =
-        CurvedAnimation(parent: _arrowController, curve: Curves.easeIn);
-    _basketController =
-        AnimationController(duration: kDurationFast, vsync: this);
-    _basketAnimation =
-        CurvedAnimation(parent: _basketController, curve: Curves.easeIn);
+    _arrowController = AnimationController(duration: kDurationFast, vsync: this);
+    _arrowAnimation = CurvedAnimation(parent: _arrowController, curve: Curves.easeIn);
+    _basketController = AnimationController(duration: kDurationFast, vsync: this);
+    _basketAnimation = CurvedAnimation(parent: _basketController, curve: Curves.easeIn);
     if (widget.basketCount > 0) {
       _basketController.forward();
     }
-    _sizeAnimation = SizeTween(begin: Size.zero, end: Size(_fabSize, _fabSize))
-        .animate(_basketAnimation);
+    _sizeAnimation =
+        SizeTween(begin: Size.zero, end: Size(_fabSize, _fabSize)).animate(_basketAnimation);
   }
 
   @override
@@ -244,14 +246,12 @@ class __HomeFabState extends State<_HomeFab> with TickerProviderStateMixin {
   }
 
   void _checkOffset() {
-    if (!_showUpButton &&
-        widget.scrollController.offset > widget.showOnOffset) {
+    if (!_showUpButton && widget.scrollController.offset > widget.showOnOffset) {
       _showUpButton = true;
       _arrowController.forward();
     }
 
-    if (_showUpButton &&
-        widget.scrollController.offset <= widget.showOnOffset) {
+    if (_showUpButton && widget.scrollController.offset <= widget.showOnOffset) {
       _arrowController.reverse();
       _showUpButton = false;
     }
@@ -260,8 +260,7 @@ class __HomeFabState extends State<_HomeFab> with TickerProviderStateMixin {
   @override
   void didUpdateWidget(covariant _HomeFab oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.basketCount != widget.basketCount &&
-            oldWidget.basketCount == 0 ||
+    if (oldWidget.basketCount != widget.basketCount && oldWidget.basketCount == 0 ||
         widget.basketCount == 0) {
       if (widget.basketCount > 0) {
         _basketController.forward();

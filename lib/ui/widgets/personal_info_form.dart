@@ -221,7 +221,8 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
           decoration: InputDecoration(
             labelText: localizations.house,
             suffixIcon: const Icon(Icons.keyboard_arrow_down),
-            errorText: widget.isHomeSelectionAllow ? widget.errors.house.tryLocalize(localizations) : null,
+            errorText:
+                widget.isHomeSelectionAllow ? widget.errors.house.tryLocalize(localizations) : null,
           ),
           enabled: widget.isHomeSelectionAllow,
           controller: houseController,

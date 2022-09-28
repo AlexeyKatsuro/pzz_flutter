@@ -182,20 +182,16 @@ class _ViewModel {
       itemsMap: combinedBasketProductsTypedMap(store.state),
       basketCount: basketCountSelector(store.state),
       freeSauceCounts: freeSauceCountsSelector(store.state),
-      onChooseSauceClick: () =>
-          store.dispatch(NavigateAction.push(Routes.saucesScreen)),
-      onAddItemClick: (item) =>
-          store.dispatch(AddProductAction(product: item, scope: scope)),
-      onRemoveItemClick: (item) =>
-          store.dispatch(RemoveProductAction(product: item, scope: scope)),
-      onPlaceOrderClick: () =>
-          store.dispatch(TryPlaceOrderAction(scope: scope)),
+      onChooseSauceClick: () => store.dispatch(NavigateAction.push(Routes.saucesScreen)),
+      onAddItemClick: (item) => store.dispatch(AddProductAction(product: item, scope: scope)),
+      onRemoveItemClick: (item) => store.dispatch(RemoveProductAction(product: item, scope: scope)),
+      onPlaceOrderClick: () => store.dispatch(TryPlaceOrderAction(scope: scope)),
     );
   }
 
   final int basketCount;
   final Map<ProductType, List<CombinedBasketProduct>> itemsMap;
-  final Basket basket;
+  final BasketEntity basket;
   final int freeSauceCounts;
   final bool isLoading;
 

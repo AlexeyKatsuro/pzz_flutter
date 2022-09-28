@@ -36,7 +36,12 @@ class Pizza {
 
   @override
   int get hashCode =>
-      id.hashCode ^ name.hashCode ^ description.hashCode ^ thumbnail.hashCode ^ photo.hashCode ^ variants.hashCode;
+      id.hashCode ^
+      name.hashCode ^
+      description.hashCode ^
+      thumbnail.hashCode ^
+      photo.hashCode ^
+      variants.hashCode;
 
   @override
   String toString() {
@@ -45,6 +50,7 @@ class Pizza {
 }
 
 enum ProductSize { big, medium, thin }
+
 enum ProductType { pizza, sauce, snack, dessert, drink }
 
 extension ProductSizeExt on ProductSize {

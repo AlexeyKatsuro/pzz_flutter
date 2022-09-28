@@ -18,7 +18,7 @@ class ConfirmPlaceOrderView extends StatefulWidget {
 
   final bool isLoading;
   final String totalPriceText;
-  final BasketAddress address;
+  final BasketAddressEntity address;
   final List<BasketProduct> products;
   final VoidCallback onConfirm;
 

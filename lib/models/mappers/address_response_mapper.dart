@@ -2,8 +2,8 @@ import 'package:pzz/models/basket_address.dart';
 import 'package:pzz/models/dto/address_dto.dart';
 
 class AddressResponseMapper {
-  static BasketAddress map(AddressDto from) {
-    return BasketAddress(
+  static BasketAddressEntity map(AddressDto from) {
+    return BasketAddressEntity(
       streetId: from.streetId!,
       houseId: from.houseId!,
       name: from.name!,

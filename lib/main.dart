@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pzz/app.dart';
 import 'package:pzz/domain/middleware/epics.dart';
 import 'package:pzz/domain/middleware/middlewares.dart';
@@ -8,6 +9,8 @@ import 'package:pzz/domain/repository/pzz_repository.dart';
 import 'package:pzz/models/app_state.dart';
 import 'package:pzz/routes.dart';
 import 'package:pzz/service_locator.dart';
+import 'package:pzz/stores/basket_store.dart';
+import 'package:pzz/stores/home_store.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_epics/redux_epics.dart';
 import 'package:redux_logging/redux_logging.dart';
@@ -28,12 +31,20 @@ Future<void> main() async {
     epicMiddleware,
     LoggingMiddleware.printer(),
   ];
+  final homeStore = HomeStore(pzzRepository: pzzRepository);
+  final basketStore = BasketStore(pzzRepository: pzzRepository);
   runApp(
-    PzzApp(
-      store: Store<AppState>(
-        appReducer,
-        initialState: AppState.initial(initialRoute: Routes.homeScreen),
-        middleware: middleware,
+    MultiProvider(
+      providers: [
+        Provider.value(value: homeStore),
+        Provider.value(value: basketStore),
+      ],
+      child: PzzApp(
+        store: Store<AppState>(
+          appReducer,
+          initialState: AppState.initial(initialRoute: Routes.homeScreen),
+          middleware: middleware,
+        ),
       ),
     ),
   );

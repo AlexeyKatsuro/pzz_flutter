@@ -29,7 +29,7 @@ class AppState {
     PersonalInfoState? personalInfoState,
     List<Pizza>? pizzas,
     List<Sauce>? sauce,
-    Basket? basket,
+    BasketEntity? basket,
     bool? isConfirmLoading,
     ScopedErrorsHub? scopedErrors,
     NavigationState? navigationState,
@@ -40,11 +40,10 @@ class AppState {
       personalInfoState: personalInfoState ?? const PersonalInfoState.initial(),
       pizzas: pizzas ?? const [],
       sauce: sauce ?? const [],
-      basket: basket ?? const Basket.initial(),
+      basket: basket ?? const BasketEntity.initial(),
       isConfirmLoading: isConfirmLoading ?? false,
       scopedErrors: scopedErrors ?? const ScopedErrorsHub.initial(),
-      navigationState: navigationState ??
-          NavigationState.initial(initialRoute: initialRoute),
+      navigationState: navigationState ?? NavigationState.initial(initialRoute: initialRoute),
       locale: locale,
     );
   }
@@ -53,7 +52,7 @@ class AppState {
   final PersonalInfoState personalInfoState;
   final List<Pizza> pizzas;
   final List<Sauce> sauce;
-  final Basket basket;
+  final BasketEntity basket;
   final bool isConfirmLoading; // TODO use local loading flags on App level
   final ScopedErrorsHub scopedErrors;
   final NavigationState navigationState;

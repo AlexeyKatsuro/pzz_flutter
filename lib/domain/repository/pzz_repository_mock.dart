@@ -30,9 +30,7 @@ class PzzRepositoryMock implements PzzRepository {
   final Future<List<Pizza>> _pizzasAsync =
       rootBundle.loadString('assets/pizzas.json').then((string) {
     final data = jsonDecode(string)['response']['data'];
-    return (data as Iterable)
-        .map(PizzaItemResponseMapper.map)
-        .toList(growable: false);
+    return (data as Iterable).map(PizzaItemResponseMapper.map).toList(growable: false);
   });
   final Future<List<Street>> _streetsAsync =
       rootBundle.loadString('assets/streets.json').then((string) {
@@ -56,10 +54,10 @@ class PzzRepositoryMock implements PzzRepository {
       ..sort(compareHouse);
   });
 
-  Basket _basket = const Basket.initial();
+  BasketEntity _basket = const BasketEntity.initial();
 
   @override
-  Future<Basket> addProductToBasket(Product product) async {
+  Future<BasketEntity> addProductToBasket(Product product) async {
     return _updateTotal(
       _basket.copyWith(
         items: [
@@ -76,7 +74,7 @@ class PzzRepositoryMock implements PzzRepository {
     );
   }
 
-  Basket _updateTotal(Basket basket) {
+  BasketEntity _updateTotal(BasketEntity basket) {
     return _basket = basket.copyWith(
       totalAmount: basket.items.fold<num>(0, (sum, item) => sum + item.price),
     );
@@ -88,7 +86,7 @@ class PzzRepositoryMock implements PzzRepository {
   }
 
   @override
-  Future<Basket> loadBasket() async {
+  Future<BasketEntity> loadBasket() async {
     return _basket;
   }
 
@@ -98,15 +96,14 @@ class PzzRepositoryMock implements PzzRepository {
   }
 
   @override
-  Future<Basket> removeProductFromBasket(Product product) async {
+  Future<BasketEntity> removeProductFromBasket(Product product) async {
+    final index = _basket.items.indexWhere(
+          (item) =>
+      item.id == product.id && item.size == product.size && item.type == product.type,
+    );
     return _updateTotal(
       _basket.copyWith(
-        items: [..._basket.items]..removeWhere(
-            (item) =>
-                item.id == product.id &&
-                item.size == product.size &&
-                item.type == product.type,
-          ),
+        items: [..._basket.items]..removeAt(index),
       ),
     );
   }
@@ -114,9 +111,7 @@ class PzzRepositoryMock implements PzzRepository {
   @override
   Future<List<Street>> searchStreet(String query) {
     return _streetsAsync.then(
-      (streets) => streets
-          .where((street) => street.title.contains(query))
-          .toList(growable: false),
+      (streets) => streets.where((street) => street.title.contains(query)).toList(growable: false),
     );
   }
 
@@ -124,10 +119,10 @@ class PzzRepositoryMock implements PzzRepository {
   Future<List<House>> loadHousesByStreet(int streetId) => _housesAsync;
 
   @override
-  Future<Basket> updateAddress(PersonalInfo personalInfo) async {
+  Future<BasketEntity> updateAddress(PersonalInfo personalInfo) async {
     await Future.delayed(const Duration(seconds: 3));
     return _basket = _basket.copyWith(
-      address: BasketAddress(
+      address: BasketAddressEntity(
         streetId: personalInfo.streetId,
         houseId: personalInfo.houseId,
         name: personalInfo.name,
@@ -145,6 +140,6 @@ class PzzRepositoryMock implements PzzRepository {
   @override
   Future<void> placeOrder() async {
     await Future.delayed(const Duration(seconds: 3));
-    _basket = const Basket.initial();
+    _basket = const BasketEntity.initial();
   }
 }

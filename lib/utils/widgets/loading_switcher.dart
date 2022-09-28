@@ -25,8 +25,10 @@ class LoadingSwitcher extends StatelessWidget {
               height: 24,
               child: CircularProgressIndicator(
                 strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation(loaderColor ?? Theme.of(context).colorScheme.onPrimary),
-              ),)
+                valueColor:
+                    AlwaysStoppedAnimation(loaderColor ?? Theme.of(context).colorScheme.onPrimary),
+              ),
+            )
           : child,
     );
   }

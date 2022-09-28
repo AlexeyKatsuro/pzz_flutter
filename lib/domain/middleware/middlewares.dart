@@ -231,9 +231,7 @@ MiddlewareTyped<AppState, TryPlaceOrderAction> _createUpdateAddress(
     next(action);
     if (isPersonInfoValid(store.state)) {
       next(ConfirmLoadingAction(isLoading: true));
-      repository
-          .updateAddress(personalInfoSelector(store.state))
-          .then((basket) {
+      repository.updateAddress(personalInfoSelector(store.state)).then((basket) {
         next(BasketLoadedAction(basket));
         next(NavigateAction.push(Routes.confirmPlaceOrderDialog));
       }).catchError((Object ex) {
@@ -269,7 +267,7 @@ MiddlewareTyped<AppState, ConfirmPlaceOrderAction> _createConfirmPlaceOrder(
           arguments: 60,
         ),
       );
-      next(BasketLoadedAction(const Basket.initial()));
+      next(BasketLoadedAction(const BasketEntity.initial()));
     }).catchError((Object ex) {
       debugPrint('$ex');
       next(

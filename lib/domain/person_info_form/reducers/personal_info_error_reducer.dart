@@ -21,19 +21,27 @@ PersonalInfoErrors _validator(PersonalInfoState state) {
 }
 
 UiMessage _validatePhone(PersonalInfo personalInfo) {
-  return personalInfo.phone.isEmpty ? UiMessage.key(AppLocalizationKeys.errorEmptyPhone) : UiMessage.empty();
+  return personalInfo.phone.isEmpty
+      ? UiMessage.key(AppLocalizationKeys.errorEmptyPhone)
+      : UiMessage.empty();
 }
 
 UiMessage _validatePaymentWay(PersonalInfo personalInfo) {
-  return personalInfo.paymentWay == null ? UiMessage.key(AppLocalizationKeys.errorEmptyPaymentPay) : UiMessage.empty();
+  return personalInfo.paymentWay == null
+      ? UiMessage.key(AppLocalizationKeys.errorEmptyPaymentPay)
+      : UiMessage.empty();
 }
 
 UiMessage _validateStreet(PersonalInfo personalInfo) {
-  return personalInfo.street.isEmpty ? UiMessage.key(AppLocalizationKeys.errorEmptyStreet) : UiMessage.empty();
+  return personalInfo.street.isEmpty
+      ? UiMessage.key(AppLocalizationKeys.errorEmptyStreet)
+      : UiMessage.empty();
 }
 
 UiMessage _validateHouse(PersonalInfo personalInfo) {
-  return personalInfo.house.isEmpty ? UiMessage.key(AppLocalizationKeys.errorEmptyHome) : UiMessage.empty();
+  return personalInfo.house.isEmpty
+      ? UiMessage.key(AppLocalizationKeys.errorEmptyHome)
+      : UiMessage.empty();
 }
 
 final clearPersonalInfoErrorsReducer = combineReducers<PersonalInfoErrors>([
@@ -55,6 +63,9 @@ PersonalInfoErrors _clearPhoneErrorReducer(PersonalInfoErrors state, PhoneChange
   return state.copyWith(phone: UiMessage.empty());
 }
 
-PersonalInfoErrors _clearPaymentWayErrorReducer(PersonalInfoErrors state, PaymentWayChangedAction action) {
+PersonalInfoErrors _clearPaymentWayErrorReducer(
+  PersonalInfoErrors state,
+  PaymentWayChangedAction action,
+) {
   return state.copyWith(paymentWay: UiMessage.empty());
 }

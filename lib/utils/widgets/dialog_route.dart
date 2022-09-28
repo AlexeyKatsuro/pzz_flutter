@@ -74,7 +74,11 @@ class DialogRoute<T> extends PopupRoute<T> {
   final RouteTransitionsBuilder? _transitionBuilder;
 
   @override
-  Widget buildPage(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+  Widget buildPage(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+  ) {
     return Semantics(
       scopesRoute: true,
       explicitChildNodes: true,
@@ -100,20 +104,29 @@ class DialogRoute<T> extends PopupRoute<T> {
 
   @override
   Widget buildTransitions(
-      BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child,) {
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
     if (_transitionBuilder == null) {
       return FadeTransition(
-          opacity: CurvedAnimation(
-            parent: animation,
-            curve: Curves.linear,
-          ),
-          child: child,);
+        opacity: CurvedAnimation(
+          parent: animation,
+          curve: Curves.linear,
+        ),
+        child: child,
+      );
     } // Some default transition
     return _transitionBuilder!(context, animation, secondaryAnimation, child);
   }
 
   static Widget buildMaterialDialogTransitions(
-      BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child,) {
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
     return FadeTransition(
       opacity: CurvedAnimation(
         parent: animation,

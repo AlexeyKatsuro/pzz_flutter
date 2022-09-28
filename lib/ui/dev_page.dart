@@ -76,7 +76,8 @@ class _ViewModel {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is _ViewModel && runtimeType == other.runtimeType && locale == other.locale;
+      identical(this, other) ||
+      other is _ViewModel && runtimeType == other.runtimeType && locale == other.locale;
 
   @override
   int get hashCode => locale.hashCode;

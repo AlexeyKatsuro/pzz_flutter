@@ -11,17 +11,17 @@ abstract class PzzRepository {
 
   Future<List<Sauce>> loadSauces();
 
-  Future<Basket> loadBasket();
+  Future<BasketEntity> loadBasket();
 
-  Future<Basket> addProductToBasket(Product product);
+  Future<BasketEntity> addProductToBasket(Product product);
 
-  Future<Basket> removeProductFromBasket(Product product);
+  Future<BasketEntity> removeProductFromBasket(Product product);
 
   Future<List<Street>> searchStreet(String query);
 
   Future<List<House>> loadHousesByStreet(int streetId);
 
-  Future<Basket> updateAddress(PersonalInfo personalInfo);
+  Future<BasketEntity> updateAddress(PersonalInfo personalInfo);
 
   Future<void> placeOrder();
 }

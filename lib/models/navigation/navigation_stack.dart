@@ -5,11 +5,13 @@ import 'package:flutter/foundation.dart';
 class NavigationStack {
   const NavigationStack(this.backStack);
 
-  factory NavigationStack.initial({String initialRoute = '/'}) => NavigationStack([NavDestination(name: initialRoute)]);
+  factory NavigationStack.initial({String initialRoute = '/'}) =>
+      NavigationStack([NavDestination(name: initialRoute)]);
 
   final List<NavDestination> backStack;
 
-  bool containsPage(String pageName) => backStack.firstWhereOrNull((element) => element.name == pageName) != null;
+  bool containsPage(String pageName) =>
+      backStack.firstWhereOrNull((element) => element.name == pageName) != null;
 
   NavDestination get last => backStack.last;
 

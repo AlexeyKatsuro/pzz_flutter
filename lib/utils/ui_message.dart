@@ -17,7 +17,8 @@ abstract class UiMessage {
 
   factory UiMessage.empty() => const UiMessageEmpty();
 
-  factory UiMessage.key(AppLocalizationKeys? kye, [Map<String, String>? params]) => UiMessageKey(kye, params);
+  factory UiMessage.key(AppLocalizationKeys? kye, [Map<String, String>? params]) =>
+      UiMessageKey(kye, params);
 
   factory UiMessage.text(String? text) => UiMessageText(text ?? '');
 

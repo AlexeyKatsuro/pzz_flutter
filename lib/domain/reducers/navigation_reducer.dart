@@ -8,7 +8,9 @@ final navigationStackReducer = combineReducers<NavigationState>([
   TypedReducer<NavigationState, NavigatePopAction>(_navigatePopReducer),
   TypedReducer<NavigationState, NavigateReplaceAction>(_navigateReplaceReducer),
   TypedReducer<NavigationState, NavigatePopUntilAction>(_navigatePopUntilReducer),
-  TypedReducer<NavigationState, NavigatePushAndRemoveUntilAction>(_navigatePushAndRemoveUntilReducer),
+  TypedReducer<NavigationState, NavigatePushAndRemoveUntilAction>(
+    _navigatePushAndRemoveUntilReducer,
+  ),
 ]);
 
 NavigationState _navigatePushReducer(NavigationState state, NavigatePushAction action) {
@@ -51,7 +53,10 @@ NavigationState _navigatePopUntilReducer(NavigationState state, NavigatePopUntil
   );
 }
 
-NavigationState _navigatePushAndRemoveUntilReducer(NavigationState state, NavigatePushAndRemoveUntilAction action) {
+NavigationState _navigatePushAndRemoveUntilReducer(
+  NavigationState state,
+  NavigatePushAndRemoveUntilAction action,
+) {
   return state.copyWith(
     history: state.history.copy(
       (previousStack) {

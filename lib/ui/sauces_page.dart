@@ -58,10 +58,9 @@ class SaucesPage extends StatelessWidget implements Scoped {
                 count: viewModel.saucesCountMap[viewModel.sauces[index].id],
                 isFree: viewModel.hasFreeSauce,
                 item: viewModel.sauces[index],
-                onAddClick: () => viewModel
-                    .onAddItemClick(viewModel.sauces[index].toProduct()),
-                onRemoveClick: () => viewModel
-                    .onRemoveItemClick(viewModel.sauces[index].toProduct()),
+                onAddClick: () => viewModel.onAddItemClick(viewModel.sauces[index].toProduct()),
+                onRemoveClick: () =>
+                    viewModel.onRemoveItemClick(viewModel.sauces[index].toProduct()),
               ),
           ],
         ),
@@ -71,8 +70,7 @@ class SaucesPage extends StatelessWidget implements Scoped {
 }
 
 class _HeaderFreeCountSauces extends StatefulWidget {
-  const _HeaderFreeCountSauces({Key? key, required this.freeSauceCounts})
-      : super(key: key);
+  const _HeaderFreeCountSauces({Key? key, required this.freeSauceCounts}) : super(key: key);
 
   final int freeSauceCounts;
 
@@ -117,10 +115,8 @@ class _ViewModel {
       freeSauceCounts: freeSauceCountsSelector(store.state),
       saucesCountMap: saucesCountsMapSelector(store.state),
       sauces: saucesSelector(store.state),
-      onAddItemClick: (item) =>
-          store.dispatch(AddProductAction(product: item, scope: scope)),
-      onRemoveItemClick: (item) =>
-          store.dispatch(RemoveProductAction(product: item, scope: scope)),
+      onAddItemClick: (item) => store.dispatch(AddProductAction(product: item, scope: scope)),
+      onRemoveItemClick: (item) => store.dispatch(RemoveProductAction(product: item, scope: scope)),
       onDoneClick: () => store.dispatch(NavigateAction.pop()),
     );
   }

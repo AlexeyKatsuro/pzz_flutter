@@ -62,7 +62,8 @@ class ErrorScopedNotifier extends StatelessWidget {
     final scaffoldMessenger = ScaffoldMessenger.maybeOf(context);
     if (scaffoldMessenger != null) {
       scaffoldMessenger.removeCurrentSnackBar(reason: SnackBarClosedReason.hide);
-      scaffoldMessenger.showSnackBar(SnackBar(content: Text(errorMessage), behavior: SnackBarBehavior.floating));
+      scaffoldMessenger
+          .showSnackBar(SnackBar(content: Text(errorMessage), behavior: SnackBarBehavior.floating));
     } else {
       alertErrorHandler(context, errorMessage);
     }

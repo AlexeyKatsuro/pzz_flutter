@@ -22,7 +22,9 @@ PersonalInfoState _fromInfoReducer(PersonalInfoState state, dynamic action) {
 }
 
 PersonalInfoState _clearErrorReducer(PersonalInfoState state, dynamic action) {
-  return state.copyWith(formInfoErrors: clearPersonalInfoErrorsReducer(state.formInfoErrors, action));
+  return state.copyWith(
+    formInfoErrors: clearPersonalInfoErrorsReducer(state.formInfoErrors, action),
+  );
 }
 
 PersonalInfoState _setPersonalInfo(PersonalInfoState state, SavePersonalInfoAction action) {
@@ -46,6 +48,8 @@ PersonalInfoState _setSuggestedHouses(PersonalInfoState state, PerformHouseSearc
   if (action.query.isEmpty) {
     suggestedHouses = state.totalHouses;
   }
-  suggestedHouses = state.totalHouses.where((element) => element.title.contains(action.query)).toList(growable: false);
+  suggestedHouses = state.totalHouses
+      .where((element) => element.title.contains(action.query))
+      .toList(growable: false);
   return state.copyWith(suggestedHouses: suggestedHouses);
 }

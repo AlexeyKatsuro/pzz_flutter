@@ -94,7 +94,10 @@ class MainNavigationContainer extends StatelessWidget {
   }
 
   // ignore: unused_element
-  static MaterialDialogPage<T> _buildBaseDialog<T>(NavDestination destination, WidgetArgBuild<T> builder) {
+  static MaterialDialogPage<T> _buildBaseDialog<T>(
+    NavDestination destination,
+    WidgetArgBuild<T> builder,
+  ) {
     return MaterialDialogPage<T>(
       key: Key(destination.name) as LocalKey?,
       name: destination.name,
@@ -110,7 +113,10 @@ class MainNavigationContainer extends StatelessWidget {
     );
   }
 
-  static BottomSheetDialog _buildScrollBottomSheetDialog<T>(NavDestination destination, WidgetArgBuild<T> builder) {
+  static BottomSheetDialog _buildScrollBottomSheetDialog<T>(
+    NavDestination destination,
+    WidgetArgBuild<T> builder,
+  ) {
     return BottomSheetDialog(
       key: Key(destination.name) as LocalKey?,
       name: destination.name,
@@ -125,7 +131,10 @@ class MainNavigationContainer extends StatelessWidget {
     );
   }
 
-  static BottomSheetDialog _buildBottomSheetDialog<T>(NavDestination destination, WidgetArgBuild<T> builder) {
+  static BottomSheetDialog _buildBottomSheetDialog<T>(
+    NavDestination destination,
+    WidgetArgBuild<T> builder,
+  ) {
     return BottomSheetDialog(
       key: Key(destination.name) as LocalKey?,
       name: destination.name,
@@ -159,7 +168,9 @@ class _ViewModel {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is _ViewModel && runtimeType == other.runtimeType && navigationStack == other.navigationStack;
+      other is _ViewModel &&
+          runtimeType == other.runtimeType &&
+          navigationStack == other.navigationStack;
 
   @override
   int get hashCode => navigationStack.hashCode;

@@ -39,7 +39,8 @@ class SystemUi extends StatelessWidget {
             systemNavigationBarDividerColor: systemNavigationBarDividerColor,
             // `systemNavigationBarIconBrightness` has no effect
             // icon color estimates to contrast with `systemNavigationBarColor` automatically
-            systemNavigationBarIconBrightness: systemNavigationBarIconBrightness ?? themeBrightness.opposite,
+            systemNavigationBarIconBrightness:
+                systemNavigationBarIconBrightness ?? themeBrightness.opposite,
             systemNavigationBarColor: systemNavigationBarColor ?? theme.colorScheme.background,
             statusBarColor: statusBarColor ?? theme.colorScheme.surface.withOpacity(0.5),
             statusBarBrightness: statusBarBrightness ?? theme.colorScheme.brightness,

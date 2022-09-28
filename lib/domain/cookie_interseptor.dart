@@ -31,7 +31,8 @@ class SessionCookiesInterceptor implements InterceptorContract {
     if (!_sessionBearer.isTokenValid()) {
       final setCookieHeader = data.headers?[SET_COOKIE];
       if (setCookieHeader != null) {
-        _sessionBearer.token = setCookieHeader.split(';').firstWhere((element) => element.contains(PHPSESSID));
+        _sessionBearer.token =
+            setCookieHeader.split(';').firstWhere((element) => element.contains(PHPSESSID));
       }
     }
     return data;

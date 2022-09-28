@@ -21,7 +21,8 @@ class ScopedErrorsHub {
 
   UiMessage? get(String scope) => _scopedErrors[scope];
 
-  ScopedErrorsHub set({required String scope, required UiMessage? error}) => _copy().._scopedErrors[scope] = error;
+  ScopedErrorsHub set({required String scope, required UiMessage? error}) =>
+      _copy().._scopedErrors[scope] = error;
 
   ScopedErrorsHub clear(String scope) => set(scope: scope, error: null);
 

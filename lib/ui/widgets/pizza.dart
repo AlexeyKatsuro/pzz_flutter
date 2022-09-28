@@ -45,7 +45,10 @@ class PizzaWidget extends StatelessWidget {
                 Text(
                   pizza.name,
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headline5!.copyWith(color: Theme.of(context).primaryColor),
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline5!
+                      .copyWith(color: Theme.of(context).primaryColor),
                 ),
                 ...[
                   for (final variant in pizza.variants)
