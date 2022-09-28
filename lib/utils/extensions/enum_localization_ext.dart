@@ -1,5 +1,5 @@
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:collection/collection.dart' show IterableExtension;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pzz/models/payment_way.dart';
 import 'package:pzz/models/pizza.dart';
 

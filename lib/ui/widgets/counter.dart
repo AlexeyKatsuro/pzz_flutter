@@ -51,8 +51,8 @@ class CircularButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final cycleButtonStyle = ElevatedButton.styleFrom(
-      primary: theme.colorScheme.secondary,
-      onPrimary: theme.colorScheme.onSecondary,
+      foregroundColor: theme.colorScheme.onSecondary,
+      backgroundColor: theme.colorScheme.secondary,
       minimumSize: const Size(34, 34),
       shape: const CircleBorder(),
       padding: EdgeInsets.zero,
@@ -63,7 +63,10 @@ class CircularButton extends StatelessWidget {
     return ElevatedButton(
       style: effectiveStyle,
       onPressed: onPressed,
-      child: DefaultTextStyle.merge(child: child, style: const TextStyle(fontSize: 20)),
+      child: DefaultTextStyle.merge(
+        child: child,
+        style: const TextStyle(fontSize: 20),
+      ),
     );
   }
 }

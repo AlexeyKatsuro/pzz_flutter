@@ -1,5 +1,5 @@
-import 'package:pzz/utils/ui_message.dart';
 import 'package:pzz/utils/scoped.dart';
+import 'package:pzz/utils/ui_message.dart';
 
 /// General action to set error message for specific [scope].
 class SetScopedErrorAction implements Scoped {

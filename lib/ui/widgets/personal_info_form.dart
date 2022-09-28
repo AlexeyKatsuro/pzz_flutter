@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:pzz/domain/person_info_form/actions/person_info_form_actions.dart';
 import 'package:pzz/domain/selectors/selector.dart';
@@ -11,7 +12,6 @@ import 'package:pzz/routes.dart';
 import 'package:pzz/ui/search_page.dart';
 import 'package:pzz/utils/extensions/text_form_field_ext.dart';
 import 'package:redux/redux.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PersonalInfoFormContainer extends StatelessWidget {
   const PersonalInfoFormContainer({Key? key}) : super(key: key);

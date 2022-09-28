@@ -37,11 +37,12 @@ class SaucesPage extends StatelessWidget implements Scoped {
         title: Text(localizations.sauces),
         actions: [
           IconButton(
-              icon: Icon(
-                Icons.check,
-                color: Theme.of(context).colorScheme.secondary,
-              ),
-              onPressed: viewModel.onDoneClick)
+            icon: Icon(
+              Icons.check,
+              color: Theme.of(context).colorScheme.secondary,
+            ),
+            onPressed: viewModel.onDoneClick,
+          )
         ],
       ),
       body: ErrorScopedNotifier(
@@ -57,8 +58,10 @@ class SaucesPage extends StatelessWidget implements Scoped {
                 count: viewModel.saucesCountMap[viewModel.sauces[index].id],
                 isFree: viewModel.hasFreeSauce,
                 item: viewModel.sauces[index],
-                onAddClick: () => viewModel.onAddItemClick(viewModel.sauces[index].toProduct()),
-                onRemoveClick: () => viewModel.onRemoveItemClick(viewModel.sauces[index].toProduct()),
+                onAddClick: () => viewModel
+                    .onAddItemClick(viewModel.sauces[index].toProduct()),
+                onRemoveClick: () => viewModel
+                    .onRemoveItemClick(viewModel.sauces[index].toProduct()),
               ),
           ],
         ),
@@ -68,7 +71,8 @@ class SaucesPage extends StatelessWidget implements Scoped {
 }
 
 class _HeaderFreeCountSauces extends StatefulWidget {
-  const _HeaderFreeCountSauces({Key? key, required this.freeSauceCounts}) : super(key: key);
+  const _HeaderFreeCountSauces({Key? key, required this.freeSauceCounts})
+      : super(key: key);
 
   final int freeSauceCounts;
 
@@ -76,7 +80,8 @@ class _HeaderFreeCountSauces extends StatefulWidget {
   _HeaderFreeCountSaucesState createState() => _HeaderFreeCountSaucesState();
 }
 
-class _HeaderFreeCountSaucesState extends State<_HeaderFreeCountSauces> with SingleTickerProviderStateMixin {
+class _HeaderFreeCountSaucesState extends State<_HeaderFreeCountSauces>
+    with SingleTickerProviderStateMixin {
   bool get hasFreeSauce => widget.freeSauceCounts != 0;
 
   @override
@@ -84,7 +89,6 @@ class _HeaderFreeCountSaucesState extends State<_HeaderFreeCountSauces> with Sin
     final localizations = AppLocalizations.of(context);
     return AnimatedSize(
       duration: kDurationFast,
-      vsync: this,
       child: hasFreeSauce
           ? Container(
               padding: const EdgeInsets.fromLTRB(0, 12, 0, 8),
@@ -113,8 +117,10 @@ class _ViewModel {
       freeSauceCounts: freeSauceCountsSelector(store.state),
       saucesCountMap: saucesCountsMapSelector(store.state),
       sauces: saucesSelector(store.state),
-      onAddItemClick: (item) => store.dispatch(AddProductAction(product: item, scope: scope)),
-      onRemoveItemClick: (item) => store.dispatch(RemoveProductAction(product: item, scope: scope)),
+      onAddItemClick: (item) =>
+          store.dispatch(AddProductAction(product: item, scope: scope)),
+      onRemoveItemClick: (item) =>
+          store.dispatch(RemoveProductAction(product: item, scope: scope)),
       onDoneClick: () => store.dispatch(NavigateAction.pop()),
     );
   }

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -6,7 +5,7 @@ import 'package:pzz/utils/extensions/widget_extension.dart';
 
 /// This is a widget that controls the color of the status and navigation bar, depending on the theme colors.
 ///
-/// TODO Note: there is some issue here, [statusBarIconBrightness]  may not be applied because [AppBar.brightness] overrides it,
+/// TODO Note: there is some issue here, [statusBarIconBrightness]  may not be applied because [AppBar.systemOverlayStyle] overrides it,
 ///  even have the AppBar located on a different Route.
 class SystemUi extends StatelessWidget {
   const SystemUi({
@@ -31,7 +30,7 @@ class SystemUi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // This requires a minimum delay after calling the build method so that the change to the system bars is applied
-    SchedulerBinding.instance!.addPostFrameCallback((_) {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
       final theme = Theme.of(context);
       if (ModalRoute.of(context)!.isCurrent) {
         final themeBrightness = theme.colorScheme.brightness;

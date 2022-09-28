@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'package:pzz/models/person_info/house.dart';
 import 'package:pzz/models/person_info/person_info_errors.dart';
 import 'package:pzz/models/person_info/personal_info.dart';
 import 'package:pzz/models/person_info/street.dart';
-
-import 'house.dart';
 
 @immutable
 class PersonalInfoState {

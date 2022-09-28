@@ -1,6 +1,6 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../l10n/app_localization_keys.dart';
+import 'package:pzz/l10n/app_localization_keys.dart';
 
 /// Class for representation of textual content that should be display on screen.
 ///

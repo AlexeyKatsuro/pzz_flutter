@@ -100,20 +100,20 @@ class DialogRoute<T> extends PopupRoute<T> {
 
   @override
   Widget buildTransitions(
-      BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
+      BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child,) {
     if (_transitionBuilder == null) {
       return FadeTransition(
           opacity: CurvedAnimation(
             parent: animation,
             curve: Curves.linear,
           ),
-          child: child);
+          child: child,);
     } // Some default transition
     return _transitionBuilder!(context, animation, secondaryAnimation, child);
   }
 
   static Widget buildMaterialDialogTransitions(
-      BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
+      BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child,) {
     return FadeTransition(
       opacity: CurvedAnimation(
         parent: animation,

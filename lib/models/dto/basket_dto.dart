@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_dynamic_calls
+
 import 'package:pzz/models/dto/address_dto.dart';
 import 'package:pzz/models/dto/basket_item_dto.dart';
 
@@ -77,7 +79,7 @@ class BasketDto {
       this.freeWarmersCount,
       this.items = const [],
       this.address,
-      this.publicCommentHtml});
+      this.publicCommentHtml,});
 
   BasketDto.fromJson(Map<String, dynamic> json) : items = [] {
     id = json['id'] as int?;

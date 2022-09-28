@@ -15,53 +15,59 @@ class PzzAppTheme {
 
   static ThemeData themeData(ColorScheme colorScheme, TextTheme textTheme) {
     final bool isDark = colorScheme.brightness == Brightness.dark;
-    final iconTheme = isDark ? const IconThemeData(color: Colors.white) : const IconThemeData(color: Colors.black54);
+    final iconTheme = isDark
+        ? const IconThemeData(color: Colors.white)
+        : const IconThemeData(color: Colors.black54);
     final dividerColor = colorScheme.onSurface.withOpacity(0.20);
 
-    final buttonsShapeStateProp = MaterialStateProperty.all(kRoundedShapeBorder);
+    final buttonsShapeStateProp =
+        MaterialStateProperty.all(kRoundedShapeBorder);
     return ThemeData(
-        textTheme: textTheme,
-        primaryTextTheme: textTheme,
-        iconTheme: iconTheme,
-        brightness: colorScheme.brightness,
-        colorScheme: colorScheme,
-        primaryColor: colorScheme.primary,
-        primaryColorLight: colorScheme.primaryVariant,
-        primaryColorDark: colorScheme.primaryVariant,
-        errorColor: colorScheme.error,
-        toggleableActiveColor: colorScheme.primary,
-        cardColor: colorScheme.surface,
-        applyElevationOverlayColor: true,
-        dividerColor: dividerColor,
-        backgroundColor: colorScheme.background,
-        dialogBackgroundColor: colorScheme.surface,
-        scaffoldBackgroundColor: colorScheme.background,
-        cardTheme: _buildCardTheme(dividerColor, colorScheme),
-        appBarTheme: _buildAppBarTheme(textTheme, iconTheme, colorScheme),
-        progressIndicatorTheme: ProgressIndicatorThemeData(color: colorScheme.secondary),
-        inputDecorationTheme: _buildInputDecorationTheme(),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ButtonStyle(
-            elevation: MaterialStateProperty.all(0),
-            shape: buttonsShapeStateProp,
-          ),
+      textTheme: textTheme,
+      primaryTextTheme: textTheme,
+      iconTheme: iconTheme,
+      brightness: colorScheme.brightness,
+      colorScheme: colorScheme,
+      primaryColor: colorScheme.primary,
+      primaryColorLight: colorScheme.primaryContainer,
+      primaryColorDark: colorScheme.primaryContainer,
+      errorColor: colorScheme.error,
+      toggleableActiveColor: colorScheme.primary,
+      cardColor: colorScheme.surface,
+      applyElevationOverlayColor: true,
+      dividerColor: dividerColor,
+      backgroundColor: colorScheme.background,
+      dialogBackgroundColor: colorScheme.surface,
+      scaffoldBackgroundColor: colorScheme.background,
+      cardTheme: _buildCardTheme(dividerColor, colorScheme),
+      appBarTheme: _buildAppBarTheme(textTheme, iconTheme, colorScheme),
+      progressIndicatorTheme:
+          ProgressIndicatorThemeData(color: colorScheme.secondary),
+      inputDecorationTheme: _buildInputDecorationTheme(),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ButtonStyle(
+          elevation: MaterialStateProperty.all(0),
+          shape: buttonsShapeStateProp,
         ),
-        outlinedButtonTheme: OutlinedButtonThemeData(
-          style: ButtonStyle(shape: buttonsShapeStateProp),
-        ),
-        buttonTheme: ButtonThemeData(
-            shape: RoundedRectangleBorder(
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: ButtonStyle(shape: buttonsShapeStateProp),
+      ),
+      buttonTheme: ButtonThemeData(
+        shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(6),
-        )),
-        bottomSheetTheme: BottomSheetThemeData(
-          elevation: 16,
-          backgroundColor: colorScheme.surface,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(10),
-            ),
+        ),
+      ),
+      bottomSheetTheme: BottomSheetThemeData(
+        elevation: 16,
+        backgroundColor: colorScheme.surface,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(10),
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   static InputDecorationTheme _buildInputDecorationTheme() {
@@ -71,16 +77,24 @@ class PzzAppTheme {
     );
   }
 
-  static AppBarTheme _buildAppBarTheme(TextTheme textTheme, IconThemeData iconTheme, ColorScheme colorScheme) {
+  static AppBarTheme _buildAppBarTheme(
+    TextTheme textTheme,
+    IconThemeData iconTheme,
+    ColorScheme colorScheme,
+  ) {
     return AppBarTheme(
-      titleTextStyle: textTheme.headline6!.copyWith(color: colorScheme.primary, inherit: true),
+      titleTextStyle: textTheme.headline6!
+          .copyWith(color: colorScheme.primary, inherit: true),
       color: colorScheme.surface,
       iconTheme: iconTheme,
       actionsIconTheme: IconThemeData(color: colorScheme.primary),
     );
   }
 
-  static CardTheme _buildCardTheme(Color dividerColor, ColorScheme colorScheme) {
+  static CardTheme _buildCardTheme(
+    Color dividerColor,
+    ColorScheme colorScheme,
+  ) {
     return CardTheme(
       clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(
@@ -96,18 +110,18 @@ class PzzAppTheme {
 
   static const ColorScheme _pzzLightColorScheme = ColorScheme.light(
     primary: _brand_orange,
-    primaryVariant: _brand_orange_variant,
+    primaryContainer: _brand_orange_variant,
     secondary: _brand_blue,
-    secondaryVariant: _brand_blue_variant,
+    secondaryContainer: _brand_blue_variant,
     onSecondary: Colors.white,
     background: _white_sheet,
   );
 
   static const ColorScheme _pzzDarkColorScheme = ColorScheme.dark(
     primary: _brand_orange_variant,
-    primaryVariant: _brand_orange_variant,
+    primaryContainer: _brand_orange_variant,
     secondary: _brand_blue_variant,
-    secondaryVariant: _brand_blue,
+    secondaryContainer: _brand_blue,
     // ignore: avoid_redundant_argument_values
     background: _dark_sheet,
   );
@@ -131,7 +145,8 @@ class PzzAppTheme {
     subtitle2: TextStyle(fontSize: 14.0),
     bodyText1: TextStyle(fontSize: 16.0),
     bodyText2: TextStyle(fontSize: 14.0),
-    button: TextStyle(fontSize: 14.0, fontFamily: _fontFamily, fontWeight: _bold),
+    button:
+        TextStyle(fontSize: 14.0, fontFamily: _fontFamily, fontWeight: _bold),
     caption: TextStyle(fontSize: 12.0),
     overline: TextStyle(fontSize: 10.0),
   );

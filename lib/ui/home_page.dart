@@ -160,7 +160,8 @@ class _ViewModel {
       loading: homePageStateSelector(store.state).isLoading,
       basketCount: basketCountSelector(store.state),
       // TODO wrong approach, UI doesn't should request data through ViewModel
-      getCombinedProduct: (type, productId) => combinedProductSelectorBy(store.state, type, productId),
+      getCombinedProduct: (type, productId) =>
+          combinedProductSelectorBy(store.state, type, productId),
       onAddPizzaClick: (pizza, size) => store.dispatch(
         AddProductAction(scope: scope, product: pizza.toProduct(size)),
       ),
@@ -168,7 +169,8 @@ class _ViewModel {
         RemoveProductAction(scope: scope, product: pizza.toProduct(size)),
       ),
       onRepeat: () => store.dispatch(InitialAction(scope: scope)),
-      onBasketClick: () => store.dispatch(NavigateAction.push(Routes.basketScreen)),
+      onBasketClick: () =>
+          store.dispatch(NavigateAction.push(Routes.basketScreen)),
     );
   }
 
@@ -179,7 +181,8 @@ class _ViewModel {
   final VoidCallback onRepeat;
   final void Function(Pizza, ProductSize) onAddPizzaClick;
   final void Function(Pizza, ProductSize) onRemovePizzaClick;
-  final CombinedBasketProduct? Function(ProductType type, int productId) getCombinedProduct;
+  final CombinedBasketProduct? Function(ProductType type, int productId)
+      getCombinedProduct;
   final VoidCallback onBasketClick;
 
   bool get isBasketButtonVisible => basketCount != 0;
@@ -218,14 +221,19 @@ class __HomeFabState extends State<_HomeFab> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     widget.scrollController.addListener(_checkOffset);
-    _arrowController = AnimationController(duration: kDurationFast, vsync: this);
-    _arrowAnimation = CurvedAnimation(parent: _arrowController, curve: Curves.easeIn);
-    _basketController = AnimationController(duration: kDurationFast, vsync: this);
-    _basketAnimation = CurvedAnimation(parent: _basketController, curve: Curves.easeIn);
+    _arrowController =
+        AnimationController(duration: kDurationFast, vsync: this);
+    _arrowAnimation =
+        CurvedAnimation(parent: _arrowController, curve: Curves.easeIn);
+    _basketController =
+        AnimationController(duration: kDurationFast, vsync: this);
+    _basketAnimation =
+        CurvedAnimation(parent: _basketController, curve: Curves.easeIn);
     if (widget.basketCount > 0) {
       _basketController.forward();
     }
-    _sizeAnimation = SizeTween(begin: const Size(0, 0), end: Size(_fabSize, _fabSize)).animate(_basketAnimation);
+    _sizeAnimation = SizeTween(begin: Size.zero, end: Size(_fabSize, _fabSize))
+        .animate(_basketAnimation);
   }
 
   @override
@@ -236,12 +244,14 @@ class __HomeFabState extends State<_HomeFab> with TickerProviderStateMixin {
   }
 
   void _checkOffset() {
-    if (!_showUpButton && widget.scrollController.offset > widget.showOnOffset) {
+    if (!_showUpButton &&
+        widget.scrollController.offset > widget.showOnOffset) {
       _showUpButton = true;
       _arrowController.forward();
     }
 
-    if (_showUpButton && widget.scrollController.offset <= widget.showOnOffset) {
+    if (_showUpButton &&
+        widget.scrollController.offset <= widget.showOnOffset) {
       _arrowController.reverse();
       _showUpButton = false;
     }
@@ -250,7 +260,9 @@ class __HomeFabState extends State<_HomeFab> with TickerProviderStateMixin {
   @override
   void didUpdateWidget(covariant _HomeFab oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.basketCount != widget.basketCount && oldWidget.basketCount == 0 || widget.basketCount == 0) {
+    if (oldWidget.basketCount != widget.basketCount &&
+            oldWidget.basketCount == 0 ||
+        widget.basketCount == 0) {
       if (widget.basketCount > 0) {
         _basketController.forward();
       } else {
@@ -273,8 +285,8 @@ class __HomeFabState extends State<_HomeFab> with TickerProviderStateMixin {
             child: CircularButton(
               onPressed: widget.onArrowClick,
               style: ElevatedButton.styleFrom(
-                primary: theme.colorScheme.primaryVariant,
-                onPrimary: theme.colorScheme.onPrimary,
+                foregroundColor: theme.colorScheme.onPrimary,
+                backgroundColor: theme.colorScheme.primaryContainer,
                 elevation: 4,
               ),
               child: const Icon(Icons.keyboard_arrow_up),

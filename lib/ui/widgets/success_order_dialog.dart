@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'bottom_sheet_drag_bar.dart';
+import 'package:pzz/ui/widgets/bottom_sheet_drag_bar.dart';
 
 class SuccessOrderDialog extends StatelessWidget {
   const SuccessOrderDialog({Key? key, required this.freeAfterMinute}) : super(key: key);

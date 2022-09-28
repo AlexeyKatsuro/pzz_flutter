@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_dynamic_calls
+
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
@@ -17,18 +19,23 @@ import 'package:pzz/models/sauce.dart';
 import 'package:pzz/utils/house_comparator.dart';
 
 class PzzRepositoryMock implements PzzRepository {
-  final Future<List<Sauce>> _saucesAsync = rootBundle.loadString('assets/sauces.json').then((string) {
+  final Future<List<Sauce>> _saucesAsync =
+      rootBundle.loadString('assets/sauces.json').then((string) {
     final data = jsonDecode(string)['response']['data'];
     return (data as Iterable)
         .map((e) => SauceDto.fromJson(e as Map<String, dynamic>))
         .map(SauceItemResponseMapper.map)
         .toList(growable: false);
   });
-  final Future<List<Pizza>> _pizzasAsync = rootBundle.loadString('assets/pizzas.json').then((string) {
+  final Future<List<Pizza>> _pizzasAsync =
+      rootBundle.loadString('assets/pizzas.json').then((string) {
     final data = jsonDecode(string)['response']['data'];
-    return (data as Iterable).map(PizzaItemResponseMapper.map).toList(growable: false);
+    return (data as Iterable)
+        .map(PizzaItemResponseMapper.map)
+        .toList(growable: false);
   });
-  final Future<List<Street>> _streetsAsync = rootBundle.loadString('assets/streets.json').then((string) {
+  final Future<List<Street>> _streetsAsync =
+      rootBundle.loadString('assets/streets.json').then((string) {
     final data = jsonDecode(string)['response']['data'];
     return (data as Iterable).map((item) {
       return Street(
@@ -37,7 +44,8 @@ class PzzRepositoryMock implements PzzRepository {
       );
     }).toList(growable: false);
   });
-  final Future<List<House>> _housesAsync = rootBundle.loadString('assets/houses.json').then((string) {
+  final Future<List<House>> _housesAsync =
+      rootBundle.loadString('assets/houses.json').then((string) {
     final data = jsonDecode(string)['response']['data'];
     return (data as Iterable).map((item) {
       return House(
@@ -52,22 +60,26 @@ class PzzRepositoryMock implements PzzRepository {
 
   @override
   Future<Basket> addProductToBasket(Product product) async {
-    return _updateTotal(_basket.copyWith(
-      items: [
-        ..._basket.items,
-        BasketProduct(
-          id: product.id,
-          type: product.type,
-          title: product.title,
-          size: product.size,
-          price: product.price,
-        ),
-      ],
-    ));
+    return _updateTotal(
+      _basket.copyWith(
+        items: [
+          ..._basket.items,
+          BasketProduct(
+            id: product.id,
+            type: product.type,
+            title: product.title,
+            size: product.size,
+            price: product.price,
+          ),
+        ],
+      ),
+    );
   }
 
   Basket _updateTotal(Basket basket) {
-    return _basket = basket.copyWith(totalAmount: basket.items.fold<num>(0, (sum, item) => sum + item.price));
+    return _basket = basket.copyWith(
+      totalAmount: basket.items.fold<num>(0, (sum, item) => sum + item.price),
+    );
   }
 
   @override
@@ -89,16 +101,23 @@ class PzzRepositoryMock implements PzzRepository {
   Future<Basket> removeProductFromBasket(Product product) async {
     return _updateTotal(
       _basket.copyWith(
-        items: [..._basket.items]
-          ..removeWhere((item) => item.id == product.id && item.size == product.size && item.type == product.type),
+        items: [..._basket.items]..removeWhere(
+            (item) =>
+                item.id == product.id &&
+                item.size == product.size &&
+                item.type == product.type,
+          ),
       ),
     );
   }
 
   @override
   Future<List<Street>> searchStreet(String query) {
-    return _streetsAsync
-        .then((streets) => streets.where((street) => street.title.contains(query)).toList(growable: false));
+    return _streetsAsync.then(
+      (streets) => streets
+          .where((street) => street.title.contains(query))
+          .toList(growable: false),
+    );
   }
 
   @override

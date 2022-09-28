@@ -1,6 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
-import 'package:http_interceptor/http_client_with_interceptor.dart';
+import 'package:http_interceptor/http/intercepted_client.dart';
 import 'package:pzz/domain/cookie_interseptor.dart';
 import 'package:pzz/domain/logging_inerceptor.dart';
 import 'package:pzz/domain/pzz_net_service.dart';
@@ -22,7 +22,7 @@ Future<void> initDependencies() async {
   getIt.registerLazySingleton<PzzRepository>(() => PzzRepositoryMock());
   getIt.registerLazySingleton<PreferenceRepository>(() => PreferenceRepositoryImpl(getIt<SharedPreferences>()));
   getIt.registerLazySingleton<http.Client>(
-    () => HttpClientWithInterceptor.build(
+    () => InterceptedClient.build(
       interceptors: [
         SessionCookiesInterceptor(getIt<SessionBearer>()),
         LoggingInterceptor(),

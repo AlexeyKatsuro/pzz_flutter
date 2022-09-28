@@ -52,25 +52,29 @@ class PizzaVariantWidget extends StatelessWidget {
       duration: kDurationFast,
       transitionBuilder: (Widget child, Animation<double> animation) {
         return ScaleTransition(
-            scale: CurvedAnimation(
-              parent: animation,
-              curve: Curves.easeOut,
-            ),
-            child: child);
+          scale: CurvedAnimation(
+            parent: animation,
+            curve: Curves.easeOut,
+          ),
+          child: child,
+        );
       },
-      child: countInBasket > 0 ? _buildCounter() : _buildToBasketButton(localizations),
+      child: countInBasket > 0
+          ? _buildCounter()
+          : _buildToBasketButton(localizations),
     );
   }
 
   Widget _buildCounter() {
     return Counter(
-        onRemoveClick: () {
-          onRemovePizzaClick(variant.size);
-        },
-        count: countInBasket,
-        onAddClick: () {
-          onAddPizzaClick(variant.size);
-        });
+      onRemoveClick: () {
+        onRemovePizzaClick(variant.size);
+      },
+      count: countInBasket,
+      onAddClick: () {
+        onAddPizzaClick(variant.size);
+      },
+    );
   }
 
   Widget _buildToBasketButton(AppLocalizations localizations) {

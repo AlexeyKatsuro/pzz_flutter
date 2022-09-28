@@ -3,10 +3,10 @@ import 'package:pzz/domain/repository/pzz_repository.dart';
 import 'package:pzz/models/basket.dart';
 import 'package:pzz/models/person_info/house.dart';
 import 'package:pzz/models/person_info/personal_info.dart';
+import 'package:pzz/models/person_info/street.dart';
 import 'package:pzz/models/pizza.dart';
 import 'package:pzz/models/product.dart';
 import 'package:pzz/models/sauce.dart';
-import 'package:pzz/models/person_info/street.dart';
 
 class PzzRepositoryImpl implements PzzRepository {
   PzzRepositoryImpl(this._service);

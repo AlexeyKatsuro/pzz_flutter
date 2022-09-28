@@ -11,7 +11,8 @@ import 'package:pzz/utils/scoped.dart';
 import 'package:pzz/utils/widgets/error_scoped_notifier.dart';
 import 'package:redux/redux.dart';
 
-class SearchPage<T, VM extends SearchViewModel<T>> extends StatefulWidget implements Scoped {
+class SearchPage<T, VM extends SearchViewModel<T>> extends StatefulWidget
+    implements Scoped {
   const SearchPage({
     required this.fromStore,
     required this.prefill,
@@ -29,7 +30,8 @@ class SearchPage<T, VM extends SearchViewModel<T>> extends StatefulWidget implem
   _SearchPageState<T, VM> createState() => _SearchPageState<T, VM>();
 }
 
-class _SearchPageState<T, VM extends SearchViewModel<T>> extends State<SearchPage<T, VM>> {
+class _SearchPageState<T, VM extends SearchViewModel<T>>
+    extends State<SearchPage<T, VM>> {
   final queryTextController = TextEditingController();
 
   @override
@@ -125,13 +127,18 @@ class StreetsSearchViewModel extends SearchViewModel<Street> {
     required void Function(Street item) onItemClick,
   }) : super(items: items, onItemClick: onItemClick, onTyping: onTyping);
 
-  factory StreetsSearchViewModel.fromStore(Store<AppState> store, String scope) {
+  factory StreetsSearchViewModel.fromStore(
+    Store<AppState> store,
+    String scope,
+  ) {
     return StreetsSearchViewModel(
       onItemClick: (item) => store.dispatch(SelectStreetAction(item)),
-      onTyping: (query) => store.dispatch(PerformStreetSearchAction(
-        query: query,
-        scope: scope,
-      )),
+      onTyping: (query) => store.dispatch(
+        PerformStreetSearchAction(
+          query: query,
+          scope: scope,
+        ),
+      ),
       items: suggestedStreetsSelector(store.state),
     );
   }
@@ -158,10 +165,12 @@ class HousesSearchViewModel extends SearchViewModel<House> {
     final totalHouses = totalHousesSelector(store.state);
     return HousesSearchViewModel(
       onInitialBuild: totalHouses.isEmpty
-          ? () => store.dispatch(LoadHousesAction(
-                streetId: street.id,
-                scope: scope,
-              ))
+          ? () => store.dispatch(
+                LoadHousesAction(
+                  streetId: street.id,
+                  scope: scope,
+                ),
+              )
           : null,
       onItemClick: (item) => store.dispatch(SelectHouseAction(item)),
       onTyping: (query) => store.dispatch(PerformHouseSearchAction(query)),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:pzz/domain/actions/actions.dart';
 import 'package:pzz/domain/actions/navigation_actions.dart';
@@ -18,7 +19,6 @@ import 'package:pzz/utils/scoped.dart';
 import 'package:pzz/utils/widgets/error_scoped_notifier.dart';
 import 'package:pzz/utils/widgets/loading_switcher.dart';
 import 'package:redux/redux.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BasketPage extends StatefulWidget implements Scoped {
   @override
@@ -44,7 +44,9 @@ class _BasketPageState extends State<BasketPage> {
     final localizations = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: Text(localizations.totalPrice('${vm.totalAmount.toStringAsFixed(2)} р.')),
+        title: Text(
+          localizations.totalPrice('${vm.totalAmount.toStringAsFixed(2)} р.'),
+        ),
       ),
       body: ErrorScopedNotifier(
         widget.scope,
@@ -106,7 +108,11 @@ class _BasketPageState extends State<BasketPage> {
     );
   }
 
-  List<Widget> _buildProducts(AppLocalizations localizations, _ViewModel vm, ProductType type) {
+  List<Widget> _buildProducts(
+    AppLocalizations localizations,
+    _ViewModel vm,
+    ProductType type,
+  ) {
     final items = vm.itemsMap[type] ?? [];
     return [
       DividedCenterTitle(type.localizedPlurals(localizations)),
@@ -171,15 +177,20 @@ class _ViewModel {
 
   factory _ViewModel.formStore(Store<AppState> store, String scope) {
     return _ViewModel(
-        isLoading: isConfirmLoadingSelector(store.state),
-        basket: basketSelector(store.state),
-        itemsMap: combinedBasketProductsTypedMap(store.state),
-        basketCount: basketCountSelector(store.state),
-        freeSauceCounts: freeSauceCountsSelector(store.state),
-        onChooseSauceClick: () => store.dispatch(NavigateAction.push(Routes.saucesScreen)),
-        onAddItemClick: (item) => store.dispatch(AddProductAction(product: item, scope: scope)),
-        onRemoveItemClick: (item) => store.dispatch(RemoveProductAction(product: item, scope: scope)),
-        onPlaceOrderClick: () => store.dispatch(TryPlaceOrderAction(scope: scope)));
+      isLoading: isConfirmLoadingSelector(store.state),
+      basket: basketSelector(store.state),
+      itemsMap: combinedBasketProductsTypedMap(store.state),
+      basketCount: basketCountSelector(store.state),
+      freeSauceCounts: freeSauceCountsSelector(store.state),
+      onChooseSauceClick: () =>
+          store.dispatch(NavigateAction.push(Routes.saucesScreen)),
+      onAddItemClick: (item) =>
+          store.dispatch(AddProductAction(product: item, scope: scope)),
+      onRemoveItemClick: (item) =>
+          store.dispatch(RemoveProductAction(product: item, scope: scope)),
+      onPlaceOrderClick: () =>
+          store.dispatch(TryPlaceOrderAction(scope: scope)),
+    );
   }
 
   final int basketCount;

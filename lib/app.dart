@@ -21,67 +21,69 @@ class PzzApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreProvider(
-        store: store,
-        child: StoreConnector<AppState, _ViewModel>(
-          distinct: true,
-          onInit: (store) => store.dispatch(InitialAction(scope: Routes.homeScreen)),
-          converter: (store) => _ViewModel.fromStore(store),
-          builder: (context, viewModel) {
-            final navigator = MainNavigationContainer();
-            Widget home;
-            if (kReleaseMode) {
-              home = navigator;
-            } else {
-              home = Stack(
-                children: [
-                  navigator,
-                  Align(
-                    alignment: Alignment.bottomLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: SizedBox(
-                        width: 48,
-                        height: 48,
-                        child: Material(
-                          color: Colors.transparent,
-                          child: IconButton(
-                            icon: const Icon(Icons.developer_mode),
-                            onPressed: viewModel.onDevPageClick,
-                          ),
+      store: store,
+      child: StoreConnector<AppState, _ViewModel>(
+        distinct: true,
+        onInit: (store) =>
+            store.dispatch(InitialAction(scope: Routes.homeScreen)),
+        converter: (store) => _ViewModel.fromStore(store),
+        builder: (context, viewModel) {
+          final navigator = MainNavigationContainer();
+          Widget home;
+          if (kReleaseMode) {
+            home = navigator;
+          } else {
+            home = Stack(
+              children: [
+                navigator,
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: SizedBox(
+                      width: 48,
+                      height: 48,
+                      child: Material(
+                        color: Colors.transparent,
+                        child: IconButton(
+                          icon: const Icon(Icons.developer_mode),
+                          onPressed: viewModel.onDevPageClick,
                         ),
                       ),
                     ),
                   ),
-                ],
-              );
-            }
-            return MaterialApp(
-              localizationsDelegates: AppLocalizations.localizationsDelegates,
-              supportedLocales: AppLocalizations.supportedLocales,
-              title: 'Pzz',
-              theme: PzzAppTheme.pzzLightTheme,
-              darkTheme: PzzAppTheme.pzzDarkTheme,
-              locale: viewModel.locale,
-              localeResolutionCallback: (locale, supportedLocales) {
-                final availableLocale = supportedLocales.firstWhereOrNull(
-                      (supported) => _checkInitLocale(supported, locale),
-                    ) ??
-                    supportedLocales.first;
-                deviceLocale = availableLocale;
-                return availableLocale;
-              },
-              home: home,
+                ),
+              ],
             );
-          },
-        ));
+          }
+          return MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            title: 'Pzz',
+            theme: PzzAppTheme.pzzLightTheme,
+            darkTheme: PzzAppTheme.pzzDarkTheme,
+            locale: viewModel.locale,
+            localeResolutionCallback: (locale, supportedLocales) {
+              final availableLocale = supportedLocales.firstWhereOrNull(
+                    (supported) => _checkInitLocale(supported, locale),
+                  ) ??
+                  supportedLocales.first;
+              deviceLocale = availableLocale;
+              return availableLocale;
+            },
+            home: home,
+          );
+        },
+      ),
+    );
   }
 
-  bool _checkInitLocale(Locale locale, Locale? _osLocale) {
+  bool _checkInitLocale(Locale locale, Locale? osLocale) {
     // If suported locale not contain countryCode then check only languageCode
-    if (locale.countryCode == null || _osLocale!.countryCode == null) {
-      return locale.languageCode == _osLocale!.languageCode;
+    if (locale.countryCode == null || osLocale!.countryCode == null) {
+      return locale.languageCode == osLocale!.languageCode;
     } else {
-      return locale == _osLocale;
+      return locale == osLocale;
     }
   }
 }
@@ -97,7 +99,8 @@ class _ViewModel {
     return _ViewModel(
       locale: appLocaleSelector(store.state),
       onSetLocale: (value) => store.dispatch(ChangeLocaleAction(value)),
-      onDevPageClick: () => store.dispatch(NavigateAction.push(Routes.devScreen)),
+      onDevPageClick: () =>
+          store.dispatch(NavigateAction.push(Routes.devScreen)),
     );
   }
 
@@ -107,7 +110,10 @@ class _ViewModel {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is _ViewModel && runtimeType == other.runtimeType && locale == other.locale;
+      identical(this, other) ||
+      other is _ViewModel &&
+          runtimeType == other.runtimeType &&
+          locale == other.locale;
 
   @override
   int get hashCode => locale.hashCode;

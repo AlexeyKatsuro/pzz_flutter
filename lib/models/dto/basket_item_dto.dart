@@ -1,24 +1,25 @@
 class BasketItemDto {
-  BasketItemDto(
-      {this.type,
-      this.id,
-      this.size,
-      this.dough,
-      this.isFailure,
-      this.is3in2,
-      this.withSauce,
-      this.parts,
-      this.itemId,
-      this.isNew,
-      this.autoRemoved,
-      this.title,
-      this.freeSaucesCount,
-      this.toRemove,
-      this.toSoftRemove,
-      this.packed,
-      this.prepared,
-      this.isFree,
-      this.price});
+  BasketItemDto({
+    this.type,
+    this.id,
+    this.size,
+    this.dough,
+    this.isFailure,
+    this.is3in2,
+    this.withSauce,
+    this.parts,
+    this.itemId,
+    this.isNew,
+    this.autoRemoved,
+    this.title,
+    this.freeSaucesCount,
+    this.toRemove,
+    this.toSoftRemove,
+    this.packed,
+    this.prepared,
+    this.isFree,
+    this.price,
+  });
 
   BasketItemDto.fromJson(Map<String, dynamic> json) {
     type = json['type'] as String?;

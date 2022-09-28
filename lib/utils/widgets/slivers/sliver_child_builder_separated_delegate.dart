@@ -3,9 +3,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 class SliverChildBuilderSeparatedDelegate extends SliverChildBuilderDelegate {
-  SliverChildBuilderSeparatedDelegate(
-      {required this.itemBuilder, required this.separatorBuilder, required int itemCount})
-      : super(
+  SliverChildBuilderSeparatedDelegate({
+    required this.itemBuilder,
+    required this.separatorBuilder,
+    required int itemCount,
+  }) : super(
           _makeSeperatedBuilder(itemBuilder, separatorBuilder),
           childCount: _makeChildCount(itemCount),
           //addSemanticIndexes: _makeSemanticIndexCallback(),
@@ -15,7 +17,9 @@ class SliverChildBuilderSeparatedDelegate extends SliverChildBuilderDelegate {
   final IndexedWidgetBuilder separatorBuilder;
 
   static IndexedWidgetBuilder _makeSeperatedBuilder(
-      IndexedWidgetBuilder itemBuilder, IndexedWidgetBuilder separatorBuilder) {
+    IndexedWidgetBuilder itemBuilder,
+    IndexedWidgetBuilder separatorBuilder,
+  ) {
     return (BuildContext context, int index) {
       final int itemIndex = index ~/ 2;
       if (index.isEven) {

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:pzz/domain/error/scoped_error_actions.dart';
 import 'package:pzz/domain/error/scoped_error_hub_selectors.dart';
 import 'package:pzz/models/app_state.dart';
 import 'package:pzz/utils/ui_message.dart';
 import 'package:redux/redux.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 typedef ErrorEventBuilder = void Function(BuildContext context, String error);
 

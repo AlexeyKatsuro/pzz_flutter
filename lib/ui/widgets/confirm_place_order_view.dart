@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pzz/models/basket_address.dart';
 import 'package:pzz/models/basket_product.dart';
+import 'package:pzz/ui/widgets/bottom_sheet_drag_bar.dart';
 import 'package:pzz/utils/extensions/enum_localization_ext.dart';
 import 'package:pzz/utils/extensions/widget_extension.dart';
 import 'package:pzz/utils/widgets/loading_switcher.dart';
-
-import 'bottom_sheet_drag_bar.dart';
 
 class ConfirmPlaceOrderView extends StatefulWidget {
   const ConfirmPlaceOrderView({

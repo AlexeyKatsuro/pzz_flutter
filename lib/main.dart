@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pzz/app.dart';
+import 'package:pzz/domain/middleware/epics.dart';
 import 'package:pzz/domain/middleware/middlewares.dart';
 import 'package:pzz/domain/reducers/app_state_reduser.dart';
 import 'package:pzz/domain/repository/preference_repository.dart';
@@ -10,8 +11,6 @@ import 'package:pzz/service_locator.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_epics/redux_epics.dart';
 import 'package:redux_logging/redux_logging.dart';
-
-import 'domain/middleware/epics.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

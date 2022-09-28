@@ -36,15 +36,17 @@ class AppState {
     Locale? locale,
   }) {
     return AppState(
-        homePageState: homePageState ?? const HomePageState.initial(),
-        personalInfoState: personalInfoState ?? const PersonalInfoState.initial(),
-        pizzas: pizzas ?? const [],
-        sauce: sauce ?? const [],
-        basket: basket ?? const Basket.initial(),
-        isConfirmLoading: isConfirmLoading ?? false,
-        scopedErrors: scopedErrors ?? const ScopedErrorsHub.initial(),
-        navigationState: navigationState ?? NavigationState.initial(initialRoute: initialRoute),
-        locale: locale);
+      homePageState: homePageState ?? const HomePageState.initial(),
+      personalInfoState: personalInfoState ?? const PersonalInfoState.initial(),
+      pizzas: pizzas ?? const [],
+      sauce: sauce ?? const [],
+      basket: basket ?? const Basket.initial(),
+      isConfirmLoading: isConfirmLoading ?? false,
+      scopedErrors: scopedErrors ?? const ScopedErrorsHub.initial(),
+      navigationState: navigationState ??
+          NavigationState.initial(initialRoute: initialRoute),
+      locale: locale,
+    );
   }
 
   final HomePageState homePageState;
