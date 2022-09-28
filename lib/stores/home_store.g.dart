@@ -62,6 +62,20 @@ mixin _$HomeStore on HomeStoreBase, Store {
     return _$_fetchPizzasAsyncAction.run(() => super._fetchPizzas());
   }
 
+  late final _$HomeStoreBaseActionController =
+      ActionController(name: 'HomeStoreBase', context: context);
+
+  @override
+  void onBasketClick() {
+    final _$actionInfo =
+        _$HomeStoreBaseActionController.startAction(name: 'HomeStoreBase.onBasketClick');
+    try {
+      return super.onBasketClick();
+    } finally {
+      _$HomeStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''

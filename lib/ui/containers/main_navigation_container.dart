@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:pzz/domain/actions/navigation_actions.dart';
-import 'package:pzz/domain/selectors/selector.dart';
-import 'package:pzz/models/app_state.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
+import 'package:provider/provider.dart';
 import 'package:pzz/models/navigation/navigation_stack.dart';
 import 'package:pzz/routes.dart';
+import 'package:pzz/stores/navigation_store.dart';
 import 'package:pzz/ui/basket_page.dart';
 import 'package:pzz/ui/containers/confirm_place_order_container.dart';
 import 'package:pzz/ui/dev_page.dart';
@@ -16,11 +16,12 @@ import 'package:pzz/ui/widgets/success_order_dialog.dart';
 import 'package:pzz/utils/widgets/bottom_sheet_route.dart';
 import 'package:pzz/utils/widgets/dialog_route.dart';
 import 'package:pzz/utils/widgets/system_ui.dart';
-import 'package:redux/redux.dart';
+
+part 'main_navigation_container.g.dart';
 
 typedef WidgetArgBuild<T> = Widget Function(T args);
 
-class MainNavigationContainer extends StatelessWidget {
+class MainNavigationShell extends StatelessWidget {
   final _navigatorKey = GlobalKey<NavigatorState>();
 
   final Map<String, _PageBuilder> routes = {
@@ -55,25 +56,22 @@ class MainNavigationContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, _ViewModel>(
-      distinct: true,
-      converter: (Store<AppState> store) => _ViewModel.fromStore(store),
-      builder: _build,
-    );
-  }
-
-  Widget _build(BuildContext context, _ViewModel viewModel) {
+    final viewModel = _ViewModel(navigationStore: Provider.of<NavigationStore>(context));
     return WillPopScope(
       onWillPop: () async {
         return !await _navigatorKey.currentState!.maybePop();
       },
-      child: Navigator(
-        key: _navigatorKey,
-        pages: viewModel.navigationStack.backStack.map(buildPage).toList(growable: false),
-        onPopPage: (route, result) {
-          if (!route.didPop(result)) return false;
-          viewModel.onPopPage();
-          return true;
+      child: Observer(
+        builder: (context) {
+          return Navigator(
+            key: _navigatorKey,
+            pages: viewModel.navigationStack.map(buildPage).toList(growable: false),
+            onPopPage: (route, result) {
+              if (!route.didPop(result)) return false;
+              viewModel.onPopPage();
+              return true;
+            },
+          );
         },
       ),
     );
@@ -149,31 +147,19 @@ class MainNavigationContainer extends StatelessWidget {
   }
 }
 
-class _ViewModel {
-  _ViewModel({
-    required this.navigationStack,
-    required this.onPopPage,
-  });
+class _ViewModel = _ViewModelBase with _$_ViewModel;
 
-  factory _ViewModel.fromStore(Store<AppState> store) {
-    return _ViewModel(
-      navigationStack: navigationStackSelector(store.state),
-      onPopPage: () => store.dispatch(NavigateAction.pop()),
-    );
+abstract class _ViewModelBase with Store {
+  _ViewModelBase({required NavigationStore navigationStore}) : _navigationStore = navigationStore;
+
+  final NavigationStore _navigationStore;
+
+  @computed
+  List<NavDestination> get navigationStack => _navigationStore.backStack;
+
+  void onPopPage() {
+    _navigationStore.pop();
   }
-
-  final NavigationStack navigationStack;
-  final VoidCallback onPopPage;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is _ViewModel &&
-          runtimeType == other.runtimeType &&
-          navigationStack == other.navigationStack;
-
-  @override
-  int get hashCode => navigationStack.hashCode;
 }
 
 class _PageBuilder<T> {
@@ -184,7 +170,7 @@ class _PageBuilder<T> {
 
   _PageBuilder.unknown()
       : widgetBuilder = ((_) => NotFoundPage()),
-        builder = MainNavigationContainer._buildBasePage;
+        builder = MainNavigationShell._buildBasePage;
 
   final WidgetArgBuild<T> widgetBuilder;
   final Page Function(NavDestination arguments, WidgetArgBuild<T> builder) builder;

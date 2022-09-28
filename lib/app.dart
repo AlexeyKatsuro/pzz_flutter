@@ -27,7 +27,7 @@ class PzzApp extends StatelessWidget {
         onInit: (store) => store.dispatch(InitialAction(scope: Routes.homeScreen)),
         converter: (store) => _ViewModel.fromStore(store),
         builder: (context, viewModel) {
-          final navigator = MainNavigationContainer();
+          final navigator = MainNavigationShell();
           Widget home;
           if (kReleaseMode) {
             home = navigator;

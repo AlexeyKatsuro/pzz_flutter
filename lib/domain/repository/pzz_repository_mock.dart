@@ -98,8 +98,7 @@ class PzzRepositoryMock implements PzzRepository {
   @override
   Future<BasketEntity> removeProductFromBasket(Product product) async {
     final index = _basket.items.indexWhere(
-          (item) =>
-      item.id == product.id && item.size == product.size && item.type == product.type,
+      (item) => item.id == product.id && item.size == product.size && item.type == product.type,
     );
     return _updateTotal(
       _basket.copyWith(

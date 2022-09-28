@@ -11,6 +11,7 @@ import 'package:pzz/routes.dart';
 import 'package:pzz/service_locator.dart';
 import 'package:pzz/stores/basket_store.dart';
 import 'package:pzz/stores/home_store.dart';
+import 'package:pzz/stores/navigation_store.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_epics/redux_epics.dart';
 import 'package:redux_logging/redux_logging.dart';
@@ -31,13 +32,17 @@ Future<void> main() async {
     epicMiddleware,
     LoggingMiddleware.printer(),
   ];
-  final homeStore = HomeStore(pzzRepository: pzzRepository);
-  final basketStore = BasketStore(pzzRepository: pzzRepository);
+  // ignore: avoid_redundant_argument_values
+  final mainNavigationStore = NavigationStore(initialRoute: Routes.homeScreen);
+  final homeStore = HomeStore(pzzRepository: pzzRepository, navigationStore: mainNavigationStore);
+  final basketStore =
+      BasketStore(pzzRepository: pzzRepository, navigationStore: mainNavigationStore);
   runApp(
     MultiProvider(
       providers: [
         Provider.value(value: homeStore),
         Provider.value(value: basketStore),
+        Provider.value(value: mainNavigationStore),
       ],
       child: PzzApp(
         store: Store<AppState>(

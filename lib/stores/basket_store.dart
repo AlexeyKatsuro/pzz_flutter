@@ -7,6 +7,7 @@ import 'package:pzz/models/basket.dart';
 import 'package:pzz/models/basket_product.dart';
 import 'package:pzz/models/combined_basket_product.dart';
 import 'package:pzz/models/pizza.dart';
+import 'package:pzz/stores/navigation_store.dart';
 import 'package:pzz/utils/extensions/to_product_ext.dart';
 
 part 'basket_store.g.dart';
@@ -14,11 +15,16 @@ part 'basket_store.g.dart';
 class BasketStore = BasketStoreBase with _$BasketStore;
 
 abstract class BasketStoreBase with Store {
-  BasketStoreBase({required PzzRepository pzzRepository}) : _pzzRepository = pzzRepository {
+  BasketStoreBase({
+    required PzzRepository pzzRepository,
+    required NavigationStore navigationStore,
+  })  : _pzzRepository = pzzRepository,
+        _navigationStore = navigationStore {
     _fetchBasket();
   }
 
   final PzzRepository _pzzRepository;
+  final NavigationStore _navigationStore;
 
   @observable
   BasketEntity basket = const BasketEntity.initial();

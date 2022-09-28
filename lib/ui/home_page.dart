@@ -56,27 +56,31 @@ class _HomePageState extends State<HomePage> {
         widget.scope,
         child: AnimatedSwitcher(
           duration: kDurationFast,
-          child: Observer(builder: (context) {
-            return _buildContent(localizations, vm);
-          },),
+          child: Observer(
+            builder: (context) {
+              return _buildContent(localizations, vm);
+            },
+          ),
         ),
       ),
-      floatingActionButton: Observer(builder: (context) {
-        return _HomeFab(
-          scrollController: scrollController,
-          basketCount: vm.basketCount,
-          showOnOffset: screenSize.height,
-          onArrowClick: () {
-            // scroll to top
-            scrollController.animateTo(
-              scrollController.initialScrollOffset,
-              curve: Curves.easeInOutCirc,
-              duration: kDurationMedium,
-            );
-          },
-          onBasketClick: vm.onBasketClick,
-        );
-      },),
+      floatingActionButton: Observer(
+        builder: (context) {
+          return _HomeFab(
+            scrollController: scrollController,
+            basketCount: vm.basketCount,
+            showOnOffset: screenSize.height,
+            onArrowClick: () {
+              // scroll to top
+              scrollController.animateTo(
+                scrollController.initialScrollOffset,
+                curve: Curves.easeInOutCirc,
+                duration: kDurationMedium,
+              );
+            },
+            onBasketClick: vm.onBasketClick,
+          );
+        },
+      ),
     );
   }
 
@@ -116,28 +120,30 @@ class _HomePageState extends State<HomePage> {
         ),
         SliverPadding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-          sliver: Observer(builder: (context) {
-            return SliverList(
-              delegate: SliverChildBuilderSeparatedDelegate(
-                separatorBuilder: (context, index) => const SizedBox(height: 8),
-                itemBuilder: (context, index) {
-                  return Observer(
-                    builder: (context) {
-                      final pizza = vm.pizzas[index];
-                      return PizzaWidget(
-                        combinedProduct:
-                            pizza.value, // vm.getCombinedProduct(pizza.type, pizza.id),
-                        pizza: pizza.key,
-                        onRemovePizzaClick: vm.onRemovePizzaClick,
-                        onAddPizzaClick: vm.onAddPizzaClick,
-                      );
-                    },
-                  );
-                },
-                itemCount: vm.pizzasCount,
-              ),
-            );
-          },),
+          sliver: Observer(
+            builder: (context) {
+              return SliverList(
+                delegate: SliverChildBuilderSeparatedDelegate(
+                  separatorBuilder: (context, index) => const SizedBox(height: 8),
+                  itemBuilder: (context, index) {
+                    return Observer(
+                      builder: (context) {
+                        final pizza = vm.pizzas[index];
+                        return PizzaWidget(
+                          combinedProduct:
+                              pizza.value, // vm.getCombinedProduct(pizza.type, pizza.id),
+                          pizza: pizza.key,
+                          onRemovePizzaClick: vm.onRemovePizzaClick,
+                          onAddPizzaClick: vm.onAddPizzaClick,
+                        );
+                      },
+                    );
+                  },
+                  itemCount: vm.pizzasCount,
+                ),
+              );
+            },
+          ),
         )
       ],
     );
@@ -163,9 +169,10 @@ abstract class _ViewModelBase with Store {
     return [
       for (final pizza in homeStore.pizzas)
         MapEntry(
-            pizza,
-            basketStore.combinedProductBy[ProductType.pizza]
-                ?.firstWhereOrNull((product) => product.id == pizza.id),),
+          pizza,
+          basketStore.combinedProductBy[ProductType.pizza]
+              ?.firstWhereOrNull((product) => product.id == pizza.id),
+        ),
     ];
   }
 
